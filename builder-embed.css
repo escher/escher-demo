@@ -1,6 +1,10 @@
-.canvas {
-    stroke: #333;
+#mouse-node {
     fill: none;
+}
+#canvas {
+    stroke: #ccc;
+    stroke-width: 7px;
+    fill: white;
 }
 .resize-rect {
     fill: black;
@@ -24,10 +28,12 @@
     font-size: 50px;
 }
 .node-circle {
+    stroke-width: 2px;
     fill: none;	
     stroke: rgb(50, 50, 50);
 }
 .selected .node-circle{
+    stroke-width: 3px;
     stroke: rgb(20, 113, 199);
 }
 .selected.text-label {
@@ -63,11 +69,14 @@
 .bezier2 {
     stroke: blue;
 }
+.connect-line{ 
+    stroke: rgb(200,200,200);
+}
 .direction-arrow {
-    stroke: grey;
+    stroke: black;
     stroke-width: 1px;
-    fill: none;
-    opacity: 0.5;
+    fill: white;
+    opacity: 0.3;
 }
 .start-reaction-cursor {
     cursor: pointer;
@@ -76,4 +85,19 @@
     stroke: rgb(100,100,100);
     fill: none;
     opacity: 0.5;
+}
+.rotation-center-line {
+    stroke: red;
+    stroke-width: 2px;
+}
+.highlight {
+    fill: #106F94;
+}
+.cursor-grab {
+    cursor: grab;
+    cursor: -webkit-grab;
+}
+.cursor-grabbing {
+    cursor: grabbing;
+    cursor: -webkit-grabbing;
 }
