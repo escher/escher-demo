@@ -1,0 +1,18 @@
+<html>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.8/d3.min.js"></script>
+  <script src="//zakandrewking.github.io/escher/escher.1.0.0.js"></script>
+  <link rel="stylesheet" href="//zakandrewking.github.io/escher/escher/css/builder.css" />
+  <body>
+    <script>
+     d3.json('e_coli.iJO1366.central_metabolism.json', function(e, data) {
+       d3.text('builder-embed.css', function(e, css) {
+         if (e) console.warn(e);
+         console.log(data);
+         b = escher.Builder(data, null, { menu: 'zoom',
+                                          fill_screen: true,
+                                          css: css });
+       });
+     });
+    </script>
+  </body>
+</html>
