@@ -6,6 +6,7 @@ function initialize_knockout() {
 	    optimize_loop(builder, model);
 	    builder.selection
 		.append('button')
+		.attr('class', 'btn btn-default btn-lg')
 		.style('position', 'absolute')
 		.style('bottom', '10px')
 		.style('right', '20px')
@@ -27,7 +28,8 @@ function load_builder(callback) {
 	    if (e) console.warn(e);
 	    var options = { menu: 'all',
 			    fill_screen: true,
-			    reaction_styles: ['abs', 'color', 'size', 'text'] };
+			    reaction_styles: ['abs', 'color', 'size', 'text'],
+			    never_ask_before_quit: true };
 	    var b = escher.Builder(data, null, css, d3.select('#map_container'), options);
 	    callback(b);
 	});
@@ -44,29 +46,36 @@ function load_model(callback) {
 
 
 function optimize_loop(builder, model) {
-    var solve_and_display = function(m) {
+    var solve_and_display = function(m, knockouts) {
 	var problem = build_glpk_problem(m);
 	var result = optimize(problem);
-	if (result.f == 0.0) {
+	var ko_string = Object.keys(knockouts).map(function(s) { return 'Δ'+s; }).join(' ');
+	if (ko_string.length > 0) ko_string += ': ';
+	else ko_string = 'Click a reaction to knock it out. ';
+	if (result.f < 1e-3) {
 	    builder.set_reaction_data(null);
-	    builder.map.set_status('You killed E. coli!');
+	    builder.map.set_status(ko_string + 'You killed E. coli!');
 	} else { 
 	    builder.set_reaction_data(result.x);
-	    builder.map.set_status('Objective value: ' + result.f.toFixed(3));
+	    builder.map.set_status(ko_string + 'Growth rate: ' + (result.f/1.791*100).toFixed(1) + '%');
 	}
     };
 
+    var knockouts = {};
+
     // set up and run
     model = set_carbon_source(model, 'EX_glc_e', 20);
-    solve_and_display(model);
+    solve_and_display(model, knockouts);
     
     // initialize event listeners
     var sel = builder.selection;
     sel.selectAll('.reaction,.reaction-label')
 	.style('cursor', 'pointer')
 	.on('click', function(d) {
+	    if (!(d.bigg_id in knockouts))
+		knockouts[d.bigg_id] = true;
 	    model = knock_out_reaction(model, d.bigg_id);
-	    solve_and_display(model);
+	    solve_and_display(model, knockouts);
 	});
 }
 
