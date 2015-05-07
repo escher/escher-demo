@@ -1,3 +1,18 @@
 #status {
     font-size: 24px;
 }
+#knockout-buttons {
+	position: absolute;
+	bottom: 5px;
+	right: 5px;
+}
+#knockout-buttons .btn {
+	display: inline-block;
+}
+
+@media (max-width: 850px) {
+	#status {
+		bottom: 65px;
+	}
+}
+
