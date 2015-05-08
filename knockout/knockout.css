@@ -16,6 +16,9 @@ body {
 #knockout-buttons .btn {
     display: inline-block;
 }
+.label {
+    cursor: inherit !important;
+}
 
 @media (max-width: 850px) {
     #status {

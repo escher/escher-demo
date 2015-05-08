@@ -44,9 +44,11 @@ function optimize_loop(builder, model) {
     var solve_and_display = function(m, knockouts) {
         var problem = build_glpk_problem(m);
         var result = optimize(problem);
-        var ko_string = Object.keys(knockouts).map(function(s) { return 'Δ'+s; }).join(' '),
+        var keys = Object.keys(knockouts),
+            ko_string = keys.map(function(s) { return 'Δ'+s; }).join(' ');
             nbs = String.fromCharCode(160); // non-breaking space
-        if (ko_string.length > 0) ko_string += ': ';
+        if (keys.length > 0)
+            ko_string += (' (' + keys.length + 'KO): ');
         else ko_string = 'Click a reaction to knock it out. ';
         if (result.f < 1e-3) {
             builder.set_reaction_data(null);
@@ -58,7 +60,12 @@ function optimize_loop(builder, model) {
         }
     };
 
-    var knockouts = {};
+    var knockouts = {},
+        knockable = function(r) {
+            return (r.indexOf('EX_') == -1 &&
+                    r.indexOf('ATPM') == -1 &&
+                    r.indexOf('Biomass') == -1);
+        };
 
     // set up and run
     model = set_carbon_source(model, 'EX_glc_e', 20);
@@ -67,12 +74,23 @@ function optimize_loop(builder, model) {
     // initialize event listeners
     var sel = builder.selection;
     sel.selectAll('.reaction,.reaction-label')
-        .style('cursor', 'pointer')
+        .style('cursor', function(d) {
+            if (knockable(d.bigg_id)) return 'pointer';
+            else return null;
+        })
         .on('click', function(d) {
-            if (!(d.bigg_id in knockouts))
-                knockouts[d.bigg_id] = true;
-            model = knock_out_reaction(model, d.bigg_id);
-            solve_and_display(model, knockouts);
+            if (knockable(d.bigg_id)) {
+                if (!(d.bigg_id in knockouts))
+                    knockouts[d.bigg_id] = true;
+                model = knock_out_reaction(model, d.bigg_id);
+                solve_and_display(model, knockouts);
+            }
+        });
+    // grey for reactions that cannot be knocked out
+    sel.selectAll('.reaction-label')
+        .style('fill', function(d) {
+            if (!knockable(d.bigg_id)) return '#888';
+            else return null;
         });
 }
 
