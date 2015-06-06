@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <title>Escher Structures</title>
+  <!-- Bootstrap dependencies for the menu and buttons -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.0/jquery.min.js"/></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+  <!-- Choose a Bootswatch theme: Paper -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootswatch/3.1.1/paper/bootstrap.min.css"/>
+
+  <!-- d3 -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.8/d3.min.js"></script>
+  
+  <!-- Escher files -->
+  <script src="escher-1.1.2.js"></script>
+  <link rel="stylesheet" href="builder-1.1.2.css"/>
+
+  <style>
+   #structures-buttons {
+     position: absolute;
+     bottom: 5px;
+     right: 5px;
+   }
+  </style>
+
+  <link rel="shortcut icon" href="//escher.github.io/escher/resources/favicon.ico" />
+
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, height=device-height,
+                                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui"/>
+  <body>
+    <div id="map_container"></div>
+    <div id="structures-buttons">
+      <a href="https://escher.github.io/" class="btn btn-default btn-md">
+        Escher home
+      </a>
+      <a href="https://github.com/escher/escher-demo" class="btn btn-default btn-md">
+        View the code
+      </a>
+  </body>
+
+  <script>
+   function remove_compartment(met_id) {
+       return met_id.replace(/_[a-z][a-z0-9]?$/, '');
+   }
+   
+   function add_structures() {
+       d3.select('#map_container')
+         .selectAll('.metabolite-circle')
+         .each(function(data) {
+             var group = d3.select(this),
+                 circle = group.select('circle'),
+                 transform = circle.attr('transform');
+             circle.remove();
+             group.append('image')
+                 .attr('transform', transform)
+                 .attr('xlink:href', remove_compartment(data.bigg_id) + '.png');
+         });
+   }
+   
+   d3.json('E coli core.Core metabolism.json', function(e, data) {
+       if (e) console.warn(e);
+       d3.text('builder-embed-1.1.2.css', function(e, css) {
+           if (e) console.warn(e);
+           var options = { menu: 'all',
+                           enable_editing: false,
+                           fill_screen: true,
+                           reaction_styles: ['abs', 'color', 'size', 'text'],
+                           never_ask_before_quit: true };
+           var builder = escher.Builder(data, null, css, d3.select('#map_container'), options);
+           add_structures();
+       });
+   });
+  </script>
+</html>
