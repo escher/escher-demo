@@ -6,6 +6,9 @@ import json
 import os
 from os.path import join, exists
 import re
+from base64 import b64decode
+from StringIO import StringIO
+from PIL import Image
 
 # a useful function
 def remove_compartment(met_id):
@@ -40,7 +43,12 @@ for k, node in nodes.iteritems():
         print 'could not find match for {}'.format(node['name'])
         continue
 
+    # convert to transparent
+    image = Image.open(StringIO(b64decode(chem.image)))
+    image = image.convert('RGBA')
+    new_data = [x if x[:3] != (255, 255, 255) else (255, 255, 255, 0) for x in image.getdata()]
+    image.putdata(new_data)
+
     # save the image
-    with open(structure_path, 'w') as f:
-        print 'Found structure for {}. Saving to {}'.format(node['name'], structure_path)
-        f.write(chem.image)
+    print 'Found structure for {}. Saving to {}'.format(node['name'], structure_path)
+    image.save(structure_path, "PNG")
