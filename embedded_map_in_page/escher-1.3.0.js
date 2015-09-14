@@ -785,63 +785,71 @@ define('lib/vkbeautify',[],function() {
 });
 
 /*! @source http://purl.eligrey.com/github/FileSaver.js/blob/master/FileSaver.js */
-var saveAs=saveAs||"undefined"!==typeof navigator&&navigator.msSaveOrOpenBlob&&navigator.msSaveOrOpenBlob.bind(navigator)||function(a){if("undefined"===typeof navigator||!/MSIE [1-9]\./.test(navigator.userAgent)){var k=a.document,n=k.createElementNS("http://www.w3.org/1999/xhtml","a"),w="download"in n,x=function(c){var e=k.createEvent("MouseEvents");e.initMouseEvent("click",!0,!1,a,0,0,0,0,0,!1,!1,!1,!1,0,null);c.dispatchEvent(e)},q=a.webkitRequestFileSystem,u=a.requestFileSystem||q||a.mozRequestFileSystem,
-y=function(c){(a.setImmediate||a.setTimeout)(function(){throw c;},0)},r=0,s=function(c){var e=function(){"string"===typeof c?(a.URL||a.webkitURL||a).revokeObjectURL(c):c.remove()};a.chrome?e():setTimeout(e,10)},t=function(c,a,d){a=[].concat(a);for(var b=a.length;b--;){var l=c["on"+a[b]];if("function"===typeof l)try{l.call(c,d||c)}catch(f){y(f)}}},m=function(c,e){var d=this,b=c.type,l=!1,f,p,k=function(){t(d,["writestart","progress","write","writeend"])},g=function(){if(l||!f)f=(a.URL||a.webkitURL||
-a).createObjectURL(c);p?p.location.href=f:void 0==a.open(f,"_blank")&&"undefined"!==typeof safari&&(a.location.href=f);d.readyState=d.DONE;k();s(f)},h=function(a){return function(){if(d.readyState!==d.DONE)return a.apply(this,arguments)}},m={create:!0,exclusive:!1},v;d.readyState=d.INIT;e||(e="download");if(w)f=(a.URL||a.webkitURL||a).createObjectURL(c),n.href=f,n.download=e,x(n),d.readyState=d.DONE,k(),s(f);else{a.chrome&&b&&"application/octet-stream"!==b&&(v=c.slice||c.webkitSlice,c=v.call(c,0,
-c.size,"application/octet-stream"),l=!0);q&&"download"!==e&&(e+=".download");if("application/octet-stream"===b||q)p=a;u?(r+=c.size,u(a.TEMPORARY,r,h(function(a){a.root.getDirectory("saved",m,h(function(a){var b=function(){a.getFile(e,m,h(function(a){a.createWriter(h(function(b){b.onwriteend=function(b){p.location.href=a.toURL();d.readyState=d.DONE;t(d,"writeend",b);s(a)};b.onerror=function(){var a=b.error;a.code!==a.ABORT_ERR&&g()};["writestart","progress","write","abort"].forEach(function(a){b["on"+
-a]=d["on"+a]});b.write(c);d.abort=function(){b.abort();d.readyState=d.DONE};d.readyState=d.WRITING}),g)}),g)};a.getFile(e,{create:!1},h(function(a){a.remove();b()}),h(function(a){a.code===a.NOT_FOUND_ERR?b():g()}))}),g)}),g)):g()}},b=m.prototype;b.abort=function(){this.readyState=this.DONE;t(this,"abort")};b.readyState=b.INIT=0;b.WRITING=1;b.DONE=2;b.error=b.onwritestart=b.onprogress=b.onwrite=b.onabort=b.onerror=b.onwriteend=null;return function(a,b){return new m(a,b)}}}("undefined"!==typeof self&&
-self||"undefined"!==typeof window&&window||this.content);"undefined"!==typeof module&&null!==module?module.exports=saveAs:"undefined"!==typeof define&&null!==define&&null!=define.amd&&define('lib/FileSaver',[],function(){return saveAs});
-define('utils',["lib/vkbeautify", "lib/FileSaver"], function(vkbeautify, FileSaver) {
+var saveAs=saveAs||function(e){if("undefined"==typeof navigator||!/MSIE [1-9]\./.test(navigator.userAgent)){var t=e.document,n=function(){return e.URL||e.webkitURL||e},o=t.createElementNS("http://www.w3.org/1999/xhtml","a"),r="download"in o,i=function(e){var t=new MouseEvent("click");e.dispatchEvent(t)},a=e.webkitRequestFileSystem,c=e.requestFileSystem||a||e.mozRequestFileSystem,u=function(t){(e.setImmediate||e.setTimeout)(function(){throw t},0)},f="application/octet-stream",s=0,d=500,l=function(t){var o=function(){"string"==typeof t?n().revokeObjectURL(t):t.remove()};e.chrome?o():setTimeout(o,d)},v=function(e,t,n){t=[].concat(t);for(var o=t.length;o--;){var r=e["on"+t[o]];if("function"==typeof r)try{r.call(e,n||e)}catch(i){u(i)}}},p=function(e){return/^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(e.type)?new Blob(["﻿",e],{type:e.type}):e},w=function(t,u,d){d||(t=p(t));var w,y,m,S=this,h=t.type,O=!1,R=function(){v(S,"writestart progress write writeend".split(" "))},b=function(){if((O||!w)&&(w=n().createObjectURL(t)),y)y.location.href=w;else{var o=e.open(w,"_blank");void 0==o&&"undefined"!=typeof safari&&(e.location.href=w)}S.readyState=S.DONE,R(),l(w)},g=function(e){return function(){return S.readyState!==S.DONE?e.apply(this,arguments):void 0}},E={create:!0,exclusive:!1};return S.readyState=S.INIT,u||(u="download"),r?(w=n().createObjectURL(t),o.href=w,o.download=u,void setTimeout(function(){i(o),R(),l(w),S.readyState=S.DONE})):(e.chrome&&h&&h!==f&&(m=t.slice||t.webkitSlice,t=m.call(t,0,t.size,f),O=!0),a&&"download"!==u&&(u+=".download"),(h===f||a)&&(y=e),c?(s+=t.size,void c(e.TEMPORARY,s,g(function(e){e.root.getDirectory("saved",E,g(function(e){var n=function(){e.getFile(u,E,g(function(e){e.createWriter(g(function(n){n.onwriteend=function(t){y.location.href=e.toURL(),S.readyState=S.DONE,v(S,"writeend",t),l(e)},n.onerror=function(){var e=n.error;e.code!==e.ABORT_ERR&&b()},"writestart progress write abort".split(" ").forEach(function(e){n["on"+e]=S["on"+e]}),n.write(t),S.abort=function(){n.abort(),S.readyState=S.DONE},S.readyState=S.WRITING}),b)}),b)};e.getFile(u,{create:!1},g(function(e){e.remove(),n()}),g(function(e){e.code===e.NOT_FOUND_ERR?n():b()}))}),b)}),b)):void b())},y=w.prototype,m=function(e,t,n){return new w(e,t,n)};return"undefined"!=typeof navigator&&navigator.msSaveOrOpenBlob?function(e,t,n){return n||(e=p(e)),navigator.msSaveOrOpenBlob(e,t||"download")}:(y.abort=function(){var e=this;e.readyState=e.DONE,v(e,"abort")},y.readyState=y.INIT=0,y.WRITING=1,y.DONE=2,y.error=y.onwritestart=y.onprogress=y.onwrite=y.onabort=y.onerror=y.onwriteend=null,m)}}("undefined"!=typeof self&&self||"undefined"!=typeof window&&window||this.content);"undefined"!=typeof module&&module.exports?module.exports.saveAs=saveAs:"undefined"!=typeof define&&null!==define&&null!=define.amd&&define('lib/FileSaver',[],function(){return saveAs});
+/* global define, d3, Blob, XMLSerializer */
+
+define('utils',["lib/vkbeautify", "lib/FileSaver"], function(vkbeautify, saveAs) {
     return { set_options: set_options,
-             setup_svg: setup_svg,
-	     remove_child_nodes: remove_child_nodes,
+             remove_child_nodes: remove_child_nodes,
              load_css: load_css,
              load_files: load_files,
              load_the_file: load_the_file,
-	     make_class: make_class,
-	     setup_defs: setup_defs,
-	     draw_an_object: draw_an_object,
-	     draw_a_nested_object: draw_a_nested_object,
-	     make_array: make_array,
+             make_class: make_class,
+             setup_defs: setup_defs,
+             draw_an_object: draw_an_object,
+             draw_a_nested_object: draw_a_nested_object,
+             make_array: make_array,
              make_array_ref: make_array_ref,
-	     compare_arrays: compare_arrays,
-	     array_to_object: array_to_object,
-	     clone: clone,
-	     extend: extend,
-	     unique_concat: unique_concat,
-	     object_slice_for_ids: object_slice_for_ids,
-	     object_slice_for_ids_ref: object_slice_for_ids_ref,
-	     c_plus_c: c_plus_c,
-	     c_minus_c: c_minus_c,
-	     c_times_scalar: c_times_scalar,
-	     download_json: download_json,
-	     load_json: load_json,
-	     load_json_or_csv: load_json_or_csv,
-	     export_svg: export_svg,
-	     rotate_coords_recursive: rotate_coords_recursive,
-	     rotate_coords: rotate_coords,
-	     get_angle: get_angle,
-	     to_degrees: to_degrees,
-	     angle_for_event: angle_for_event,
-	     distance: distance,
-	     check_undefined: check_undefined,
-	     compartmentalize: compartmentalize,
-	     decompartmentalize: decompartmentalize,
-	     mean: mean,
+             compare_arrays: compare_arrays,
+             array_to_object: array_to_object,
+             clone: clone,
+             extend: extend,
+             unique_concat: unique_concat,
+             unique_strings_array: unique_strings_array,
+             debounce: debounce,
+             object_slice_for_ids: object_slice_for_ids,
+             object_slice_for_ids_ref: object_slice_for_ids_ref,
+             c_plus_c: c_plus_c,
+             c_minus_c: c_minus_c,
+             c_times_scalar: c_times_scalar,
+             download_json: download_json,
+             load_json: load_json,
+             load_json_or_csv: load_json_or_csv,
+             download_svg: download_svg,
+             rotate_coords_recursive: rotate_coords_recursive,
+             rotate_coords: rotate_coords,
+             get_angle: get_angle,
+             to_degrees: to_degrees,
+             angle_for_event: angle_for_event,
+             distance: distance,
+             check_undefined: check_undefined,
+             compartmentalize: compartmentalize,
+             decompartmentalize: decompartmentalize,
+             mean: mean,
              median: median,
              quartiles: quartiles,
              random_characters: random_characters,
-	     check_for_parent_tag: check_for_parent_tag,
-	     name_to_url: name_to_url,
-	     parse_url_components: parse_url_components };
+             generate_map_id: generate_map_id,
+             check_for_parent_tag: check_for_parent_tag,
+             name_to_url: name_to_url,
+             parse_url_components: parse_url_components };
 
     // definitions
+    function _check_filesaver() {
+        /** Check if Blob is available, and alert if it is not. */
+        try {
+            var isFileSaverSupported = !!new Blob();
+        } catch (e) {
+            alert("Blob not supported");
+        }
+    }
+
     function set_options(options, defaults, must_be_float) {
         if (options === undefined || options === null)
             return defaults;
         var i = -1,
             out = {};
-	for (var key in defaults) {
+        for (var key in defaults) {
             var has_key = ((key in options) &&
                            (options[key] !== null) &&
                            (options[key] !== undefined));
@@ -863,45 +871,18 @@ define('utils',["lib/vkbeautify", "lib/FileSaver"], function(vkbeautify, FileSav
                 }
             }
             out[key] = val;
-	}
+        }
         return out;
     }
 
-    function setup_svg(selection, selection_is_svg, fill_screen) {
-        // sub selection places the graph in an existing svg environment
-        var add_svg = function(f, s) {
-            if (f) {
-                d3.select("body").classed('fill-screen-body', true);
-		s.classed('fill-screen-div', true);
-            }
-            var svg = s.append('svg')
-		    .attr("class", "escher-svg")
-                    .attr('xmlns', "http://www.w3.org/2000/svg");
-	    return svg;
-        };
-
-        // run
-        var out;
-	// set the selection class
-	selection.classed('escher-container', true);
-	// make the svg
-        if (selection_is_svg) {
-            return selection;
-        } else if (selection) {
-            return add_svg(fill_screen, selection);
-        } else {
-            throw new Error('No selection');
-        }
-    }
-
     function remove_child_nodes(selection) {
-	/** Removes all child nodes from a d3 selection
+        /** Removes all child nodes from a d3 selection
 
-	 */
-	var node =  selection.node();
-	while (node.hasChildNodes()) {
-	    node.removeChild(node.lastChild);
-	}
+         */
+        var node =  selection.node();
+        while (node.hasChildNodes()) {
+            node.removeChild(node.lastChild);
+        }
     }
 
     function load_css(css_path, callback) {
@@ -932,17 +913,17 @@ define('utils',["lib/vkbeautify", "lib/FileSaver"], function(vkbeautify, FileSav
             return;
         }
         if (ends_with(file, 'json'))
-	    d3.json(file, function(e, d) { callback(e, d, file); });
+            d3.json(file, function(e, d) { callback(e, d, file); });
         else if (ends_with(file, 'css'))
-	    d3.text(file, function(e, d) { callback(e, d, file); });
+            d3.text(file, function(e, d) { callback(e, d, file); });
         else
-	    callback.call(t, "Unrecognized file type", null, file);
+            callback.call(t, "Unrecognized file type", null, file);
         return;
 
         // definitions
         function ends_with(str, suffix) {
-	    return str.indexOf(suffix, str.length - suffix.length) !== -1;
-	}
+            return str.indexOf(suffix, str.length - suffix.length) !== -1;
+        }
     }
     function load_files(t, files_to_load, final_callback) {
         // load multiple files asynchronously
@@ -952,7 +933,7 @@ define('utils',["lib/vkbeautify", "lib/FileSaver"], function(vkbeautify, FileSav
             var this_file = files_to_load[i].file;
             callbacks[this_file] = files_to_load[i].callback;
             load_the_file(t,
-			  this_file,
+                          this_file,
                           function(e, d, file) {
                               callbacks[file].call(t, e, d);
                               if (!--remaining) final_callback.call(t);
@@ -964,29 +945,29 @@ define('utils',["lib/vkbeautify", "lib/FileSaver"], function(vkbeautify, FileSav
     // original by John Resig (MIT Licensed).
     // http://stackoverflow.com/questions/7892884/simple-class-instantiation
     function make_class(){
-	var isInternal;
-	var constructor = function(args){
+        var isInternal;
+        var constructor = function(args){
             if ( this instanceof constructor ) {
-		if ( typeof this.init == "function" ) {
+                if ( typeof this.init == "function" ) {
                     this.init.apply( this, isInternal ? args : arguments );
-		}
+                }
             } else {
-		isInternal = true;
-		var instance = new constructor( arguments );
-		isInternal = false;
-		return instance;
+                isInternal = true;
+                var instance = new constructor( arguments );
+                isInternal = false;
+                return instance;
             }
-	};
-	return constructor;
+        };
+        return constructor;
     }
 
     function setup_defs(svg, style) {
         // add stylesheet
         svg.select("defs").remove();
-	var defs = svg.append("defs");
-	// make sure the defs is the first node
-	var node = defs.node();
-	node.parentNode.insertBefore(node, node.parentNode.firstChild);
+        var defs = svg.append("defs");
+        // make sure the defs is the first node
+        var node = defs.node();
+        node.parentNode.insertBefore(node, node.parentNode.firstChild);
         defs.append("style")
             .attr("type", "text/css")
             .text(style);
@@ -994,37 +975,37 @@ define('utils',["lib/vkbeautify", "lib/FileSaver"], function(vkbeautify, FileSav
     }
 
     function draw_an_object(container_sel, parent_node_selector, children_selector,
-			    object, id_key, create_function, update_function,
-			    exit_function) {
-	/** Run through the d3 data binding steps for an object. Also checks to
-            make sure none of the values in the *object* are undefined, and
-            ignores those.
+                            object, id_key, create_function, update_function,
+                            exit_function) {
+        /** Run through the d3 data binding steps for an object. Also checks to
+         make sure none of the values in the *object* are undefined, and
+         ignores those.
 
          The create_function, update_function, and exit_function CAN modify the
          input data object.
 
-	 Arguments
-	 ---------
+         Arguments
+         ---------
 
-	 container_sel: A d3 selection containing all objects.
+         container_sel: A d3 selection containing all objects.
 
-	 parent_node_selector: A selector string for a subselection of
-	 container_sel.
+         parent_node_selector: A selector string for a subselection of
+         container_sel.
 
-	 children_selector: A selector string for each DOM element to bind.
+         children_selector: A selector string for each DOM element to bind.
 
-	 object: An object to bind to the selection.
+         object: An object to bind to the selection.
 
-	 id_key: The key that will be used to store object IDs in the bound data
-	 points.
+         id_key: The key that will be used to store object IDs in the bound data
+         points.
 
-	 create_function: A function for enter selection.
+         create_function: A function for enter selection.
 
-	 update_function: A function for update selection.
+         update_function: A function for update selection.
 
-	 exit_function: A function for exit selection.
-	 
-	*/
+         exit_function: A function for exit selection.
+
+         */
         var draw_object = {};
         for (var id in object) {
             if (object[id] === undefined) {
@@ -1033,64 +1014,64 @@ define('utils',["lib/vkbeautify", "lib/FileSaver"], function(vkbeautify, FileSav
                 draw_object[id] = object[id];
             }
         }
-        
-	var sel = container_sel.select(parent_node_selector)
-		.selectAll(children_selector)
-		.data(make_array_ref(draw_object, id_key),
+
+        var sel = container_sel.select(parent_node_selector)
+                .selectAll(children_selector)
+                .data(make_array_ref(draw_object, id_key),
                       function(d) { return d[id_key]; });
-	// enter: generate and place reaction
-	if (create_function)
-	    sel.enter().call(create_function);
-	// update: update when necessary
-	if (update_function)
-	    sel.call(update_function);
-	// exit
-	if (exit_function) 
-	    sel.exit().call(exit_function);
+        // enter: generate and place reaction
+        if (create_function)
+            sel.enter().call(create_function);
+        // update: update when necessary
+        if (update_function)
+            sel.call(update_function);
+        // exit
+        if (exit_function)
+            sel.exit().call(exit_function);
     }
 
     function draw_a_nested_object(container_sel, children_selector, object_data_key,
-				  id_key, create_function, update_function,
-				  exit_function) {
-	/** Run through the d3 data binding steps for an object that is nested
-	 within another element with d3 data.
+                                  id_key, create_function, update_function,
+                                  exit_function) {
+        /** Run through the d3 data binding steps for an object that is nested
+         within another element with d3 data.
 
          The create_function, update_function, and exit_function CAN modify the
          input data object.
 
-	 Arguments
-	 ---------
+         Arguments
+         ---------
 
-	 container_sel: A d3 selection containing all objects.
+         container_sel: A d3 selection containing all objects.
 
-	 children_selector: A selector string for each DOM element to bind.
+         children_selector: A selector string for each DOM element to bind.
 
-	 object_data_key: A key for the parent object containing data for the
-	 new selection.
+         object_data_key: A key for the parent object containing data for the
+         new selection.
 
-	 id_key: The key that will be used to store object IDs in the bound data
-	 points.
+         id_key: The key that will be used to store object IDs in the bound data
+         points.
 
-	 create_function: A function for enter selection.
+         create_function: A function for enter selection.
 
-	 update_function: A function for update selection.
+         update_function: A function for update selection.
 
-	 exit_function: A function for exit selection.
-	 
-	 */
-	var sel = container_sel.selectAll(children_selector)
-	    .data(function(d) {
-		return make_array_ref(d[object_data_key], id_key);
-	    }, function(d) { return d[id_key]; });
-	// enter: generate and place reaction
-	if (create_function)
-	    sel.enter().call(create_function);
-	// update: update when necessary
-	if (update_function)
-	    sel.call(update_function);
-	// exit
-	if (exit_function) 
-	    sel.exit().call(exit_function);
+         exit_function: A function for exit selection.
+
+         */
+        var sel = container_sel.selectAll(children_selector)
+                .data(function(d) {
+                    return make_array_ref(d[object_data_key], id_key);
+                }, function(d) { return d[id_key]; });
+        // enter: generate and place reaction
+        if (create_function)
+            sel.enter().call(create_function);
+        // update: update when necessary
+        if (update_function)
+            sel.call(update_function);
+        // exit
+        if (exit_function)
+            sel.exit().call(exit_function);
     }
 
     function make_array(obj, id_key) { // is this super slow?
@@ -1108,7 +1089,7 @@ define('utils',["lib/vkbeautify", "lib/FileSaver"], function(vkbeautify, FileSav
 
     function make_array_ref(obj, id_key) {
         /** Turn the object into an array, but only by reference. Faster than
-            make_array.
+         make_array.
 
          */
         var array = [];
@@ -1124,18 +1105,18 @@ define('utils',["lib/vkbeautify", "lib/FileSaver"], function(vkbeautify, FileSav
     }
 
     function compare_arrays(a1, a2) {
-	/** Compares two simple (not-nested) arrays.
+        /** Compares two simple (not-nested) arrays.
 
-	 */
-	if (!a1 || !a2) return false;
-	if (a1.length != a2.length) return false;
-	for (var i = 0, l=a1.length; i < l; i++) {
+         */
+        if (!a1 || !a2) return false;
+        if (a1.length != a2.length) return false;
+        for (var i = 0, l=a1.length; i < l; i++) {
             if (a1[i] != a2[i]) {
-		// Warning - two different object instances will never be equal: {x:20} != {x:20}
-		return false;
+                // Warning - two different object instances will never be equal: {x:20} != {x:20}
+                return false;
             }
-	}
-	return true;
+        }
+        return true;
     }
 
     function array_to_object(arr) {
@@ -1146,195 +1127,235 @@ define('utils',["lib/vkbeautify", "lib/FileSaver"], function(vkbeautify, FileSav
 
          */
         // new object
-	var obj = {};
+        var obj = {};
         // for each element of the array
-	for (var i = 0, l = arr.length; i < l; i++) {
-	    var column = arr[i],
+        for (var i = 0, l = arr.length; i < l; i++) {
+            var column = arr[i],
                 keys = Object.keys(column);
             for (var k = 0, nk = keys.length; k < nk; k++) {
                 var id = keys[k];
-		if (!(id in obj)) {
-		    var n = [];
-		    // fill spaces with null
-		    for (var j = 0; j < l; j++) {
-			n[j] = null;
-		    }
-		    n[i] = column[id];
-		    obj[id] = n;
-		} else {
-		    obj[id][i] = column[id];
+                if (!(id in obj)) {
+                    var n = [];
+                    // fill spaces with null
+                    for (var j = 0; j < l; j++) {
+                        n[j] = null;
+                    }
+                    n[i] = column[id];
+                    obj[id] = n;
+                } else {
+                    obj[id][i] = column[id];
                 }
-	    }
-	}
-	return obj;
+            }
+        }
+        return obj;
     }
 
     function clone(obj) {
-	// Handles the array and object types, and null or undefined
-	if (null == obj || "object" != typeof obj) return obj;
-	// Handle Array
-	if (obj instanceof Array) {
+        // Handles the array and object types, and null or undefined
+        if (null == obj || "object" != typeof obj) return obj;
+        // Handle Array
+        if (obj instanceof Array) {
             var copy = [];
             for (var i = 0, len = obj.length; i < len; i++) {
-		copy[i] = clone(obj[i]);
+                copy[i] = clone(obj[i]);
             }
             return copy;
-	}
-	// Handle Object
-	if (obj instanceof Object) {
+        }
+        // Handle Object
+        if (obj instanceof Object) {
             var copy = {};
             for (var attr in obj) {
-		if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]);
+                if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]);
             }
             return copy;
-	}
-	throw new Error("Unable to copy obj! Its type isn't supported.");
+        }
+        throw new Error("Unable to copy obj! Its type isn't supported.");
     }
 
     function extend(obj1, obj2, overwrite) {
-	/** Extends obj1 with keys/values from obj2. Performs the extension
-	    cautiously, and does not override attributes, unless the overwrite
-	    argument is true.
+        /** Extends obj1 with keys/values from obj2. Performs the extension
+         cautiously, and does not override attributes, unless the overwrite
+         argument is true.
 
-	    Arguments
-	    ---------
+         Arguments
+         ---------
 
-	    obj1: Object to extend
-	    
-	    obj2: Object with which to extend.
+         obj1: Object to extend
 
-	    overwrite: (Optional, Default false) Overwrite attributes in obj1.
+         obj2: Object with which to extend.
 
-	*/
+         overwrite: (Optional, Default false) Overwrite attributes in obj1.
 
-	if (overwrite === undefined)
-	    overwrite = false;
-	
-	for (var attrname in obj2) { 
-	    if (!(attrname in obj1) || overwrite) // UNIT TEST This
-		obj1[attrname] = obj2[attrname];
-	    else
-		throw new Error('Attribute ' + attrname + ' already in object.');
-	}
+         */
+
+        if (overwrite === undefined)
+            overwrite = false;
+
+        for (var attrname in obj2) {
+            if (!(attrname in obj1) || overwrite) // UNIT TEST This
+                obj1[attrname] = obj2[attrname];
+            else
+                throw new Error('Attribute ' + attrname + ' already in object.');
+        }
     }
 
     function unique_concat(arrays) {
-	var new_array = [];
-	arrays.forEach(function (a) {
-	    a.forEach(function(x) {
-		if (new_array.indexOf(x) < 0)
-		    new_array.push(x);
-	    });
-	});
-	return new_array;
+        var new_array = [];
+        arrays.forEach(function (a) {
+            a.forEach(function(x) {
+                if (new_array.indexOf(x) < 0)
+                    new_array.push(x);
+            });
+        });
+        return new_array;
+    }
+
+    function unique_strings_array(arr) {
+        /** Return unique values in array of strings.
+
+         http://stackoverflow.com/questions/1960473/unique-values-in-an-array
+
+         */
+        var a = [];
+        for (var i = 0, l = arr.length; i < l; i++)
+            if (a.indexOf(arr[i]) === -1)
+                a.push(arr[i]);
+        return a;
+    }
+
+    function debounce(func, wait, immediate) {
+        /** Returns a function, that, as long as it continues to be invoked, will
+         not be triggered.
+
+         The function will be called after it stops being called for N
+         milliseconds. If `immediate` is passed, trigger the function on the leading
+         edge, instead of the trailing.
+
+         */
+        var timeout;
+        return function() {
+            var context = this, args = arguments;
+            var later = function() {
+                timeout = null;
+                if (!immediate) func.apply(context, args);
+            };
+            var callNow = immediate && !timeout;
+            window.clearTimeout(timeout);
+            timeout = window.setTimeout(later, wait);
+            if (callNow) func.apply(context, args);
+        };
     }
 
     function object_slice_for_ids(obj, ids) {
-	/** Return a copy of the object with just the given ids. 
-	 
-	 Arguments
-	 ---------
+        /** Return a copy of the object with just the given ids.
 
-	 obj: An object.
+         Arguments
+         ---------
 
-	 ids: An array of id strings.
+         obj: An object.
 
-	 */
+         ids: An array of id strings.
+
+         */
         var subset = {}, i = -1;
         while (++i<ids.length) {
-	    subset[ids[i]] = clone(obj[ids[i]]);
+            subset[ids[i]] = clone(obj[ids[i]]);
         }
         if (ids.length != Object.keys(subset).length) {
-	    console.warn('did not find correct reaction subset');
+            console.warn('did not find correct reaction subset');
         }
-	return subset;
+        return subset;
     }
-    
+
     function object_slice_for_ids_ref(obj, ids) {
-	/** Return a reference of the object with just the given ids. Faster
-	 than object_slice_for_ids.
-	 
-	 Arguments
-	 ---------
+        /** Return a reference of the object with just the given ids. Faster
+         than object_slice_for_ids.
 
-	 obj: An object.
+         Arguments
+         ---------
 
-	 ids: An array of id strings.
+         obj: An object.
 
-	 */
+         ids: An array of id strings.
+
+         */
         var subset = {}, i = -1;
         while (++i<ids.length) {
-	    subset[ids[i]] = obj[ids[i]];
+            subset[ids[i]] = obj[ids[i]];
         }
         if (ids.length != Object.keys(subset).length) {
-	    console.warn('did not find correct reaction subset');
+            console.warn('did not find correct reaction subset');
         }
-	return subset;
+        return subset;
     }
 
     function c_plus_c(coords1, coords2) {
-	if (coords1 === null || coords2 === null || 
-	    coords1 === undefined || coords2 === undefined)
-	    return null;
-	return { "x": coords1.x + coords2.x,
-		 "y": coords1.y + coords2.y };
+        if (coords1 === null || coords2 === null ||
+            coords1 === undefined || coords2 === undefined)
+            return null;
+        return { "x": coords1.x + coords2.x,
+                 "y": coords1.y + coords2.y };
     }
     function c_minus_c(coords1, coords2) {
-	if (coords1 === null || coords2 === null || 
-	    coords1 === undefined || coords2 === undefined)
-	    return null;
-	return { "x": coords1.x - coords2.x,
-		 "y": coords1.y - coords2.y };
+        if (coords1 === null || coords2 === null ||
+            coords1 === undefined || coords2 === undefined)
+            return null;
+        return { "x": coords1.x - coords2.x,
+                 "y": coords1.y - coords2.y };
     }
 
     function c_times_scalar(coords, scalar) {
-	return { "x": coords.x * scalar,
-		 "y": coords.y * scalar };
+        return { "x": coords.x * scalar,
+                 "y": coords.y * scalar };
     }
-    
-    function download_json(json, name) {
-	/** Download json file in a blob.
 
-	 */
-	var j = JSON.stringify(json),
-	    blob = new Blob([j], {type: "octet/stream"});
-	FileSaver(blob, name + '.json');
+    function download_json(json, name) {
+        /** Download json file in a blob.
+
+         */
+
+        // alert if blob isn't going to work
+        _check_filesaver();
+
+        var j = JSON.stringify(json),
+            blob = new Blob([j], {type: "application/json"});
+        saveAs(blob, name + '.json');
     }
 
     function load_json(f, callback, pre_fn, failure_fn) {
-	/** Try to load the file as JSON.
+        /** Try to load the file as JSON.
 
-	    Arguments
-	    ---------
+         Arguments
+         ---------
 
-	    f: The file path
+         f: The file path
 
-	    callback: A callback function that accepts arguments: error, data.
+         callback: A callback function that accepts arguments: error, data.
 
-            pre_fn: (optional) A function to call before loading the data.
+         pre_fn: (optional) A function to call before loading the data.
 
-            failure_fn: (optional) A function to call if the load fails or is aborted.
-            
-	*/
-	// Check for the various File API support.
-	if (!(window.File && window.FileReader && window.FileList && window.Blob))
-	    callback("The File APIs are not fully supported in this browser.", null);
+         failure_fn: (optional) A function to call if the load fails or is aborted.
 
-	var reader = new window.FileReader();
-	// Closure to capture the file information.
-	reader.onload = function(event) {
-	    var result = event.target.result,
-		data;
-	    // try JSON
-	    try {
-		data = JSON.parse(result);
-	    } catch (e) {
-		// if it failed, return the error
-		callback(e, null);
-		return;
-	    }
-	    // if successful, return the data
-	    callback(null, data);
+         */
+        // Check for the various File API support.
+        if (!(window.File && window.FileReader && window.FileList && window.Blob))
+            callback("The File APIs are not fully supported in this browser.", null);
+
+        var reader = new window.FileReader();
+        // Closure to capture the file information.
+        reader.onload = function(event) {
+            var result = event.target.result,
+                data;
+            // try JSON
+            try {
+                data = JSON.parse(result);
+            } catch (e) {
+                // if it failed, return the error
+                callback(e, null);
+                return;
+            }
+            // if successful, return the data
+            callback(null, data);
         };
         if (pre_fn !== undefined && pre_fn !== null) {
             try { pre_fn(); }
@@ -1348,64 +1369,64 @@ define('utils',["lib/vkbeautify", "lib/FileSaver"], function(vkbeautify, FileSav
             try { failure_fn(); }
             catch (e) { console.warn(e); }
         }
-	// Read in the image file as a data URL.
-	reader.readAsText(f);
+        // Read in the image file as a data URL.
+        reader.readAsText(f);
     }
-    
+
     function load_json_or_csv(f, csv_converter, callback, pre_fn, failure_fn,
                               debug_event) {
-	/** Try to load the file as JSON or CSV (JSON first).
+        /** Try to load the file as JSON or CSV (JSON first).
 
-	    Arguments
-	    ---------
+         Arguments
+         ---------
 
-	    f: The file path
+         f: The file path
 
-	    csv_converter: A function to convert the CSV output to equivalent JSON.
+         csv_converter: A function to convert the CSV output to equivalent JSON.
 
-	    callback: A callback function that accepts arguments: error, data.
+         callback: A callback function that accepts arguments: error, data.
 
-            pre_fn: (optional) A function to call before loading the data.
+         pre_fn: (optional) A function to call before loading the data.
 
-            failure_fn: (optional) A function to call if the load fails or is aborted.
+         failure_fn: (optional) A function to call if the load fails or is aborted.
 
-	    debug_event: (optional) An event, with a string at
-	    event.target.result, to load as though it was the contents of a
-	    loaded file.
+         debug_event: (optional) An event, with a string at
+         event.target.result, to load as though it was the contents of a
+         loaded file.
 
-	*/
-	// Check for the various File API support.
-	if (!(window.File && window.FileReader && window.FileList && window.Blob))
-	    callback("The File APIs are not fully supported in this browser.", null);
+         */
+        // Check for the various File API support.
+        if (!(window.File && window.FileReader && window.FileList && window.Blob))
+            callback("The File APIs are not fully supported in this browser.", null);
 
-	var reader = new window.FileReader(),
-	    // Closure to capture the file information.
-	    onload_function = function(event) {
-                
-		var result = event.target.result,
-		    data, errors;
-		// try JSON
-		try {
-		    data = JSON.parse(result);
-		} catch (e) {
-		    errors = 'JSON error: ' + e;
-		    
-		    // try csv
-		    try {
-			data = csv_converter(d3.csv.parseRows(result));
-		    } catch (e) {
-			// if both failed, return the errors
-			callback(errors + '\nCSV error: ' + e, null);
-			return;
-		    }
-		}
-		// if successful, return the data
-		callback(null, data);
+        var reader = new window.FileReader(),
+            // Closure to capture the file information.
+            onload_function = function(event) {
+
+                var result = event.target.result,
+                    data, errors;
+                // try JSON
+                try {
+                    data = JSON.parse(result);
+                } catch (e) {
+                    errors = 'JSON error: ' + e;
+
+                    // try csv
+                    try {
+                        data = csv_converter(d3.csv.parseRows(result));
+                    } catch (e) {
+                        // if both failed, return the errors
+                        callback(errors + '\nCSV error: ' + e, null);
+                        return;
+                    }
+                }
+                // if successful, return the data
+                callback(null, data);
             };
-	if (debug_event !== undefined && debug_event !== null) {
-	    console.warn('Debugging load_json_or_csv');
-	    return onload_function(debug_event);
-	}
+        if (debug_event !== undefined && debug_event !== null) {
+            console.warn('Debugging load_json_or_csv');
+            return onload_function(debug_event);
+        }
         if (pre_fn !== undefined && pre_fn !== null) {
             try { pre_fn(); }
             catch (e) { console.warn(e); }
@@ -1413,131 +1434,138 @@ define('utils',["lib/vkbeautify", "lib/FileSaver"], function(vkbeautify, FileSav
         reader.onabort = function(event) {
             try { failure_fn(); }
             catch (e) { console.warn(e); }
-        }
+        };
         reader.onerror = function(event) {
             try { failure_fn(); }
             catch (e) { console.warn(e); }
-        }
-	// Read in the image file as a data URL.
-	reader.onload = onload_function;
-	reader.readAsText(f);
+        };
+        // Read in the image file as a data URL.
+        reader.onload = onload_function;
+        reader.readAsText(f);
     }
-    
-    function export_svg(name, svg_sel, do_beautify) {
-        var a = document.createElement('a'), xml, ev;
-        a.download = name + '.svg'; // file name
-	// convert node to xml string
-        xml = (new XMLSerializer()).serializeToString(svg_sel.node()); 
+
+    function download_svg(name, svg_sel, do_beautify) {
+        /** Download an svg file using FileSaver.js.
+         *
+         * Arguments
+         * ---------
+         *
+         * name: The filename (without extension).
+         *
+         * svg_sel: The d3 selection for the SVG element.
+         *
+         * do_beautify: (Boolean) If true, then beautify the SVG output.
+         *
+         */
+
+        // alert if blob isn't going to work
+        _check_filesaver();
+
+        // make the xml string
+        var xml = (new XMLSerializer()).serializeToString(svg_sel.node());
         if (do_beautify) xml = vkbeautify.xml(xml);
         xml = '<?xml version="1.0" encoding="utf-8"?>\n \
             <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"\n \
         "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">\n' + xml;
-        a.setAttribute("href-lang", "image/svg+xml");
-        a.href = 'data:image/svg+xml;base64,' + utf8_to_b64(xml); // create data uri
-        // <a> constructed, simulate mouse click on it
-        ev = document.createEvent("MouseEvents");
-        ev.initMouseEvent("click", true, false, self, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-        a.dispatchEvent(ev);
-        
-	// definitions
-        function utf8_to_b64(str) {
-            return window.btoa(unescape(encodeURIComponent( str )));
-        }
+
+        // save
+        var blob = new Blob([xml], {type: "image/svg+xml"});
+        saveAs(blob, name + '.svg');
     };
 
     function rotate_coords_recursive(coords_array, angle, center) {
-	var rot = function(c) { return rotate_coords(c, angle, center); };
+        var rot = function(c) { return rotate_coords(c, angle, center); };
         return coords_array.map(rot);
     }
 
     function rotate_coords(c, angle, center) {
-	/** Calculates displacement { x: dx, y: dy } based on rotating point c around 
-	 center with angle.
+        /** Calculates displacement { x: dx, y: dy } based on rotating point c around
+         center with angle.
 
-	 */
+         */
         var dx = Math.cos(-angle) * (c.x - center.x) +
                 Math.sin(-angle) * (c.y - center.y)
-		+ center.x - c.x,
+                + center.x - c.x,
             dy = - Math.sin(-angle) * (c.x - center.x) +
                 Math.cos(-angle) * (c.y - center.y)
-		+ center.y - c.y;
+                + center.y - c.y;
         return { x: dx, y: dy };
     }
 
     function get_angle(coords) {
-	/* Takes an array of 2 coordinate objects {"x": 1, "y": 1}
-	 *
-	 * Returns angle between 0 and 2PI.
-	 */
-	var denominator = coords[1].x - coords[0].x,
-	    numerator = coords[1].y - coords[0].y;
-	if (denominator==0 && numerator >= 0) return Math.PI/2;
-	else if (denominator==0 && numerator < 0) return 3*Math.PI/2;
-	else if (denominator >= 0 && numerator >= 0) return Math.atan(numerator/denominator);
-	else if (denominator >= 0) return (Math.atan(numerator/denominator) + 2*Math.PI);
-	else return (Math.atan(numerator/denominator) + Math.PI);
+        /* Takes an array of 2 coordinate objects {"x": 1, "y": 1}
+         *
+         * Returns angle between 0 and 2PI.
+         */
+        var denominator = coords[1].x - coords[0].x,
+            numerator = coords[1].y - coords[0].y;
+        if (denominator==0 && numerator >= 0) return Math.PI/2;
+        else if (denominator==0 && numerator < 0) return 3*Math.PI/2;
+        else if (denominator >= 0 && numerator >= 0) return Math.atan(numerator/denominator);
+        else if (denominator >= 0) return (Math.atan(numerator/denominator) + 2*Math.PI);
+        else return (Math.atan(numerator/denominator) + Math.PI);
     }
 
     function to_degrees(radians) { return radians*180/Math.PI; }
 
     function angle_for_event(displacement, point, center) {
-	var gamma =  Math.atan2((point.x - center.x), (center.y - point.y)),
-	    beta = Math.atan2((point.x - center.x + displacement.x), 
-			      (center.y - point.y - displacement.y)),
-	    angle = beta - gamma;
-	return angle;
+        var gamma =  Math.atan2((point.x - center.x), (center.y - point.y)),
+            beta = Math.atan2((point.x - center.x + displacement.x),
+                              (center.y - point.y - displacement.y)),
+            angle = beta - gamma;
+        return angle;
     }
 
     function distance(start, end) { return Math.sqrt(Math.pow(end.y-start.y, 2) + Math.pow(end.x-start.x, 2)); }
 
     function check_undefined(args, names) {
-	/** Report an error if any of the arguments are undefined.
+        /** Report an error if any of the arguments are undefined.
 
-	 Call by passing in *arguments* from any function and an array of
-	 argument names.
+         Call by passing in *arguments* from any function and an array of
+         argument names.
 
-	 */
-	names.map(function(name, i) {
-	    if (args[i]===undefined) {
-		console.error('Argument is undefined: '+String(names[i]));
-	    }
-	});
+         */
+        names.map(function(name, i) {
+            if (args[i]===undefined) {
+                console.error('Argument is undefined: '+String(names[i]));
+            }
+        });
     }
 
     function compartmentalize(bigg_id, compartment_id) {
-	return bigg_id + '_' + compartment_id;
+        return bigg_id + '_' + compartment_id;
     }
 
 
     // definitions
     function decompartmentalize(id) {
-	/** Convert ids to bigg_id and compartment_id.
-	 
-	 */
-	var out = no_compartment(id);
-	if (out===null) out = [id, null];
-	return out;
+        /** Convert ids to bigg_id and compartment_id.
 
-	// definitions
-	function no_compartment(id) {
-	    /** Returns an array of [bigg_id, compartment id].
+         */
+        var out = no_compartment(id);
+        if (out===null) out = [id, null];
+        return out;
 
-	     Matches compartment ids with length 1 or 2.
+        // definitions
+        function no_compartment(id) {
+            /** Returns an array of [bigg_id, compartment id].
 
-	     Return null if no match is found.
+             Matches compartment ids with length 1 or 2.
 
-	     */
-	    var reg = /(.*)_([a-z0-9]{1,2})$/,
-		result = reg.exec(id);
-	    if (result===null) return null;
-	    return result.slice(1,3);
-	}
+             Return null if no match is found.
+
+             */
+            var reg = /(.*)_([a-z0-9]{1,2})$/,
+                result = reg.exec(id);
+            if (result===null) return null;
+            return result.slice(1,3);
+        }
     }
 
     function mean(array) {
-	var sum = array.reduce(function(a, b) { return a + b; });
-	var avg = sum / array.length;
-	return avg;
+        var sum = array.reduce(function(a, b) { return a + b; });
+        var avg = sum / array.length;
+        return avg;
     }
 
     function median(array) {
@@ -1574,80 +1602,84 @@ define('utils',["lib/vkbeautify", "lib/FileSaver"], function(vkbeautify, FileSav
         return text;
     }
 
+    function generate_map_id() {
+        return random_characters(12);
+    }
+
     function check_for_parent_tag(el, tag) {
-	/** Check that the selection has the given parent tag.
+        /** Check that the selection has the given parent tag.
 
-	 el: A d3 selection or node.
+         el: A d3 selection or node.
 
-	 tag: A tag name (case insensitive)
+         tag: A tag name (case insensitive)
 
-	 */
-	// make sure it is a node
-	if (el instanceof Array)
-	    el = el.node();
-	while (el.parentNode !== null) {
-	    el = el.parentNode;
-	    if (el.tagName === undefined) continue;
-	    if (el.tagName.toLowerCase() === tag.toLowerCase())
-		return true;
-	}
-	return false;
+         */
+        // make sure it is a node
+        if (el instanceof Array)
+            el = el.node();
+        while (el.parentNode !== null) {
+            el = el.parentNode;
+            if (el.tagName === undefined) continue;
+            if (el.tagName.toLowerCase() === tag.toLowerCase())
+                return true;
+        }
+        return false;
     }
 
     function name_to_url(name, download_url) {
-	/** Convert model or map name to url.
-	 
-	 Arguments
-	 ---------
+        /** Convert model or map name to url.
 
-	 name: The short name, e.g. e_coli.iJO1366.central_metabolism.
+         Arguments
+         ---------
 
-	 download_url: The url to prepend (optional).
+         name: The short name, e.g. e_coli.iJO1366.central_metabolism.
 
-	*/
+         download_url: The url to prepend (optional).
 
-	if (download_url !== undefined && download_url !== null) {
-	    // strip download_url
-	    download_url = download_url.replace(/^\/|\/$/g, '');
-	    name = [download_url, name].join('/');
-	}
-	// strip final path
-	return name.replace(/^\/|\/$/g, '') + '.json';
+         */
+
+        if (download_url !== undefined && download_url !== null) {
+            // strip download_url
+            download_url = download_url.replace(/^\/|\/$/g, '');
+            name = [download_url, name].join('/');
+        }
+        // strip final path
+        return name.replace(/^\/|\/$/g, '') + '.json';
     }
 
     function parse_url_components(the_window, options) {
-	/** Parse the URL and return options based on the URL arguments.
+        /** Parse the URL and return options based on the URL arguments.
 
-	 Arguments
-	 ---------
+         Arguments
+         ---------
 
-	 the_window: A reference to the global window.
-	 
-	 options: (optional) an existing options object to which new options
-	 will be added. Overwrites existing arguments in options.
+         the_window: A reference to the global window.
 
-	 Adapted from http://stackoverflow.com/questions/979975/how-to-get-the-value-from-url-parameter
+         options: (optional) an existing options object to which new options
+         will be added. Overwrites existing arguments in options.
 
-	 */
-	if (options===undefined) options = {};
+         Adapted from http://stackoverflow.com/questions/979975/how-to-get-the-value-from-url-parameter
 
-	var query = the_window.location.search.substring(1),
-	    vars = query.split("&");
-	for (var i = 0; i < vars.length; i++) {
-	    var pair = vars[i].split("="),
-		val = decodeURIComponent(pair[1]);
-	    // deal with array options
-	    if (pair[0].indexOf('[]') == pair[0].length - 2) {
-		var o = pair[0].replace('[]', '');
-		if (!(o in options))
-		    options[o] = [];
-		options[o].push(val);
-	    } else {
-		options[pair[0]] = val;
-	    }
-	}
-	return options;
-    }    
+         */
+        if (options===undefined) options = {};
+
+        var query = the_window.location.search.substring(1),
+            vars = query.split("&");
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split("="),
+                val = decodeURIComponent(pair[1]);
+            // deal with array options
+            if (pair[0].indexOf('[]') == pair[0].length - 2) {
+                var o = pair[0].replace('[]', '');
+                if (!(o in options))
+                    options[o] = [];
+                options[o].push(val);
+            } else {
+                options[pair[0]] = val;
+            }
+        }
+        return options;
+    }
 });
 
 define('PlacedDiv',['utils'], function(utils) {
@@ -1658,52 +1690,52 @@ define('PlacedDiv',['utils'], function(utils) {
     var PlacedDiv = utils.make_class();
     // instance methods
     PlacedDiv.prototype = { init: init,
-			    is_visible: is_visible,
-			    place: place,
-			    hide: hide };
+                            is_visible: is_visible,
+                            place: place,
+                            hide: hide };
     return PlacedDiv;
 
     // definitions
     function init(div, map, displacement) {
-	// make the input box
-	this.div = div;
+        // make the input box
+        this.div = div;
 
-	if (displacement===undefined)
-	    displacement = {x: 0, y: 0};
-	this.displacement = displacement;
+        if (displacement===undefined)
+            displacement = {x: 0, y: 0};
+        this.displacement = displacement;
 
-	this.map = map;
+        this.map = map;
     }
 
     function is_visible() {
-	return this.div.style('display') != 'none';
+        return this.div.style('display') != 'none';
     }
 
     function place(coords) {
-	/** Position the html div to match the given SVG coordinates.
+        /** Position the html div to match the given SVG coordinates.
 
-	 */
-	// show the input
-	this.div.style('display', null);
+         */
+        // show the input
+        this.div.style('display', null);
 
-	// move the new input
-	var window_translate = this.map.zoom_container.window_translate,
-	    window_scale = this.map.zoom_container.window_scale,
-	    map_size = this.map.get_size(),
-	    left = Math.max(20,
-			    Math.min(map_size.width - 270,
-				     (window_scale * coords.x + window_translate.x - this.displacement.x))),
-	    top = Math.max(20,
-			   Math.min(map_size.height - 40,
-				    (window_scale * coords.y + window_translate.y - this.displacement.y)));
-	this.div.style('position', 'absolute')
-	    .style('display', 'block')
-	    .style('left', left+'px')
-	    .style('top', top+'px');
+        // move the new input
+        var window_translate = this.map.zoom_container.window_translate,
+            window_scale = this.map.zoom_container.window_scale,
+            map_size = this.map.get_size(),
+            left = Math.max(20,
+                            Math.min(map_size.width - 270,
+                                     (window_scale * coords.x + window_translate.x - this.displacement.x))),
+            top = Math.max(20,
+                           Math.min(map_size.height - 40,
+                                    (window_scale * coords.y + window_translate.y - this.displacement.y)));
+        this.div.style('position', 'absolute')
+            .style('display', 'block')
+            .style('left', left+'px')
+            .style('top', top+'px');
     }
     
     function hide() {
-	this.div.style('display', 'none');
+        this.div.style('display', 'none');
     }
 });
 
@@ -2118,120 +2150,120 @@ define('DirectionArrow',["utils"], function(utils) {
      */
     var DirectionArrow = utils.make_class();
     DirectionArrow.prototype = { init: init,
-				 set_location: set_location,
-				 set_rotation: set_rotation,
-				 displace_rotation: displace_rotation,
-				 get_rotation: get_rotation,
-				 toggle: toggle,
-				 show: show,
-				 hide: hide,
-				 right: right,
-				 left: left,
-				 up: up,
-				 down: down,
-				 _setup_drag: _setup_drag };
+                                 set_location: set_location,
+                                 set_rotation: set_rotation,
+                                 displace_rotation: displace_rotation,
+                                 get_rotation: get_rotation,
+                                 toggle: toggle,
+                                 show: show,
+                                 hide: hide,
+                                 right: right,
+                                 left: left,
+                                 up: up,
+                                 down: down,
+                                 _setup_drag: _setup_drag };
     return DirectionArrow;
 
     // definitions
     function init(sel) {
-	this.arrow_container = sel.append('g')
-	    .attr('id', 'direction-arrow-container')
-	    .attr('transform', 'translate(0,0)rotate(0)');
-	this.arrow = this.arrow_container.append('path')
-	    .classed('direction-arrow', true)
-	    .attr('d', path_for_arrow())
-	    .style('visibility', 'hidden')
-	    .attr('transform', 'translate(30,0)scale(2.5)');
+        this.arrow_container = sel.append('g')
+            .attr('id', 'direction-arrow-container')
+            .attr('transform', 'translate(0,0)rotate(0)');
+        this.arrow = this.arrow_container.append('path')
+            .classed('direction-arrow', true)
+            .attr('d', path_for_arrow())
+            .style('visibility', 'hidden')
+            .attr('transform', 'translate(30,0)scale(2.5)');
 
-	this.sel = sel;
-	this.center = { x: 0, y: 0 };
+        this.sel = sel;
+        this.center = { x: 0, y: 0 };
 
-	this._setup_drag();
-	this.dragging = false;
+        this._setup_drag();
+        this.dragging = false;
 
-	this.is_visible = false;
-	this.show();
+        this.is_visible = false;
+        this.show();
 
-	// definitions
-	function path_for_arrow() {
-	    return "M0 -5 L0 5 L20 5 L20 10 L30 0 L20 -10 L20 -5 Z";
-	}
+        // definitions
+        function path_for_arrow() {
+            return "M0 -5 L0 5 L20 5 L20 10 L30 0 L20 -10 L20 -5 Z";
+        }
     }
     function set_location(coords) {
-	/** Move the arrow to coords.
-	 */
-	this.center = coords;
-	var transform = d3.transform(this.arrow_container.attr('transform'));
-	this.arrow_container.attr('transform',
-				  'translate('+coords.x+','+coords.y+')rotate('+transform.rotate+')');
+        /** Move the arrow to coords.
+         */
+        this.center = coords;
+        var transform = d3.transform(this.arrow_container.attr('transform'));
+        this.arrow_container.attr('transform',
+                                  'translate('+coords.x+','+coords.y+')rotate('+transform.rotate+')');
     }
     function set_rotation(rotation) {
-	/** Rotate the arrow to rotation.
-	 */
-	var transform = d3.transform(this.arrow_container.attr('transform'));
-	this.arrow_container.attr('transform',
-				  'translate('+transform.translate+')rotate('+rotation+')');
+        /** Rotate the arrow to rotation.
+         */
+        var transform = d3.transform(this.arrow_container.attr('transform'));
+        this.arrow_container.attr('transform',
+                                  'translate('+transform.translate+')rotate('+rotation+')');
     }
     function displace_rotation(d_rotation) {
-	/** Displace the arrow rotation by a set amount.
-	 */
-	var transform = d3.transform(this.arrow_container.attr('transform'));
-	this.arrow_container.attr('transform',
-				  'translate('+transform.translate+')'+
-				  'rotate('+(transform.rotate+d_rotation)+')');
+        /** Displace the arrow rotation by a set amount.
+         */
+        var transform = d3.transform(this.arrow_container.attr('transform'));
+        this.arrow_container.attr('transform',
+                                  'translate('+transform.translate+')'+
+                                  'rotate('+(transform.rotate+d_rotation)+')');
     }
     function get_rotation() {
-	/** Returns the arrow rotation.
-	 */
-	return d3.transform(this.arrow_container.attr('transform')).rotate;
+        /** Returns the arrow rotation.
+         */
+        return d3.transform(this.arrow_container.attr('transform')).rotate;
     }
     function toggle(on_off) {
-	if (on_off===undefined) this.is_visible = !this.is_visible;
-	else this.is_visible = on_off;
-	this.arrow.style('visibility', this.is_visible ? 'visible' : 'hidden');
+        if (on_off===undefined) this.is_visible = !this.is_visible;
+        else this.is_visible = on_off;
+        this.arrow.style('visibility', this.is_visible ? 'visible' : 'hidden');
     }
     function show() {
-	this.toggle(true);
+        this.toggle(true);
     }
     function hide() {
-	this.toggle(false);
+        this.toggle(false);
     }
     function right() {
-	this.set_rotation(0);
+        this.set_rotation(0);
     }
     function down() {
-	this.set_rotation(90);
+        this.set_rotation(90);
     }
     function left() {
-	this.set_rotation(180);
+        this.set_rotation(180);
     }
     function up() {
-	this.set_rotation(270);
+        this.set_rotation(270);
     }
     
     function _setup_drag() {
-	var b = d3.behavior.drag()
-		.on("dragstart", function(d) {
-		    // silence other listeners
-		    d3.event.sourceEvent.stopPropagation();
-		    this.dragging = true;
-		}.bind(this))
-		.on("drag.direction_arrow", function(d) {
-		    var displacement = { x: d3.event.dx,
-					 y: d3.event.dy },
-			location = { x: d3.mouse(this.sel.node())[0],
-				     y: d3.mouse(this.sel.node())[1] },
-			d_angle = utils.angle_for_event(displacement,
-							location,
-							this.center);
-		    this.displace_rotation(utils.to_degrees(d_angle));
-		}.bind(this))
-		.on("dragend", function(d) {
-		    window.setTimeout(function() {
-			this.dragging = false;
-		    }.bind(this), 200);
-		}.bind(this));
-	this.arrow_container.call(b);
+        var b = d3.behavior.drag()
+                .on("dragstart", function(d) {
+                    // silence other listeners
+                    d3.event.sourceEvent.stopPropagation();
+                    this.dragging = true;
+                }.bind(this))
+                .on("drag.direction_arrow", function(d) {
+                    var displacement = { x: d3.event.dx,
+                                         y: d3.event.dy },
+                        location = { x: d3.mouse(this.sel.node())[0],
+                                     y: d3.mouse(this.sel.node())[1] },
+                        d_angle = utils.angle_for_event(displacement,
+                                                        location,
+                                                        this.center);
+                    this.displace_rotation(utils.to_degrees(d_angle));
+                }.bind(this))
+                .on("dragend", function(d) {
+                    window.setTimeout(function() {
+                        this.dragging = false;
+                    }.bind(this), 200);
+                }.bind(this));
+        this.arrow_container.call(b);
     }
 });
 
@@ -2250,8 +2282,8 @@ define('data_styles',['utils'], function(utils) {
         // find ORs
         OR_EXPRESSION = /(^|\()(\s*-?[0-9.]+\s+(?:or\s+-?[0-9.]+\s*)+)(\)|$)/ig,
         // find ANDS, respecting order of operations (and before or)
-        AND_EXPRESSION = /(^|\(|or\s)(\s*-?[0-9.]+\s+(?:and\s+-?[0-9.]+\s*)+)(\sor|\)|$)/ig; 
-    
+        AND_EXPRESSION = /(^|\(|or\s)(\s*-?[0-9.]+\s+(?:and\s+-?[0-9.]+\s*)+)(\sor|\)|$)/ig;
+
     return { import_and_check: import_and_check,
              text_for_data: text_for_data,
              float_for_data: float_for_data,
@@ -2281,12 +2313,12 @@ define('data_styles',['utils'], function(utils) {
          GPRs for the map and model.
 
          */
-        
+
         // check arguments
         if (data===null)
             return null;
         if (['reaction_data', 'metabolite_data', 'gene_data'].indexOf(name) == -1)
-            throw new Error('Invalid name argument: ' + name);  
+            throw new Error('Invalid name argument: ' + name);
 
         // make array
         if (!(data instanceof Array)) {
@@ -2310,7 +2342,7 @@ define('data_styles',['utils'], function(utils) {
                 throw new Error('Must pass all_reactions argument for gene_data');
             data = align_gene_data_to_reactions(data, all_reactions);
         }
-        
+
         return data;
 
         // definitions
@@ -2325,9 +2357,9 @@ define('data_styles',['utils'], function(utils) {
             for (var reaction_id in reactions) {
                 var reaction = reactions[reaction_id],
                     bigg_id = reaction.bigg_id,
-                    this_gene_data = {}; 
+                    this_gene_data = {};
                 // save to aligned
-                
+
                 // get the genes if they aren't already there
                 var g = reaction.genes,
                     genes;
@@ -2355,19 +2387,19 @@ define('data_styles',['utils'], function(utils) {
 
         // absolute value
         var take_abs = (styles.indexOf('abs') != -1);
-        
+
         if (d.length==1) { // 1 set
             // 1 null
             var f = _parse_float_or_null(d[0]);
             if (f === null)
                 return null;
             return abs(f, take_abs);
-        } else if (d.length==2) { // 2 sets            
+        } else if (d.length==2) { // 2 sets
             // 2 null
             var fs = d.map(_parse_float_or_null);
             if (fs[0] === null || fs[1] === null)
                 return null;
-            
+
             if (compare_style == 'diff') {
                 return diff(fs[0], fs[1], take_abs);
             } else if (compare_style == 'fold') {
@@ -2382,9 +2414,9 @@ define('data_styles',['utils'], function(utils) {
         throw new Error('Bad data compare_style: ' + compare_style);
 
         // definitions
-	function check_finite(x) {
-	    return isFinite(x) ? x : null;
-	}
+        function check_finite(x) {
+            return isFinite(x) ? x : null;
+        }
         function abs(x, take_abs) {
             return take_abs ? Math.abs(x) : x;
         }
@@ -2394,7 +2426,8 @@ define('data_styles',['utils'], function(utils) {
         }
         function fold(x, y, take_abs) {
             if (x == 0 || y == 0) return null;
-            return (y >= x ? y / x : - x / y);
+            var fold = (y >= x ? y / x : - x / y);
+            return take_abs ? Math.abs(fold) : fold;
         }
         function log2_fold(x, y, take_abs) {
             if (x == 0) return null;
@@ -2412,23 +2445,61 @@ define('data_styles',['utils'], function(utils) {
 
     function gene_string_for_data(rule, gene_values, genes, styles,
                                   identifiers_on_map, compare_style) {
-        var out = rule,
-            no_data = (gene_values === null);
+        /** Add gene values to the gene_reaction_rule string.
+
+         Arguments
+         ---------
+
+         rule: (string) The gene reaction rule.
+
+         gene_values: The values.
+
+         genes: An array of objects specifying the gene bigg_id and name.
+
+         styles: The reaction styles.
+
+         identifiers_on_map: The type of identifiers ('bigg_id' or 'name').
+
+         compare_style: The comparison style.
+
+         Returns
+         -------
+
+         A list of objects with {
+           bigg_id: The bigg ID.
+           name: The name.
+           text: The new string with formatted data values.
+         }
+
+         The text elements should each appear on a new line.
+
+         */
+
+        var out_text = rule,
+            no_data = (gene_values === null),
+            // keep track of bigg_id's or names to remove repeats
+            genes_found = {};
+
+
         genes.forEach(function(g_obj) {
             // get id or name
             var name = g_obj[identifiers_on_map];
-            if (name === undefined)
+            if (typeof name === 'undefined')
                 throw new Error('Bad value for identifiers_on_map: ' + identifiers_on_map);
+            // remove repeats that may have found their way into genes object
+            if (typeof genes_found[name] !== 'undefined')
+                return;
+            genes_found[name] = true;
             // generate the string
             if (no_data) {
-                out = replace_gene_in_rule(out, g_obj.bigg_id, (name + '\n'));
+                out_text = replace_gene_in_rule(out_text, g_obj.bigg_id, (name + '\n'));
             } else {
                 var d = gene_values[g_obj.bigg_id];
                 if (typeof d === 'undefined') d = null;
                 var f = float_for_data(d, styles, compare_style),
-                    format = (f === null ? RETURN_ARG : d3.format('.3g')); 
+                    format = (f === null ? RETURN_ARG : d3.format('.3g'));
                 if (d.length==1) {
-                    out = replace_gene_in_rule(out, g_obj.bigg_id, (name + ' (' + null_or_d(d[0], format) + ')\n'));
+                    out_text = replace_gene_in_rule(out_text, g_obj.bigg_id, (name + ' (' + null_or_d(d[0], format) + ')\n'));
                 }
                 else if (d.length==2) {
                     // check if they are all text
@@ -2446,17 +2517,30 @@ define('data_styles',['utils'], function(utils) {
                         new_str = (name + ' (' +
                                    null_or_d(d[0], format) + ', ' +
                                    null_or_d(d[1], format) + ')\n');
-                    } 
-                    out = replace_gene_in_rule(out, g_obj.bigg_id, new_str);
+                    }
+                    out_text = replace_gene_in_rule(out_text, g_obj.bigg_id, new_str);
                 }
             }
         });
         // remove emtpy lines
-        out = out.replace(EMPTY_LINES, '\n')
+        out_text = out_text.replace(EMPTY_LINES, '\n')
         // remove trailing newline (with or without parens)
             .replace(TRAILING_NEWLINE, '$1');
-        return out;
-        
+
+        // split by newlines
+        var result = out_text.split('\n').map(function(text) {
+            for (var i = 0, l = genes.length; i < l; i++) {
+                var gene = genes[i];
+                if (text.indexOf(gene[identifiers_on_map]) != -1) {
+                    return { bigg_id: gene.bigg_id, name: gene.name, text: text };
+                    continue;
+                }
+            }
+            // not found, then none
+            return { bigg_id: null, name: null, text: text };
+        });
+        return result;
+
         // definitions
         function null_or_d(d, format) {
             return d === null ? 'nd' : format(d);
@@ -2508,15 +2592,20 @@ define('data_styles',['utils'], function(utils) {
         });
         return converted;
     }
-    
+
     function genes_for_gene_reaction_rule(rule) {
-        /** Find genes in gene_reaction_rule string.
+        /** Find unique genes in gene_reaction_rule string.
 
          Arguments
          ---------
 
          rule: A boolean string containing gene names, parentheses, AND's and
          OR's.
+
+         Returns
+         -------
+
+         An array of gene strings.
 
          */
         var genes = rule
@@ -2527,14 +2616,12 @@ define('data_styles',['utils'], function(utils) {
         // split on whitespace
                 .split(' ')
                 .filter(function(x) { return x != ''; });
-        return genes;
+        // unique strings
+        return utils.unique_strings_array(genes);
     }
-    
+
     function evaluate_gene_reaction_rule(rule, gene_values, and_method_in_gene_reaction_rule) {
         /** Return a value given the rule and gene_values object.
-
-         With the current version, all negative values are converted to zero,
-         OR's are sums and AND's are Min()'s.
 
          Arguments
          ---------
@@ -2556,12 +2643,12 @@ define('data_styles',['utils'], function(utils) {
             l = null_val.length;
             break;
         }
-        
+
         if (rule == '') return null_val;
 
         // for each element in the arrays
         var out = [];
-        for (var i=0; i<l; i++) {
+        for (var i = 0; i < l; i++) {
             // get the rule
             var curr_val = rule;
 
@@ -2569,7 +2656,7 @@ define('data_styles',['utils'], function(utils) {
             var all_null = true;
             for (var gene_id in gene_values) {
                 var f = _parse_float_or_null(gene_values[gene_id][i]);
-                if (f === null || f < 0) {
+                if (f === null) {
                     f = 0;
                 } else {
                     all_null = false;
@@ -2585,10 +2672,10 @@ define('data_styles',['utils'], function(utils) {
             while (true) {
                 // arithemtic expressions
                 var new_curr_val = curr_val;
-                
+
                 // take out excessive parentheses
                 new_curr_val = new_curr_val.replace(EXCESS_PARENS, ' $1 ');
-                
+
                 // or's
                 new_curr_val = new_curr_val.replace(OR_EXPRESSION, function(match, p1, p2, p3) {
                     // sum
@@ -2600,16 +2687,16 @@ define('data_styles',['utils'], function(utils) {
                 new_curr_val = new_curr_val.replace(AND_EXPRESSION, function(match, p1, p2, p3) {
                     // find min
                     var nums = p2.split(AND).map(parseFloat),
-                        val = (and_method_in_gene_reaction_rule=='min' ?
+                        val = (and_method_in_gene_reaction_rule == 'min' ?
                                Math.min.apply(null, nums) :
-                               nums.reduce(function(a, b){ return a + b; }) / nums.length);
+                               nums.reduce(function(a, b) { return a + b; }) / nums.length);
                     return p1 + val + p3;
                 });
                 // break if there is no change
                 if (new_curr_val == curr_val)
                     break;
                 curr_val = new_curr_val;
-            } 
+            }
             // strict test for number
             var num = Number(curr_val);
             if (isNaN(num)) {
@@ -2621,20 +2708,20 @@ define('data_styles',['utils'], function(utils) {
         }
         return out;
     }
-    
+
     function replace_gene_in_rule(rule, gene_id, val) {
         // get the escaped string, with surrounding space or parentheses
         var space_or_par_start = '(^|[\\\s\\\(\\\)])',
             space_or_par_finish = '([\\\s\\\(\\\)]|$)',
             escaped = space_or_par_start + escape_reg_exp(gene_id) + space_or_par_finish;
         return rule.replace(new RegExp(escaped, 'g'),  '$1' + val + '$2');
-        
+
         // definitions
         function escape_reg_exp(string) {
             return string.replace(ESCAPE_REG, "\\$1");
         }
     }
-    
+
     function apply_reaction_data_to_reactions(reactions, data, styles, compare_style) {
         /**  Returns True if the scale has changed.
 
@@ -2674,7 +2761,7 @@ define('data_styles',['utils'], function(utils) {
         }
         return true;
     }
-    
+
     function apply_metabolite_data_to_nodes(nodes, data, styles, compare_style) {
         /**  Returns True if the scale has changed.
 
@@ -2698,7 +2785,7 @@ define('data_styles',['utils'], function(utils) {
         }
         return true;
     }
-    
+
     function apply_gene_data_to_reactions(reactions, gene_data_obj, styles, identifiers_on_map,
                                           compare_style, and_method_in_gene_reaction_rule) {
         /** Returns true if data is present
@@ -2710,7 +2797,7 @@ define('data_styles',['utils'], function(utils) {
 
          gene_data_obj: The gene data object, with the following style:
 
-             { reaction_id: { gene_id: value } }
+         { reaction_id: { gene_id: value } }
 
          styles:  Gene styles array.
 
@@ -2786,7 +2873,7 @@ define('data_styles',['utils'], function(utils) {
         }
         return true;
     }
-    
+
     function _parse_float_or_null(x) {
         // strict number casting
         var f = Number(x);
@@ -2817,17 +2904,17 @@ define('CobraModel',['utils', 'data_styles'], function(utils, data_styles) {
     function build_reaction_string(stoichiometries, is_reversible) {
         /** Return a reaction string for the given stoichiometries.
 
-            Adapted from cobra.core.Reaction.build_reaction_string().
+         Adapted from cobra.core.Reaction.build_reaction_string().
 
-            Arguments
-            ---------
+         Arguments
+         ---------
 
-            stoichiometries: An object with metabolites as keys and
-            stoichiometries as values.
+         stoichiometries: An object with metabolites as keys and
+         stoichiometries as values.
 
-            is_reversible: Boolean. Whether the reaction is reversible.
+         is_reversible: Boolean. Whether the reaction is reversible.
 
-        */
+         */
 
         var format = function(number) {
             if (number == 1)
@@ -2854,7 +2941,7 @@ define('CobraModel',['utils', 'data_styles'], function(utils, data_styles) {
         reaction_string += product_bits.join(' + ');
         return reaction_string;
     }
-    
+
     function from_exported_data(data) {
         /** Use data generated by CobraModel.model_for_export() to make a new
          CobraModel object.
@@ -2862,22 +2949,27 @@ define('CobraModel',['utils', 'data_styles'], function(utils, data_styles) {
          */
         if (!(data.reactions && data.metabolites))
             throw new Error('Bad model data.');
-        
+
         var model = new CobraModel();
         model.reactions = data.reactions;
         model.metabolites = data.metabolites;
         return model;
     }
-    
+
     function from_cobra_json(model_data) {
         /** Use a JSON Cobra model exported by COBRApy to make a new CobraModel
          object.
+
+         The COBRA "id" becomes a "bigg_id", and "upper_bound" and "lower_bound"
+         bounds become "reversibility".
+
+         Fills out a "genes" list.
 
          */
         // reactions and metabolites
         if (!(model_data.reactions && model_data.metabolites))
             throw new Error('Bad model data.');
-        
+
         // make a gene dictionary
         var genes = {};
         for (var i = 0, l = model_data.genes.length; i < l; i++) {
@@ -2902,8 +2994,8 @@ define('CobraModel',['utils', 'data_styles'], function(utils, data_styles) {
             reaction.reversibility = (reaction.lower_bound < 0 && reaction.upper_bound > 0);
             if (reaction.upper_bound <= 0 && reaction.lower_bound < 0) {
                 // reverse stoichiometries
-		for (var met_id in reaction.metabolites) {
-		    reaction.metabolites[met_id] = -reaction.metabolites[met_id];
+                for (var met_id in reaction.metabolites) {
+                    reaction.metabolites[met_id] = -reaction.metabolites[met_id];
                 }
             }
             delete reaction.lower_bound;
@@ -2944,21 +3036,21 @@ define('CobraModel',['utils', 'data_styles'], function(utils, data_styles) {
         this.cofactors = ['atp', 'adp', 'nad', 'nadh', 'nadp', 'nadph', 'gtp',
                           'gdp', 'h', 'coa'];
     }
-    
+
     function apply_reaction_data(reaction_data, styles, compare_style) {
         /** Apply data to model. This is only used to display options in
-            BuildInput.
-            
-            apply_reaction_data overrides apply_gene_data.
+         BuildInput.
 
-        */
+         apply_reaction_data overrides apply_gene_data.
+
+         */
         data_styles.apply_reaction_data_to_reactions(this.reactions, reaction_data,
                                                      styles, compare_style);
     }
 
     function apply_metabolite_data(metabolite_data, styles, compare_style) {
         /** Apply data to model. This is only used to display options in
-            BuildInput.
+         BuildInput.
 
          */
         data_styles.apply_metabolite_data_to_nodes(this.metabolites, metabolite_data,
@@ -2968,11 +3060,11 @@ define('CobraModel',['utils', 'data_styles'], function(utils, data_styles) {
     function apply_gene_data(gene_data_obj, styles, identifiers_on_map,
                              compare_style, and_method_in_gene_reaction_rule) {
         /** Apply data to model. This is only used to display options in
-            BuildInput.
+         BuildInput.
 
-            apply_gene_data overrides apply_reaction_data.
+         apply_gene_data overrides apply_reaction_data.
 
-        */
+         */
         data_styles.apply_gene_data_to_reactions(this.reactions, gene_data_obj,
                                                  styles, identifiers_on_map,
                                                  compare_style,
@@ -3375,16 +3467,1565 @@ define('BuildInput',['utils', 'PlacedDiv', 'lib/complete.ly', 'DirectionArrow', 
     }
 });
 
-define('CallbackManager',["utils"], function(utils) {
+//     Underscore.js 1.8.3
+//     http://underscorejs.org
+//     (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+//     Underscore may be freely distributed under the MIT license.
+
+(function() {
+
+  // Baseline setup
+  // --------------
+
+  // Establish the root object, `window` in the browser, or `exports` on the server.
+  var root = this;
+
+  // Save the previous value of the `_` variable.
+  var previousUnderscore = root._;
+
+  // Save bytes in the minified (but not gzipped) version:
+  var ArrayProto = Array.prototype, ObjProto = Object.prototype, FuncProto = Function.prototype;
+
+  // Create quick reference variables for speed access to core prototypes.
+  var
+    push             = ArrayProto.push,
+    slice            = ArrayProto.slice,
+    toString         = ObjProto.toString,
+    hasOwnProperty   = ObjProto.hasOwnProperty;
+
+  // All **ECMAScript 5** native function implementations that we hope to use
+  // are declared here.
+  var
+    nativeIsArray      = Array.isArray,
+    nativeKeys         = Object.keys,
+    nativeBind         = FuncProto.bind,
+    nativeCreate       = Object.create;
+
+  // Naked function reference for surrogate-prototype-swapping.
+  var Ctor = function(){};
+
+  // Create a safe reference to the Underscore object for use below.
+  var _ = function(obj) {
+    if (obj instanceof _) return obj;
+    if (!(this instanceof _)) return new _(obj);
+    this._wrapped = obj;
+  };
+
+  // Export the Underscore object for **Node.js**, with
+  // backwards-compatibility for the old `require()` API. If we're in
+  // the browser, add `_` as a global object.
+  if (typeof exports !== 'undefined') {
+    if (typeof module !== 'undefined' && module.exports) {
+      exports = module.exports = _;
+    }
+    exports._ = _;
+  } else {
+    root._ = _;
+  }
+
+  // Current version.
+  _.VERSION = '1.8.3';
+
+  // Internal function that returns an efficient (for current engines) version
+  // of the passed-in callback, to be repeatedly applied in other Underscore
+  // functions.
+  var optimizeCb = function(func, context, argCount) {
+    if (context === void 0) return func;
+    switch (argCount == null ? 3 : argCount) {
+      case 1: return function(value) {
+        return func.call(context, value);
+      };
+      case 2: return function(value, other) {
+        return func.call(context, value, other);
+      };
+      case 3: return function(value, index, collection) {
+        return func.call(context, value, index, collection);
+      };
+      case 4: return function(accumulator, value, index, collection) {
+        return func.call(context, accumulator, value, index, collection);
+      };
+    }
+    return function() {
+      return func.apply(context, arguments);
+    };
+  };
+
+  // A mostly-internal function to generate callbacks that can be applied
+  // to each element in a collection, returning the desired result — either
+  // identity, an arbitrary callback, a property matcher, or a property accessor.
+  var cb = function(value, context, argCount) {
+    if (value == null) return _.identity;
+    if (_.isFunction(value)) return optimizeCb(value, context, argCount);
+    if (_.isObject(value)) return _.matcher(value);
+    return _.property(value);
+  };
+  _.iteratee = function(value, context) {
+    return cb(value, context, Infinity);
+  };
+
+  // An internal function for creating assigner functions.
+  var createAssigner = function(keysFunc, undefinedOnly) {
+    return function(obj) {
+      var length = arguments.length;
+      if (length < 2 || obj == null) return obj;
+      for (var index = 1; index < length; index++) {
+        var source = arguments[index],
+            keys = keysFunc(source),
+            l = keys.length;
+        for (var i = 0; i < l; i++) {
+          var key = keys[i];
+          if (!undefinedOnly || obj[key] === void 0) obj[key] = source[key];
+        }
+      }
+      return obj;
+    };
+  };
+
+  // An internal function for creating a new object that inherits from another.
+  var baseCreate = function(prototype) {
+    if (!_.isObject(prototype)) return {};
+    if (nativeCreate) return nativeCreate(prototype);
+    Ctor.prototype = prototype;
+    var result = new Ctor;
+    Ctor.prototype = null;
+    return result;
+  };
+
+  var property = function(key) {
+    return function(obj) {
+      return obj == null ? void 0 : obj[key];
+    };
+  };
+
+  // Helper for collection methods to determine whether a collection
+  // should be iterated as an array or as an object
+  // Related: http://people.mozilla.org/~jorendorff/es6-draft.html#sec-tolength
+  // Avoids a very nasty iOS 8 JIT bug on ARM-64. #2094
+  var MAX_ARRAY_INDEX = Math.pow(2, 53) - 1;
+  var getLength = property('length');
+  var isArrayLike = function(collection) {
+    var length = getLength(collection);
+    return typeof length == 'number' && length >= 0 && length <= MAX_ARRAY_INDEX;
+  };
+
+  // Collection Functions
+  // --------------------
+
+  // The cornerstone, an `each` implementation, aka `forEach`.
+  // Handles raw objects in addition to array-likes. Treats all
+  // sparse array-likes as if they were dense.
+  _.each = _.forEach = function(obj, iteratee, context) {
+    iteratee = optimizeCb(iteratee, context);
+    var i, length;
+    if (isArrayLike(obj)) {
+      for (i = 0, length = obj.length; i < length; i++) {
+        iteratee(obj[i], i, obj);
+      }
+    } else {
+      var keys = _.keys(obj);
+      for (i = 0, length = keys.length; i < length; i++) {
+        iteratee(obj[keys[i]], keys[i], obj);
+      }
+    }
+    return obj;
+  };
+
+  // Return the results of applying the iteratee to each element.
+  _.map = _.collect = function(obj, iteratee, context) {
+    iteratee = cb(iteratee, context);
+    var keys = !isArrayLike(obj) && _.keys(obj),
+        length = (keys || obj).length,
+        results = Array(length);
+    for (var index = 0; index < length; index++) {
+      var currentKey = keys ? keys[index] : index;
+      results[index] = iteratee(obj[currentKey], currentKey, obj);
+    }
+    return results;
+  };
+
+  // Create a reducing function iterating left or right.
+  function createReduce(dir) {
+    // Optimized iterator function as using arguments.length
+    // in the main function will deoptimize the, see #1991.
+    function iterator(obj, iteratee, memo, keys, index, length) {
+      for (; index >= 0 && index < length; index += dir) {
+        var currentKey = keys ? keys[index] : index;
+        memo = iteratee(memo, obj[currentKey], currentKey, obj);
+      }
+      return memo;
+    }
+
+    return function(obj, iteratee, memo, context) {
+      iteratee = optimizeCb(iteratee, context, 4);
+      var keys = !isArrayLike(obj) && _.keys(obj),
+          length = (keys || obj).length,
+          index = dir > 0 ? 0 : length - 1;
+      // Determine the initial value if none is provided.
+      if (arguments.length < 3) {
+        memo = obj[keys ? keys[index] : index];
+        index += dir;
+      }
+      return iterator(obj, iteratee, memo, keys, index, length);
+    };
+  }
+
+  // **Reduce** builds up a single result from a list of values, aka `inject`,
+  // or `foldl`.
+  _.reduce = _.foldl = _.inject = createReduce(1);
+
+  // The right-associative version of reduce, also known as `foldr`.
+  _.reduceRight = _.foldr = createReduce(-1);
+
+  // Return the first value which passes a truth test. Aliased as `detect`.
+  _.find = _.detect = function(obj, predicate, context) {
+    var key;
+    if (isArrayLike(obj)) {
+      key = _.findIndex(obj, predicate, context);
+    } else {
+      key = _.findKey(obj, predicate, context);
+    }
+    if (key !== void 0 && key !== -1) return obj[key];
+  };
+
+  // Return all the elements that pass a truth test.
+  // Aliased as `select`.
+  _.filter = _.select = function(obj, predicate, context) {
+    var results = [];
+    predicate = cb(predicate, context);
+    _.each(obj, function(value, index, list) {
+      if (predicate(value, index, list)) results.push(value);
+    });
+    return results;
+  };
+
+  // Return all the elements for which a truth test fails.
+  _.reject = function(obj, predicate, context) {
+    return _.filter(obj, _.negate(cb(predicate)), context);
+  };
+
+  // Determine whether all of the elements match a truth test.
+  // Aliased as `all`.
+  _.every = _.all = function(obj, predicate, context) {
+    predicate = cb(predicate, context);
+    var keys = !isArrayLike(obj) && _.keys(obj),
+        length = (keys || obj).length;
+    for (var index = 0; index < length; index++) {
+      var currentKey = keys ? keys[index] : index;
+      if (!predicate(obj[currentKey], currentKey, obj)) return false;
+    }
+    return true;
+  };
+
+  // Determine if at least one element in the object matches a truth test.
+  // Aliased as `any`.
+  _.some = _.any = function(obj, predicate, context) {
+    predicate = cb(predicate, context);
+    var keys = !isArrayLike(obj) && _.keys(obj),
+        length = (keys || obj).length;
+    for (var index = 0; index < length; index++) {
+      var currentKey = keys ? keys[index] : index;
+      if (predicate(obj[currentKey], currentKey, obj)) return true;
+    }
+    return false;
+  };
+
+  // Determine if the array or object contains a given item (using `===`).
+  // Aliased as `includes` and `include`.
+  _.contains = _.includes = _.include = function(obj, item, fromIndex, guard) {
+    if (!isArrayLike(obj)) obj = _.values(obj);
+    if (typeof fromIndex != 'number' || guard) fromIndex = 0;
+    return _.indexOf(obj, item, fromIndex) >= 0;
+  };
+
+  // Invoke a method (with arguments) on every item in a collection.
+  _.invoke = function(obj, method) {
+    var args = slice.call(arguments, 2);
+    var isFunc = _.isFunction(method);
+    return _.map(obj, function(value) {
+      var func = isFunc ? method : value[method];
+      return func == null ? func : func.apply(value, args);
+    });
+  };
+
+  // Convenience version of a common use case of `map`: fetching a property.
+  _.pluck = function(obj, key) {
+    return _.map(obj, _.property(key));
+  };
+
+  // Convenience version of a common use case of `filter`: selecting only objects
+  // containing specific `key:value` pairs.
+  _.where = function(obj, attrs) {
+    return _.filter(obj, _.matcher(attrs));
+  };
+
+  // Convenience version of a common use case of `find`: getting the first object
+  // containing specific `key:value` pairs.
+  _.findWhere = function(obj, attrs) {
+    return _.find(obj, _.matcher(attrs));
+  };
+
+  // Return the maximum element (or element-based computation).
+  _.max = function(obj, iteratee, context) {
+    var result = -Infinity, lastComputed = -Infinity,
+        value, computed;
+    if (iteratee == null && obj != null) {
+      obj = isArrayLike(obj) ? obj : _.values(obj);
+      for (var i = 0, length = obj.length; i < length; i++) {
+        value = obj[i];
+        if (value > result) {
+          result = value;
+        }
+      }
+    } else {
+      iteratee = cb(iteratee, context);
+      _.each(obj, function(value, index, list) {
+        computed = iteratee(value, index, list);
+        if (computed > lastComputed || computed === -Infinity && result === -Infinity) {
+          result = value;
+          lastComputed = computed;
+        }
+      });
+    }
+    return result;
+  };
+
+  // Return the minimum element (or element-based computation).
+  _.min = function(obj, iteratee, context) {
+    var result = Infinity, lastComputed = Infinity,
+        value, computed;
+    if (iteratee == null && obj != null) {
+      obj = isArrayLike(obj) ? obj : _.values(obj);
+      for (var i = 0, length = obj.length; i < length; i++) {
+        value = obj[i];
+        if (value < result) {
+          result = value;
+        }
+      }
+    } else {
+      iteratee = cb(iteratee, context);
+      _.each(obj, function(value, index, list) {
+        computed = iteratee(value, index, list);
+        if (computed < lastComputed || computed === Infinity && result === Infinity) {
+          result = value;
+          lastComputed = computed;
+        }
+      });
+    }
+    return result;
+  };
+
+  // Shuffle a collection, using the modern version of the
+  // [Fisher-Yates shuffle](http://en.wikipedia.org/wiki/Fisher–Yates_shuffle).
+  _.shuffle = function(obj) {
+    var set = isArrayLike(obj) ? obj : _.values(obj);
+    var length = set.length;
+    var shuffled = Array(length);
+    for (var index = 0, rand; index < length; index++) {
+      rand = _.random(0, index);
+      if (rand !== index) shuffled[index] = shuffled[rand];
+      shuffled[rand] = set[index];
+    }
+    return shuffled;
+  };
+
+  // Sample **n** random values from a collection.
+  // If **n** is not specified, returns a single random element.
+  // The internal `guard` argument allows it to work with `map`.
+  _.sample = function(obj, n, guard) {
+    if (n == null || guard) {
+      if (!isArrayLike(obj)) obj = _.values(obj);
+      return obj[_.random(obj.length - 1)];
+    }
+    return _.shuffle(obj).slice(0, Math.max(0, n));
+  };
+
+  // Sort the object's values by a criterion produced by an iteratee.
+  _.sortBy = function(obj, iteratee, context) {
+    iteratee = cb(iteratee, context);
+    return _.pluck(_.map(obj, function(value, index, list) {
+      return {
+        value: value,
+        index: index,
+        criteria: iteratee(value, index, list)
+      };
+    }).sort(function(left, right) {
+      var a = left.criteria;
+      var b = right.criteria;
+      if (a !== b) {
+        if (a > b || a === void 0) return 1;
+        if (a < b || b === void 0) return -1;
+      }
+      return left.index - right.index;
+    }), 'value');
+  };
+
+  // An internal function used for aggregate "group by" operations.
+  var group = function(behavior) {
+    return function(obj, iteratee, context) {
+      var result = {};
+      iteratee = cb(iteratee, context);
+      _.each(obj, function(value, index) {
+        var key = iteratee(value, index, obj);
+        behavior(result, value, key);
+      });
+      return result;
+    };
+  };
+
+  // Groups the object's values by a criterion. Pass either a string attribute
+  // to group by, or a function that returns the criterion.
+  _.groupBy = group(function(result, value, key) {
+    if (_.has(result, key)) result[key].push(value); else result[key] = [value];
+  });
+
+  // Indexes the object's values by a criterion, similar to `groupBy`, but for
+  // when you know that your index values will be unique.
+  _.indexBy = group(function(result, value, key) {
+    result[key] = value;
+  });
+
+  // Counts instances of an object that group by a certain criterion. Pass
+  // either a string attribute to count by, or a function that returns the
+  // criterion.
+  _.countBy = group(function(result, value, key) {
+    if (_.has(result, key)) result[key]++; else result[key] = 1;
+  });
+
+  // Safely create a real, live array from anything iterable.
+  _.toArray = function(obj) {
+    if (!obj) return [];
+    if (_.isArray(obj)) return slice.call(obj);
+    if (isArrayLike(obj)) return _.map(obj, _.identity);
+    return _.values(obj);
+  };
+
+  // Return the number of elements in an object.
+  _.size = function(obj) {
+    if (obj == null) return 0;
+    return isArrayLike(obj) ? obj.length : _.keys(obj).length;
+  };
+
+  // Split a collection into two arrays: one whose elements all satisfy the given
+  // predicate, and one whose elements all do not satisfy the predicate.
+  _.partition = function(obj, predicate, context) {
+    predicate = cb(predicate, context);
+    var pass = [], fail = [];
+    _.each(obj, function(value, key, obj) {
+      (predicate(value, key, obj) ? pass : fail).push(value);
+    });
+    return [pass, fail];
+  };
+
+  // Array Functions
+  // ---------------
+
+  // Get the first element of an array. Passing **n** will return the first N
+  // values in the array. Aliased as `head` and `take`. The **guard** check
+  // allows it to work with `_.map`.
+  _.first = _.head = _.take = function(array, n, guard) {
+    if (array == null) return void 0;
+    if (n == null || guard) return array[0];
+    return _.initial(array, array.length - n);
+  };
+
+  // Returns everything but the last entry of the array. Especially useful on
+  // the arguments object. Passing **n** will return all the values in
+  // the array, excluding the last N.
+  _.initial = function(array, n, guard) {
+    return slice.call(array, 0, Math.max(0, array.length - (n == null || guard ? 1 : n)));
+  };
+
+  // Get the last element of an array. Passing **n** will return the last N
+  // values in the array.
+  _.last = function(array, n, guard) {
+    if (array == null) return void 0;
+    if (n == null || guard) return array[array.length - 1];
+    return _.rest(array, Math.max(0, array.length - n));
+  };
+
+  // Returns everything but the first entry of the array. Aliased as `tail` and `drop`.
+  // Especially useful on the arguments object. Passing an **n** will return
+  // the rest N values in the array.
+  _.rest = _.tail = _.drop = function(array, n, guard) {
+    return slice.call(array, n == null || guard ? 1 : n);
+  };
+
+  // Trim out all falsy values from an array.
+  _.compact = function(array) {
+    return _.filter(array, _.identity);
+  };
+
+  // Internal implementation of a recursive `flatten` function.
+  var flatten = function(input, shallow, strict, startIndex) {
+    var output = [], idx = 0;
+    for (var i = startIndex || 0, length = getLength(input); i < length; i++) {
+      var value = input[i];
+      if (isArrayLike(value) && (_.isArray(value) || _.isArguments(value))) {
+        //flatten current level of array or arguments object
+        if (!shallow) value = flatten(value, shallow, strict);
+        var j = 0, len = value.length;
+        output.length += len;
+        while (j < len) {
+          output[idx++] = value[j++];
+        }
+      } else if (!strict) {
+        output[idx++] = value;
+      }
+    }
+    return output;
+  };
+
+  // Flatten out an array, either recursively (by default), or just one level.
+  _.flatten = function(array, shallow) {
+    return flatten(array, shallow, false);
+  };
+
+  // Return a version of the array that does not contain the specified value(s).
+  _.without = function(array) {
+    return _.difference(array, slice.call(arguments, 1));
+  };
+
+  // Produce a duplicate-free version of the array. If the array has already
+  // been sorted, you have the option of using a faster algorithm.
+  // Aliased as `unique`.
+  _.uniq = _.unique = function(array, isSorted, iteratee, context) {
+    if (!_.isBoolean(isSorted)) {
+      context = iteratee;
+      iteratee = isSorted;
+      isSorted = false;
+    }
+    if (iteratee != null) iteratee = cb(iteratee, context);
+    var result = [];
+    var seen = [];
+    for (var i = 0, length = getLength(array); i < length; i++) {
+      var value = array[i],
+          computed = iteratee ? iteratee(value, i, array) : value;
+      if (isSorted) {
+        if (!i || seen !== computed) result.push(value);
+        seen = computed;
+      } else if (iteratee) {
+        if (!_.contains(seen, computed)) {
+          seen.push(computed);
+          result.push(value);
+        }
+      } else if (!_.contains(result, value)) {
+        result.push(value);
+      }
+    }
+    return result;
+  };
+
+  // Produce an array that contains the union: each distinct element from all of
+  // the passed-in arrays.
+  _.union = function() {
+    return _.uniq(flatten(arguments, true, true));
+  };
+
+  // Produce an array that contains every item shared between all the
+  // passed-in arrays.
+  _.intersection = function(array) {
+    var result = [];
+    var argsLength = arguments.length;
+    for (var i = 0, length = getLength(array); i < length; i++) {
+      var item = array[i];
+      if (_.contains(result, item)) continue;
+      for (var j = 1; j < argsLength; j++) {
+        if (!_.contains(arguments[j], item)) break;
+      }
+      if (j === argsLength) result.push(item);
+    }
+    return result;
+  };
+
+  // Take the difference between one array and a number of other arrays.
+  // Only the elements present in just the first array will remain.
+  _.difference = function(array) {
+    var rest = flatten(arguments, true, true, 1);
+    return _.filter(array, function(value){
+      return !_.contains(rest, value);
+    });
+  };
+
+  // Zip together multiple lists into a single array -- elements that share
+  // an index go together.
+  _.zip = function() {
+    return _.unzip(arguments);
+  };
+
+  // Complement of _.zip. Unzip accepts an array of arrays and groups
+  // each array's elements on shared indices
+  _.unzip = function(array) {
+    var length = array && _.max(array, getLength).length || 0;
+    var result = Array(length);
+
+    for (var index = 0; index < length; index++) {
+      result[index] = _.pluck(array, index);
+    }
+    return result;
+  };
+
+  // Converts lists into objects. Pass either a single array of `[key, value]`
+  // pairs, or two parallel arrays of the same length -- one of keys, and one of
+  // the corresponding values.
+  _.object = function(list, values) {
+    var result = {};
+    for (var i = 0, length = getLength(list); i < length; i++) {
+      if (values) {
+        result[list[i]] = values[i];
+      } else {
+        result[list[i][0]] = list[i][1];
+      }
+    }
+    return result;
+  };
+
+  // Generator function to create the findIndex and findLastIndex functions
+  function createPredicateIndexFinder(dir) {
+    return function(array, predicate, context) {
+      predicate = cb(predicate, context);
+      var length = getLength(array);
+      var index = dir > 0 ? 0 : length - 1;
+      for (; index >= 0 && index < length; index += dir) {
+        if (predicate(array[index], index, array)) return index;
+      }
+      return -1;
+    };
+  }
+
+  // Returns the first index on an array-like that passes a predicate test
+  _.findIndex = createPredicateIndexFinder(1);
+  _.findLastIndex = createPredicateIndexFinder(-1);
+
+  // Use a comparator function to figure out the smallest index at which
+  // an object should be inserted so as to maintain order. Uses binary search.
+  _.sortedIndex = function(array, obj, iteratee, context) {
+    iteratee = cb(iteratee, context, 1);
+    var value = iteratee(obj);
+    var low = 0, high = getLength(array);
+    while (low < high) {
+      var mid = Math.floor((low + high) / 2);
+      if (iteratee(array[mid]) < value) low = mid + 1; else high = mid;
+    }
+    return low;
+  };
+
+  // Generator function to create the indexOf and lastIndexOf functions
+  function createIndexFinder(dir, predicateFind, sortedIndex) {
+    return function(array, item, idx) {
+      var i = 0, length = getLength(array);
+      if (typeof idx == 'number') {
+        if (dir > 0) {
+            i = idx >= 0 ? idx : Math.max(idx + length, i);
+        } else {
+            length = idx >= 0 ? Math.min(idx + 1, length) : idx + length + 1;
+        }
+      } else if (sortedIndex && idx && length) {
+        idx = sortedIndex(array, item);
+        return array[idx] === item ? idx : -1;
+      }
+      if (item !== item) {
+        idx = predicateFind(slice.call(array, i, length), _.isNaN);
+        return idx >= 0 ? idx + i : -1;
+      }
+      for (idx = dir > 0 ? i : length - 1; idx >= 0 && idx < length; idx += dir) {
+        if (array[idx] === item) return idx;
+      }
+      return -1;
+    };
+  }
+
+  // Return the position of the first occurrence of an item in an array,
+  // or -1 if the item is not included in the array.
+  // If the array is large and already in sort order, pass `true`
+  // for **isSorted** to use binary search.
+  _.indexOf = createIndexFinder(1, _.findIndex, _.sortedIndex);
+  _.lastIndexOf = createIndexFinder(-1, _.findLastIndex);
+
+  // Generate an integer Array containing an arithmetic progression. A port of
+  // the native Python `range()` function. See
+  // [the Python documentation](http://docs.python.org/library/functions.html#range).
+  _.range = function(start, stop, step) {
+    if (stop == null) {
+      stop = start || 0;
+      start = 0;
+    }
+    step = step || 1;
+
+    var length = Math.max(Math.ceil((stop - start) / step), 0);
+    var range = Array(length);
+
+    for (var idx = 0; idx < length; idx++, start += step) {
+      range[idx] = start;
+    }
+
+    return range;
+  };
+
+  // Function (ahem) Functions
+  // ------------------
+
+  // Determines whether to execute a function as a constructor
+  // or a normal function with the provided arguments
+  var executeBound = function(sourceFunc, boundFunc, context, callingContext, args) {
+    if (!(callingContext instanceof boundFunc)) return sourceFunc.apply(context, args);
+    var self = baseCreate(sourceFunc.prototype);
+    var result = sourceFunc.apply(self, args);
+    if (_.isObject(result)) return result;
+    return self;
+  };
+
+  // Create a function bound to a given object (assigning `this`, and arguments,
+  // optionally). Delegates to **ECMAScript 5**'s native `Function.bind` if
+  // available.
+  _.bind = function(func, context) {
+    if (nativeBind && func.bind === nativeBind) return nativeBind.apply(func, slice.call(arguments, 1));
+    if (!_.isFunction(func)) throw new TypeError('Bind must be called on a function');
+    var args = slice.call(arguments, 2);
+    var bound = function() {
+      return executeBound(func, bound, context, this, args.concat(slice.call(arguments)));
+    };
+    return bound;
+  };
+
+  // Partially apply a function by creating a version that has had some of its
+  // arguments pre-filled, without changing its dynamic `this` context. _ acts
+  // as a placeholder, allowing any combination of arguments to be pre-filled.
+  _.partial = function(func) {
+    var boundArgs = slice.call(arguments, 1);
+    var bound = function() {
+      var position = 0, length = boundArgs.length;
+      var args = Array(length);
+      for (var i = 0; i < length; i++) {
+        args[i] = boundArgs[i] === _ ? arguments[position++] : boundArgs[i];
+      }
+      while (position < arguments.length) args.push(arguments[position++]);
+      return executeBound(func, bound, this, this, args);
+    };
+    return bound;
+  };
+
+  // Bind a number of an object's methods to that object. Remaining arguments
+  // are the method names to be bound. Useful for ensuring that all callbacks
+  // defined on an object belong to it.
+  _.bindAll = function(obj) {
+    var i, length = arguments.length, key;
+    if (length <= 1) throw new Error('bindAll must be passed function names');
+    for (i = 1; i < length; i++) {
+      key = arguments[i];
+      obj[key] = _.bind(obj[key], obj);
+    }
+    return obj;
+  };
+
+  // Memoize an expensive function by storing its results.
+  _.memoize = function(func, hasher) {
+    var memoize = function(key) {
+      var cache = memoize.cache;
+      var address = '' + (hasher ? hasher.apply(this, arguments) : key);
+      if (!_.has(cache, address)) cache[address] = func.apply(this, arguments);
+      return cache[address];
+    };
+    memoize.cache = {};
+    return memoize;
+  };
+
+  // Delays a function for the given number of milliseconds, and then calls
+  // it with the arguments supplied.
+  _.delay = function(func, wait) {
+    var args = slice.call(arguments, 2);
+    return setTimeout(function(){
+      return func.apply(null, args);
+    }, wait);
+  };
+
+  // Defers a function, scheduling it to run after the current call stack has
+  // cleared.
+  _.defer = _.partial(_.delay, _, 1);
+
+  // Returns a function, that, when invoked, will only be triggered at most once
+  // during a given window of time. Normally, the throttled function will run
+  // as much as it can, without ever going more than once per `wait` duration;
+  // but if you'd like to disable the execution on the leading edge, pass
+  // `{leading: false}`. To disable execution on the trailing edge, ditto.
+  _.throttle = function(func, wait, options) {
+    var context, args, result;
+    var timeout = null;
+    var previous = 0;
+    if (!options) options = {};
+    var later = function() {
+      previous = options.leading === false ? 0 : _.now();
+      timeout = null;
+      result = func.apply(context, args);
+      if (!timeout) context = args = null;
+    };
+    return function() {
+      var now = _.now();
+      if (!previous && options.leading === false) previous = now;
+      var remaining = wait - (now - previous);
+      context = this;
+      args = arguments;
+      if (remaining <= 0 || remaining > wait) {
+        if (timeout) {
+          clearTimeout(timeout);
+          timeout = null;
+        }
+        previous = now;
+        result = func.apply(context, args);
+        if (!timeout) context = args = null;
+      } else if (!timeout && options.trailing !== false) {
+        timeout = setTimeout(later, remaining);
+      }
+      return result;
+    };
+  };
+
+  // Returns a function, that, as long as it continues to be invoked, will not
+  // be triggered. The function will be called after it stops being called for
+  // N milliseconds. If `immediate` is passed, trigger the function on the
+  // leading edge, instead of the trailing.
+  _.debounce = function(func, wait, immediate) {
+    var timeout, args, context, timestamp, result;
+
+    var later = function() {
+      var last = _.now() - timestamp;
+
+      if (last < wait && last >= 0) {
+        timeout = setTimeout(later, wait - last);
+      } else {
+        timeout = null;
+        if (!immediate) {
+          result = func.apply(context, args);
+          if (!timeout) context = args = null;
+        }
+      }
+    };
+
+    return function() {
+      context = this;
+      args = arguments;
+      timestamp = _.now();
+      var callNow = immediate && !timeout;
+      if (!timeout) timeout = setTimeout(later, wait);
+      if (callNow) {
+        result = func.apply(context, args);
+        context = args = null;
+      }
+
+      return result;
+    };
+  };
+
+  // Returns the first function passed as an argument to the second,
+  // allowing you to adjust arguments, run code before and after, and
+  // conditionally execute the original function.
+  _.wrap = function(func, wrapper) {
+    return _.partial(wrapper, func);
+  };
+
+  // Returns a negated version of the passed-in predicate.
+  _.negate = function(predicate) {
+    return function() {
+      return !predicate.apply(this, arguments);
+    };
+  };
+
+  // Returns a function that is the composition of a list of functions, each
+  // consuming the return value of the function that follows.
+  _.compose = function() {
+    var args = arguments;
+    var start = args.length - 1;
+    return function() {
+      var i = start;
+      var result = args[start].apply(this, arguments);
+      while (i--) result = args[i].call(this, result);
+      return result;
+    };
+  };
+
+  // Returns a function that will only be executed on and after the Nth call.
+  _.after = function(times, func) {
+    return function() {
+      if (--times < 1) {
+        return func.apply(this, arguments);
+      }
+    };
+  };
+
+  // Returns a function that will only be executed up to (but not including) the Nth call.
+  _.before = function(times, func) {
+    var memo;
+    return function() {
+      if (--times > 0) {
+        memo = func.apply(this, arguments);
+      }
+      if (times <= 1) func = null;
+      return memo;
+    };
+  };
+
+  // Returns a function that will be executed at most one time, no matter how
+  // often you call it. Useful for lazy initialization.
+  _.once = _.partial(_.before, 2);
+
+  // Object Functions
+  // ----------------
+
+  // Keys in IE < 9 that won't be iterated by `for key in ...` and thus missed.
+  var hasEnumBug = !{toString: null}.propertyIsEnumerable('toString');
+  var nonEnumerableProps = ['valueOf', 'isPrototypeOf', 'toString',
+                      'propertyIsEnumerable', 'hasOwnProperty', 'toLocaleString'];
+
+  function collectNonEnumProps(obj, keys) {
+    var nonEnumIdx = nonEnumerableProps.length;
+    var constructor = obj.constructor;
+    var proto = (_.isFunction(constructor) && constructor.prototype) || ObjProto;
+
+    // Constructor is a special case.
+    var prop = 'constructor';
+    if (_.has(obj, prop) && !_.contains(keys, prop)) keys.push(prop);
+
+    while (nonEnumIdx--) {
+      prop = nonEnumerableProps[nonEnumIdx];
+      if (prop in obj && obj[prop] !== proto[prop] && !_.contains(keys, prop)) {
+        keys.push(prop);
+      }
+    }
+  }
+
+  // Retrieve the names of an object's own properties.
+  // Delegates to **ECMAScript 5**'s native `Object.keys`
+  _.keys = function(obj) {
+    if (!_.isObject(obj)) return [];
+    if (nativeKeys) return nativeKeys(obj);
+    var keys = [];
+    for (var key in obj) if (_.has(obj, key)) keys.push(key);
+    // Ahem, IE < 9.
+    if (hasEnumBug) collectNonEnumProps(obj, keys);
+    return keys;
+  };
+
+  // Retrieve all the property names of an object.
+  _.allKeys = function(obj) {
+    if (!_.isObject(obj)) return [];
+    var keys = [];
+    for (var key in obj) keys.push(key);
+    // Ahem, IE < 9.
+    if (hasEnumBug) collectNonEnumProps(obj, keys);
+    return keys;
+  };
+
+  // Retrieve the values of an object's properties.
+  _.values = function(obj) {
+    var keys = _.keys(obj);
+    var length = keys.length;
+    var values = Array(length);
+    for (var i = 0; i < length; i++) {
+      values[i] = obj[keys[i]];
+    }
+    return values;
+  };
+
+  // Returns the results of applying the iteratee to each element of the object
+  // In contrast to _.map it returns an object
+  _.mapObject = function(obj, iteratee, context) {
+    iteratee = cb(iteratee, context);
+    var keys =  _.keys(obj),
+          length = keys.length,
+          results = {},
+          currentKey;
+      for (var index = 0; index < length; index++) {
+        currentKey = keys[index];
+        results[currentKey] = iteratee(obj[currentKey], currentKey, obj);
+      }
+      return results;
+  };
+
+  // Convert an object into a list of `[key, value]` pairs.
+  _.pairs = function(obj) {
+    var keys = _.keys(obj);
+    var length = keys.length;
+    var pairs = Array(length);
+    for (var i = 0; i < length; i++) {
+      pairs[i] = [keys[i], obj[keys[i]]];
+    }
+    return pairs;
+  };
+
+  // Invert the keys and values of an object. The values must be serializable.
+  _.invert = function(obj) {
+    var result = {};
+    var keys = _.keys(obj);
+    for (var i = 0, length = keys.length; i < length; i++) {
+      result[obj[keys[i]]] = keys[i];
+    }
+    return result;
+  };
+
+  // Return a sorted list of the function names available on the object.
+  // Aliased as `methods`
+  _.functions = _.methods = function(obj) {
+    var names = [];
+    for (var key in obj) {
+      if (_.isFunction(obj[key])) names.push(key);
+    }
+    return names.sort();
+  };
+
+  // Extend a given object with all the properties in passed-in object(s).
+  _.extend = createAssigner(_.allKeys);
+
+  // Assigns a given object with all the own properties in the passed-in object(s)
+  // (https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object/assign)
+  _.extendOwn = _.assign = createAssigner(_.keys);
+
+  // Returns the first key on an object that passes a predicate test
+  _.findKey = function(obj, predicate, context) {
+    predicate = cb(predicate, context);
+    var keys = _.keys(obj), key;
+    for (var i = 0, length = keys.length; i < length; i++) {
+      key = keys[i];
+      if (predicate(obj[key], key, obj)) return key;
+    }
+  };
+
+  // Return a copy of the object only containing the whitelisted properties.
+  _.pick = function(object, oiteratee, context) {
+    var result = {}, obj = object, iteratee, keys;
+    if (obj == null) return result;
+    if (_.isFunction(oiteratee)) {
+      keys = _.allKeys(obj);
+      iteratee = optimizeCb(oiteratee, context);
+    } else {
+      keys = flatten(arguments, false, false, 1);
+      iteratee = function(value, key, obj) { return key in obj; };
+      obj = Object(obj);
+    }
+    for (var i = 0, length = keys.length; i < length; i++) {
+      var key = keys[i];
+      var value = obj[key];
+      if (iteratee(value, key, obj)) result[key] = value;
+    }
+    return result;
+  };
+
+   // Return a copy of the object without the blacklisted properties.
+  _.omit = function(obj, iteratee, context) {
+    if (_.isFunction(iteratee)) {
+      iteratee = _.negate(iteratee);
+    } else {
+      var keys = _.map(flatten(arguments, false, false, 1), String);
+      iteratee = function(value, key) {
+        return !_.contains(keys, key);
+      };
+    }
+    return _.pick(obj, iteratee, context);
+  };
+
+  // Fill in a given object with default properties.
+  _.defaults = createAssigner(_.allKeys, true);
+
+  // Creates an object that inherits from the given prototype object.
+  // If additional properties are provided then they will be added to the
+  // created object.
+  _.create = function(prototype, props) {
+    var result = baseCreate(prototype);
+    if (props) _.extendOwn(result, props);
+    return result;
+  };
+
+  // Create a (shallow-cloned) duplicate of an object.
+  _.clone = function(obj) {
+    if (!_.isObject(obj)) return obj;
+    return _.isArray(obj) ? obj.slice() : _.extend({}, obj);
+  };
+
+  // Invokes interceptor with the obj, and then returns obj.
+  // The primary purpose of this method is to "tap into" a method chain, in
+  // order to perform operations on intermediate results within the chain.
+  _.tap = function(obj, interceptor) {
+    interceptor(obj);
+    return obj;
+  };
+
+  // Returns whether an object has a given set of `key:value` pairs.
+  _.isMatch = function(object, attrs) {
+    var keys = _.keys(attrs), length = keys.length;
+    if (object == null) return !length;
+    var obj = Object(object);
+    for (var i = 0; i < length; i++) {
+      var key = keys[i];
+      if (attrs[key] !== obj[key] || !(key in obj)) return false;
+    }
+    return true;
+  };
+
+
+  // Internal recursive comparison function for `isEqual`.
+  var eq = function(a, b, aStack, bStack) {
+    // Identical objects are equal. `0 === -0`, but they aren't identical.
+    // See the [Harmony `egal` proposal](http://wiki.ecmascript.org/doku.php?id=harmony:egal).
+    if (a === b) return a !== 0 || 1 / a === 1 / b;
+    // A strict comparison is necessary because `null == undefined`.
+    if (a == null || b == null) return a === b;
+    // Unwrap any wrapped objects.
+    if (a instanceof _) a = a._wrapped;
+    if (b instanceof _) b = b._wrapped;
+    // Compare `[[Class]]` names.
+    var className = toString.call(a);
+    if (className !== toString.call(b)) return false;
+    switch (className) {
+      // Strings, numbers, regular expressions, dates, and booleans are compared by value.
+      case '[object RegExp]':
+      // RegExps are coerced to strings for comparison (Note: '' + /a/i === '/a/i')
+      case '[object String]':
+        // Primitives and their corresponding object wrappers are equivalent; thus, `"5"` is
+        // equivalent to `new String("5")`.
+        return '' + a === '' + b;
+      case '[object Number]':
+        // `NaN`s are equivalent, but non-reflexive.
+        // Object(NaN) is equivalent to NaN
+        if (+a !== +a) return +b !== +b;
+        // An `egal` comparison is performed for other numeric values.
+        return +a === 0 ? 1 / +a === 1 / b : +a === +b;
+      case '[object Date]':
+      case '[object Boolean]':
+        // Coerce dates and booleans to numeric primitive values. Dates are compared by their
+        // millisecond representations. Note that invalid dates with millisecond representations
+        // of `NaN` are not equivalent.
+        return +a === +b;
+    }
+
+    var areArrays = className === '[object Array]';
+    if (!areArrays) {
+      if (typeof a != 'object' || typeof b != 'object') return false;
+
+      // Objects with different constructors are not equivalent, but `Object`s or `Array`s
+      // from different frames are.
+      var aCtor = a.constructor, bCtor = b.constructor;
+      if (aCtor !== bCtor && !(_.isFunction(aCtor) && aCtor instanceof aCtor &&
+                               _.isFunction(bCtor) && bCtor instanceof bCtor)
+                          && ('constructor' in a && 'constructor' in b)) {
+        return false;
+      }
+    }
+    // Assume equality for cyclic structures. The algorithm for detecting cyclic
+    // structures is adapted from ES 5.1 section 15.12.3, abstract operation `JO`.
+
+    // Initializing stack of traversed objects.
+    // It's done here since we only need them for objects and arrays comparison.
+    aStack = aStack || [];
+    bStack = bStack || [];
+    var length = aStack.length;
+    while (length--) {
+      // Linear search. Performance is inversely proportional to the number of
+      // unique nested structures.
+      if (aStack[length] === a) return bStack[length] === b;
+    }
+
+    // Add the first object to the stack of traversed objects.
+    aStack.push(a);
+    bStack.push(b);
+
+    // Recursively compare objects and arrays.
+    if (areArrays) {
+      // Compare array lengths to determine if a deep comparison is necessary.
+      length = a.length;
+      if (length !== b.length) return false;
+      // Deep compare the contents, ignoring non-numeric properties.
+      while (length--) {
+        if (!eq(a[length], b[length], aStack, bStack)) return false;
+      }
+    } else {
+      // Deep compare objects.
+      var keys = _.keys(a), key;
+      length = keys.length;
+      // Ensure that both objects contain the same number of properties before comparing deep equality.
+      if (_.keys(b).length !== length) return false;
+      while (length--) {
+        // Deep compare each member
+        key = keys[length];
+        if (!(_.has(b, key) && eq(a[key], b[key], aStack, bStack))) return false;
+      }
+    }
+    // Remove the first object from the stack of traversed objects.
+    aStack.pop();
+    bStack.pop();
+    return true;
+  };
+
+  // Perform a deep comparison to check if two objects are equal.
+  _.isEqual = function(a, b) {
+    return eq(a, b);
+  };
+
+  // Is a given array, string, or object empty?
+  // An "empty" object has no enumerable own-properties.
+  _.isEmpty = function(obj) {
+    if (obj == null) return true;
+    if (isArrayLike(obj) && (_.isArray(obj) || _.isString(obj) || _.isArguments(obj))) return obj.length === 0;
+    return _.keys(obj).length === 0;
+  };
+
+  // Is a given value a DOM element?
+  _.isElement = function(obj) {
+    return !!(obj && obj.nodeType === 1);
+  };
+
+  // Is a given value an array?
+  // Delegates to ECMA5's native Array.isArray
+  _.isArray = nativeIsArray || function(obj) {
+    return toString.call(obj) === '[object Array]';
+  };
+
+  // Is a given variable an object?
+  _.isObject = function(obj) {
+    var type = typeof obj;
+    return type === 'function' || type === 'object' && !!obj;
+  };
+
+  // Add some isType methods: isArguments, isFunction, isString, isNumber, isDate, isRegExp, isError.
+  _.each(['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp', 'Error'], function(name) {
+    _['is' + name] = function(obj) {
+      return toString.call(obj) === '[object ' + name + ']';
+    };
+  });
+
+  // Define a fallback version of the method in browsers (ahem, IE < 9), where
+  // there isn't any inspectable "Arguments" type.
+  if (!_.isArguments(arguments)) {
+    _.isArguments = function(obj) {
+      return _.has(obj, 'callee');
+    };
+  }
+
+  // Optimize `isFunction` if appropriate. Work around some typeof bugs in old v8,
+  // IE 11 (#1621), and in Safari 8 (#1929).
+  if (typeof /./ != 'function' && typeof Int8Array != 'object') {
+    _.isFunction = function(obj) {
+      return typeof obj == 'function' || false;
+    };
+  }
+
+  // Is a given object a finite number?
+  _.isFinite = function(obj) {
+    return isFinite(obj) && !isNaN(parseFloat(obj));
+  };
+
+  // Is the given value `NaN`? (NaN is the only number which does not equal itself).
+  _.isNaN = function(obj) {
+    return _.isNumber(obj) && obj !== +obj;
+  };
+
+  // Is a given value a boolean?
+  _.isBoolean = function(obj) {
+    return obj === true || obj === false || toString.call(obj) === '[object Boolean]';
+  };
+
+  // Is a given value equal to null?
+  _.isNull = function(obj) {
+    return obj === null;
+  };
+
+  // Is a given variable undefined?
+  _.isUndefined = function(obj) {
+    return obj === void 0;
+  };
+
+  // Shortcut function for checking if an object has a given property directly
+  // on itself (in other words, not on a prototype).
+  _.has = function(obj, key) {
+    return obj != null && hasOwnProperty.call(obj, key);
+  };
+
+  // Utility Functions
+  // -----------------
+
+  // Run Underscore.js in *noConflict* mode, returning the `_` variable to its
+  // previous owner. Returns a reference to the Underscore object.
+  _.noConflict = function() {
+    root._ = previousUnderscore;
+    return this;
+  };
+
+  // Keep the identity function around for default iteratees.
+  _.identity = function(value) {
+    return value;
+  };
+
+  // Predicate-generating functions. Often useful outside of Underscore.
+  _.constant = function(value) {
+    return function() {
+      return value;
+    };
+  };
+
+  _.noop = function(){};
+
+  _.property = property;
+
+  // Generates a function for a given object that returns a given property.
+  _.propertyOf = function(obj) {
+    return obj == null ? function(){} : function(key) {
+      return obj[key];
+    };
+  };
+
+  // Returns a predicate for checking whether an object has a given set of
+  // `key:value` pairs.
+  _.matcher = _.matches = function(attrs) {
+    attrs = _.extendOwn({}, attrs);
+    return function(obj) {
+      return _.isMatch(obj, attrs);
+    };
+  };
+
+  // Run a function **n** times.
+  _.times = function(n, iteratee, context) {
+    var accum = Array(Math.max(0, n));
+    iteratee = optimizeCb(iteratee, context, 1);
+    for (var i = 0; i < n; i++) accum[i] = iteratee(i);
+    return accum;
+  };
+
+  // Return a random integer between min and max (inclusive).
+  _.random = function(min, max) {
+    if (max == null) {
+      max = min;
+      min = 0;
+    }
+    return min + Math.floor(Math.random() * (max - min + 1));
+  };
+
+  // A (possibly faster) way to get the current timestamp as an integer.
+  _.now = Date.now || function() {
+    return new Date().getTime();
+  };
+
+   // List of HTML entities for escaping.
+  var escapeMap = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#x27;',
+    '`': '&#x60;'
+  };
+  var unescapeMap = _.invert(escapeMap);
+
+  // Functions for escaping and unescaping strings to/from HTML interpolation.
+  var createEscaper = function(map) {
+    var escaper = function(match) {
+      return map[match];
+    };
+    // Regexes for identifying a key that needs to be escaped
+    var source = '(?:' + _.keys(map).join('|') + ')';
+    var testRegexp = RegExp(source);
+    var replaceRegexp = RegExp(source, 'g');
+    return function(string) {
+      string = string == null ? '' : '' + string;
+      return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
+    };
+  };
+  _.escape = createEscaper(escapeMap);
+  _.unescape = createEscaper(unescapeMap);
+
+  // If the value of the named `property` is a function then invoke it with the
+  // `object` as context; otherwise, return it.
+  _.result = function(object, property, fallback) {
+    var value = object == null ? void 0 : object[property];
+    if (value === void 0) {
+      value = fallback;
+    }
+    return _.isFunction(value) ? value.call(object) : value;
+  };
+
+  // Generate a unique integer id (unique within the entire client session).
+  // Useful for temporary DOM ids.
+  var idCounter = 0;
+  _.uniqueId = function(prefix) {
+    var id = ++idCounter + '';
+    return prefix ? prefix + id : id;
+  };
+
+  // By default, Underscore uses ERB-style template delimiters, change the
+  // following template settings to use alternative delimiters.
+  _.templateSettings = {
+    evaluate    : /<%([\s\S]+?)%>/g,
+    interpolate : /<%=([\s\S]+?)%>/g,
+    escape      : /<%-([\s\S]+?)%>/g
+  };
+
+  // When customizing `templateSettings`, if you don't want to define an
+  // interpolation, evaluation or escaping regex, we need one that is
+  // guaranteed not to match.
+  var noMatch = /(.)^/;
+
+  // Certain characters need to be escaped so that they can be put into a
+  // string literal.
+  var escapes = {
+    "'":      "'",
+    '\\':     '\\',
+    '\r':     'r',
+    '\n':     'n',
+    '\u2028': 'u2028',
+    '\u2029': 'u2029'
+  };
+
+  var escaper = /\\|'|\r|\n|\u2028|\u2029/g;
+
+  var escapeChar = function(match) {
+    return '\\' + escapes[match];
+  };
+
+  // JavaScript micro-templating, similar to John Resig's implementation.
+  // Underscore templating handles arbitrary delimiters, preserves whitespace,
+  // and correctly escapes quotes within interpolated code.
+  // NB: `oldSettings` only exists for backwards compatibility.
+  _.template = function(text, settings, oldSettings) {
+    if (!settings && oldSettings) settings = oldSettings;
+    settings = _.defaults({}, settings, _.templateSettings);
+
+    // Combine delimiters into one regular expression via alternation.
+    var matcher = RegExp([
+      (settings.escape || noMatch).source,
+      (settings.interpolate || noMatch).source,
+      (settings.evaluate || noMatch).source
+    ].join('|') + '|$', 'g');
+
+    // Compile the template source, escaping string literals appropriately.
+    var index = 0;
+    var source = "__p+='";
+    text.replace(matcher, function(match, escape, interpolate, evaluate, offset) {
+      source += text.slice(index, offset).replace(escaper, escapeChar);
+      index = offset + match.length;
+
+      if (escape) {
+        source += "'+\n((__t=(" + escape + "))==null?'':_.escape(__t))+\n'";
+      } else if (interpolate) {
+        source += "'+\n((__t=(" + interpolate + "))==null?'':__t)+\n'";
+      } else if (evaluate) {
+        source += "';\n" + evaluate + "\n__p+='";
+      }
+
+      // Adobe VMs need the match returned to produce the correct offest.
+      return match;
+    });
+    source += "';\n";
+
+    // If a variable is not specified, place data values in local scope.
+    if (!settings.variable) source = 'with(obj||{}){\n' + source + '}\n';
+
+    source = "var __t,__p='',__j=Array.prototype.join," +
+      "print=function(){__p+=__j.call(arguments,'');};\n" +
+      source + 'return __p;\n';
+
+    try {
+      var render = new Function(settings.variable || 'obj', '_', source);
+    } catch (e) {
+      e.source = source;
+      throw e;
+    }
+
+    var template = function(data) {
+      return render.call(this, data, _);
+    };
+
+    // Provide the compiled source as a convenience for precompilation.
+    var argument = settings.variable || 'obj';
+    template.source = 'function(' + argument + '){\n' + source + '}';
+
+    return template;
+  };
+
+  // Add a "chain" function. Start chaining a wrapped Underscore object.
+  _.chain = function(obj) {
+    var instance = _(obj);
+    instance._chain = true;
+    return instance;
+  };
+
+  // OOP
+  // ---------------
+  // If Underscore is called as a function, it returns a wrapped object that
+  // can be used OO-style. This wrapper holds altered versions of all the
+  // underscore functions. Wrapped objects may be chained.
+
+  // Helper function to continue chaining intermediate results.
+  var result = function(instance, obj) {
+    return instance._chain ? _(obj).chain() : obj;
+  };
+
+  // Add your own custom functions to the Underscore object.
+  _.mixin = function(obj) {
+    _.each(_.functions(obj), function(name) {
+      var func = _[name] = obj[name];
+      _.prototype[name] = function() {
+        var args = [this._wrapped];
+        push.apply(args, arguments);
+        return result(this, func.apply(_, args));
+      };
+    });
+  };
+
+  // Add all of the Underscore functions to the wrapper object.
+  _.mixin(_);
+
+  // Add all mutator Array functions to the wrapper.
+  _.each(['pop', 'push', 'reverse', 'shift', 'sort', 'splice', 'unshift'], function(name) {
+    var method = ArrayProto[name];
+    _.prototype[name] = function() {
+      var obj = this._wrapped;
+      method.apply(obj, arguments);
+      if ((name === 'shift' || name === 'splice') && obj.length === 0) delete obj[0];
+      return result(this, obj);
+    };
+  });
+
+  // Add all accessor Array functions to the wrapper.
+  _.each(['concat', 'join', 'slice'], function(name) {
+    var method = ArrayProto[name];
+    _.prototype[name] = function() {
+      return result(this, method.apply(this._wrapped, arguments));
+    };
+  });
+
+  // Extracts the result from a wrapped and chained object.
+  _.prototype.value = function() {
+    return this._wrapped;
+  };
+
+  // Provide unwrapping proxy for some methods used in engine operations
+  // such as arithmetic and JSON stringification.
+  _.prototype.valueOf = _.prototype.toJSON = _.prototype.value;
+
+  _.prototype.toString = function() {
+    return '' + this._wrapped;
+  };
+
+  // AMD registration happens at the end for compatibility with AMD loaders
+  // that may not enforce next-turn semantics on modules. Even though general
+  // practice for AMD registration is to be anonymous, underscore registers
+  // as a named module because, like jQuery, it is a base library that is
+  // popular enough to be bundled in a third party lib, but not be part of
+  // an AMD load request. Those cases could generate an error when an
+  // anonymous define() is called outside of a loader request.
+  if (typeof define === 'function' && define.amd) {
+    define('lib/underscore',[], function() {
+      return _;
+    });
+  }
+}.call(this));
+
+define('CallbackManager',["utils", "lib/underscore"], function(utils, _) {
     /** CallbackManager()
 
      */
 
     var CallbackManager = utils.make_class();
     CallbackManager.prototype = { init: init,
-				  set: set,
-				  remove: remove,
-				  run: run };
+                                  set: set,
+                                  remove: remove,
+                                  run: run };
 
     return CallbackManager;
 
@@ -3392,290 +5033,487 @@ define('CallbackManager',["utils"], function(utils) {
 
     }
     function set(name, fn) {
-	/** As in d3 callbacks, you can namespace your callbacks after a period:
-	 
-	 select_metabolite.direction_arrow
-	 select_metabolite.input
+        /** As in d3 callbacks, you can namespace your callbacks after a period:
 
-	 Both are called by select_metabolite
-	 
-	 */
-	if (this.callbacks===undefined) this.callbacks = {};
-	if (this.callbacks[name]===undefined) this.callbacks[name] = [];
-	this.callbacks[name].push(fn);
+         select_metabolite.direction_arrow
+         select_metabolite.input
 
-	return this;
+         Both are called by select_metabolite
+
+
+         TODO add *arguments to set, as in _.defer()
+
+         */
+        if (this.callbacks===undefined) this.callbacks = {};
+        if (this.callbacks[name]===undefined) this.callbacks[name] = [];
+        this.callbacks[name].push(fn);
+
+        return this;
     }
     function remove(name) {
-	/** Remove a callback by name
-	 
-	 */
-	if (this.callbacks===undefined || Object.keys(this.callbacks).length==0) {
-	    console.warn('No callbacks to remove');
-	}
-	delete this.callbacks[name];
-	return this;
+        /** Remove a callback by name
+
+         */
+        if (this.callbacks===undefined || Object.keys(this.callbacks).length==0) {
+            console.warn('No callbacks to remove');
+        }
+        delete this.callbacks[name];
+        return this;
     }
     function run(name, this_arg) {
-	/** Run all callbacks that match the portion of name before the period ('.').
+        /** Run all callbacks that match the portion of name before the period ('.').
 
-            Arguments
-            ---------
+         Arguments
+         ---------
 
-            name: The callback name, which can include a tag after a '.' to
-            specificy a particular callback.
+         name: The callback name, which can include a tag after a '.' to
+         specificy a particular callback.
 
-            this_arg: (Optional, Default: null) The object assigned to `this` in
-            the callback.
+         this_arg: (Optional, Default: null) The object assigned to `this` in
+         the callback.
 
-	 */
-	if (this.callbacks===undefined) return this;
-        if (this_arg===undefined) this_arg = null;
-	// pass all but the first (name) argument to the callback
-	var pass_args = Array.prototype.slice.call(arguments, 2);
-	// look for matching callback names
-	for (var a_name in this.callbacks) {
-	    var split_name = a_name.split('.')[0];
-	    if (split_name==name) {
-		this.callbacks[a_name].forEach(function(fn) {
-		    fn.apply(this_arg, pass_args);
-		});
-	    }
-	}
-	return this;
+         */
+        if (_.isUndefined(this.callbacks)) return this;
+        if (_.isUndefined(this_arg)) this_arg = null;
+        // pass all but the first (name) argument to the callback
+        var pass_args = Array.prototype.slice.call(arguments, 2);
+        // look for matching callback names
+        for (var a_name in this.callbacks) {
+            var split_name = a_name.split('.')[0];
+            if (split_name==name) {
+                this.callbacks[a_name].forEach(function(fn) {
+                    fn.apply(this_arg, pass_args);
+                });
+            }
+        }
+        return this;
     }
 });
 
-define('ZoomContainer',["utils", "CallbackManager"], function(utils, CallbackManager) {
-    /** ZoomContainer
+/* global define, d3 */
 
-     The zoom behavior is based on this SO question:
-     http://stackoverflow.com/questions/18788188/how-to-temporarily-disable-the-zooming-in-d3-js
-     */
+define('ZoomContainer',["utils", "CallbackManager", "lib/underscore"], function(utils, CallbackManager, _) {
     var ZoomContainer = utils.make_class();
     ZoomContainer.prototype = { init: init,
-				toggle_zoom: toggle_zoom,
-				go_to: go_to,
-				zoom_by: zoom_by,
-				zoom_in: zoom_in,
-				zoom_out: zoom_out,
-				get_size: get_size,
-				translate_off_screen: translate_off_screen,
-				reset: reset };
+                                set_scroll_behavior: set_scroll_behavior,
+                                set_use_3d_transform: set_use_3d_transform,
+                                _update_scroll: _update_scroll,
+                                toggle_pan_drag: toggle_pan_drag,
+                                go_to: go_to,
+                                _go_to_3d: _go_to_3d,
+                                _clear_3d: _clear_3d,
+                                _go_to_svg: _go_to_svg,
+                                zoom_by: zoom_by,
+                                zoom_in: zoom_in,
+                                zoom_out: zoom_out,
+                                get_size: get_size,
+                                translate_off_screen: translate_off_screen };
     return ZoomContainer;
 
     // definitions
-    function init(selection, size_container, scroll_behavior) {
-	/** Make a container that will manage panning and zooming.
+    function init(selection, scroll_behavior, use_3d_transform, fill_screen) {
+        /** Make a container that will manage panning and zooming. Creates a new
+         SVG element, with a parent div for CSS3 3D transforms.
 
-	 selection: A d3 selection of an 'svg' or 'g' node to put the zoom
-	 container in.
+         Arguments
+         ---------
 
-	 size_container: A d3 selection of a 'div' node that has defined width
-	 and height.
+         selection: A d3 selection of a HTML node to put the zoom container
+         in. Should have a defined width and height.
 
-	 */
+         scroll_behavior: Either 'zoom' or 'pan'.
 
-	this.zoom_on = true;
-	this.initial_zoom = 1.0;
-	this.window_translate = {x: 0, y: 0};
-	this.window_scale = 1.0;
+         use_3d_transform: If true, then use CSS3 3D transform to speed up pan
+         and zoom.
 
-	// set up the callbacks
-	this.callback_manager = new CallbackManager();
+         fill_screen: If true, then apply styles to body and selection that fill
+         the screen. The styled classes are "fill-screen-body" and
+         "fill-screen-div".
 
-	// save the size_container
-	this.size_container = size_container;
+         */
 
-        // set up the container
-        selection.select("#zoom-container").remove();
-        var container = selection.append("g")
-                .attr("id", "zoom-container");
-        this.zoomed_sel = container.append("g");
+        // set the selection class
+        selection.classed('escher-container', true);
 
-	// the zoom function and behavior
-        var zoom = function(zoom_container, event) {
-	    if (zoom_container.zoom_on) {
-                zoom_container.zoomed_sel.attr("transform", "translate(" + event.translate + ")" +
-					       "scale(" + event.scale + ")");
-		zoom_container.window_translate = {'x': event.translate[0],
-						   'y': event.translate[1]};
-		zoom_container.window_scale = event.scale;
-		zoom_container.callback_manager.run('zoom');
-	    }
-        };
-	var zoom_container = this;
-	this.zoom_behavior = d3.behavior.zoom()
-	    .on("zoom", function() {
-		zoom(zoom_container, d3.event);
-	    });
-	container.call(this.zoom_behavior);	
-	if (scroll_behavior=='none' || scroll_behavior=='pan') {
-	    container.on("mousewheel.zoom", null)
-		.on("DOMMouseScroll.zoom", null) // disables older versions of Firefox
-		.on("wheel.zoom", null) // disables newer versions of Firefox
-		.on('dblclick.zoom', null);
-	}
-	if (scroll_behavior=='pan') {
-	    // Add the wheel listener
-	    var wheel_fn = function() {
-		var ev = d3.event,
-		    sensitivity = 0.5;
-		// stop scroll in parent elements
-		ev.stopPropagation();
-		ev.preventDefault();
-		ev.returnValue = false;
-		// change the location
-		this.go_to(this.window_scale,
-			   { x: this.window_translate.x -
-			     (ev.wheelDeltaX!==undefined ? -ev.wheelDeltaX/1.5 : ev.deltaX) * sensitivity,
-			     y: this.window_translate.y -
-			     (ev.wheelDeltaY!==undefined ? -ev.wheelDeltaY/1.5 : ev.deltaY) * sensitivity },
-			   false);
-	    }.bind(this);
-	    container.on('mousewheel.escher', wheel_fn);
-	    container.on('DOMMouseScroll.escher', wheel_fn);
-	    container.on('wheel.escher', wheel_fn);
-	}
+        // fill screen classes
+        if (fill_screen) {
+            d3.select("body").classed('fill-screen-body', true);
+            selection.classed('fill-screen-div', true);
+        }
 
-	this.saved_scale = null;
-	this.saved_translate = null;
+        // make the svg
+        var zoom_container = selection.append('div')
+                .attr('class', 'escher-zoom-container');
+
+        var css3_transform_container = zoom_container.append('div')
+                .attr('class', 'escher-3d-transform-container');
+
+        var svg = css3_transform_container.append('svg')
+            .attr("class", "escher-svg")
+            .attr('xmlns', "http://www.w3.org/2000/svg");
+
+        // set up the zoom container
+        svg.select(".zoom-g").remove();
+        var zoomed_sel = svg.append("g")
+            .attr("class", "zoom-g");
+
+        // attributes
+        this.selection = selection;
+        this.zoom_container = zoom_container;
+        this.css3_transform_container = css3_transform_container;
+        this.svg = svg;
+        this.zoomed_sel = zoomed_sel;
+        this.window_translate = {x: 0, y: 0};
+        this.window_scale = 1.0;
+
+        this._scroll_behavior = scroll_behavior;
+        this._use_3d_transform = use_3d_transform;
+        this._pan_drag_on = true;
+        this._zoom_behavior = null;
+        this._zoom_timeout = null;
+        this._svg_scale = this.window_scale;
+        this._svg_translate = this.window_translate;
+        // this._last_svg_ms = null;
+
+        // set up the callbacks
+        this.callback_manager = new CallbackManager();
+
+        // update the scroll behavior
+        this._update_scroll();
     }
 
-    function toggle_zoom(on_off) {
-	/** Toggle the zoom state, and remember zoom when the behavior is off.
+    function set_scroll_behavior(scroll_behavior) {
+        /** Set up pan or zoom on scroll.
+         *
+         * Arguments
+         * ---------
+         *
+         * scroll_behavior: 'none', 'pan' or 'zoom'.
+         *
+         */
 
-	 */
-	if (on_off===undefined) {
-	    this.zoom_on = !this.zoom_on;
-	} else {
-	    this.zoom_on = on_off;
-	}
-	if (this.zoom_on) {
-	    if (this.saved_scale !== null){
-		this.zoom_behavior.scale(this.saved_scale);
-		this.saved_scale = null;
-	    }
-	    if (this.saved_translate !== null){
-		this.zoom_behavior.translate(this.saved_translate);
-		this.saved_translate = null;
-	    }
+        this._scroll_behavior = scroll_behavior;
+        this._update_scroll();
+    }
 
-	    // turn on the hand
-	    this.zoomed_sel
-		.classed('cursor-grab', true).classed('cursor-grabbing', false);
-	    this.zoomed_sel
-		.on('mousedown.cursor', function(sel) {
-		    sel.classed('cursor-grab', false).classed('cursor-grabbing', true);
-		}.bind(null, this.zoomed_sel))
-		.on('mouseup.cursor', function(sel) {
-		    sel.classed('cursor-grab', true).classed('cursor-grabbing', false);
-		}.bind(null, this.zoomed_sel));
-	} else {
-	    if (this.saved_scale === null){
-		this.saved_scale = utils.clone(this.zoom_behavior.scale());
-	    }
-	    if (this.saved_translate === null){
-		this.saved_translate = utils.clone(this.zoom_behavior.translate());
-	    }
+    function set_use_3d_transform(use_3d_transform) {
+        /** Set the option use_3d_transform */
+        this._use_3d_transform = use_3d_transform;
+    }
 
-	    // turn off the hand
-	    this.zoomed_sel.style('cursor', null)
-		.classed('cursor-grab', false)
-		.classed('cursor-grabbing', false);
-	    this.zoomed_sel.on('mousedown.cursor', null);
-	    this.zoomed_sel.on('mouseup.cursor', null);
-	}
+    function toggle_pan_drag(on_off) {
+        /** Toggle the zoom drag and the cursor UI for it. */
+
+        if (_.isUndefined(on_off)) {
+            this._pan_drag_on = !this._pan_drag_on;
+        } else {
+            this._pan_drag_on = on_off;
+        }
+
+        if (this._pan_drag_on) {
+            // turn on the hand
+            this.zoomed_sel
+                .classed('cursor-grab', true).classed('cursor-grabbing', false);
+            this.zoomed_sel
+                .on('mousedown.cursor', function(sel) {
+                    sel.classed('cursor-grab', false).classed('cursor-grabbing', true);
+                }.bind(null, this.zoomed_sel))
+                .on('mouseup.cursor', function(sel) {
+                    sel.classed('cursor-grab', true).classed('cursor-grabbing', false);
+                }.bind(null, this.zoomed_sel));
+        } else {
+            // turn off the hand
+            this.zoomed_sel.style('cursor', null)
+                .classed('cursor-grab', false)
+                .classed('cursor-grabbing', false);
+            this.zoomed_sel.on('mousedown.cursor', null);
+            this.zoomed_sel.on('mouseup.cursor', null);
+        }
+
+        // update the behaviors
+        this._update_scroll();
+    }
+
+    function _update_scroll() {
+        /** Update the pan and zoom behaviors. The behaviors are applied to the
+         * css3_transform_container node.
+         *
+         */
+
+        if (!_.contains(['zoom', 'pan', 'none'], this._scroll_behavior)) {
+            throw Error('Bad value for scroll_behavior: ' + this._scroll_behavior);
+        }
+
+        // clear all behaviors
+        this.zoom_container.on("mousewheel.zoom", null) // zoom scroll behaviors
+            .on("DOMMouseScroll.zoom", null) // disables older versions of Firefox
+            .on("wheel.zoom", null) // disables newer versions of Firefox
+            .on('dblclick.zoom', null)
+            .on('mousewheel.escher', null) // pan scroll behaviors
+            .on('DOMMouseScroll.escher', null)
+            .on('wheel.escher', null)
+            .on("mousedown.zoom", null) // drag behaviors
+            .on("touchstart.zoom", null)
+            .on("touchmove.zoom", null)
+            .on("touchend.zoom", null);
+
+        // This handles dragging to pan, double-clicking to zoom, and touch
+        // events (in any scroll mode). It also handles scrolling to zoom (only
+        // 'zoom' mode).
+        this._zoom_behavior = d3.behavior.zoom()
+            .on("zoom", function() {
+                this.go_to(d3.event.scale, {x: d3.event.translate[0], y: d3.event.translate[1]});
+            }.bind(this));
+
+        // set current location
+        this._zoom_behavior.scale(this.window_scale);
+        this._zoom_behavior.translate([this.window_translate.x,
+                                       this.window_translate.y]);
+
+        // set it up
+        this.zoom_container.call(this._zoom_behavior);
+
+        // if panning is off, then turn off these listeners
+        if (!this._pan_drag_on) {
+            this.zoom_container.on("mousedown.zoom", null)
+                .on("touchstart.zoom", null)
+                .on("touchmove.zoom", null)
+                .on("touchend.zoom", null);
+        }
+
+        // if scroll to zoom is off, then turn off these listeners
+        if (this._scroll_behavior !== 'zoom') {
+            this.zoom_container
+                .on("mousewheel.zoom", null) // zoom scroll behaviors
+                .on("DOMMouseScroll.zoom", null) // disables older versions of Firefox
+                .on("wheel.zoom", null); // disables newer versions of Firefox
+        }
+
+        // add listeners for scrolling to pan
+        if (this._scroll_behavior === 'pan') {
+            // Add the wheel listener
+            var wheel_fn = function() {
+                var ev = d3.event,
+                    sensitivity = 0.5;
+                // stop scroll in parent elements
+                ev.stopPropagation();
+                ev.preventDefault();
+                ev.returnValue = false;
+                // change the location
+                var get_directional_disp = function(wheel_delta, delta) {
+                    var the_delt = _.isUndefined(wheel_delta) ? delta : -wheel_delta / 1.5;
+                    return the_delt * sensitivity;
+                };
+                var new_translate = {
+                    x: this.window_translate.x - get_directional_disp(ev.wheelDeltaX, ev.deltaX),
+                    y: this.window_translate.y - get_directional_disp(ev.wheelDeltaY, ev.deltaY)
+                };
+                this.go_to(this.window_scale, new_translate, false);
+            }.bind(this);
+
+            // apply it
+            this.zoom_container.on('mousewheel.escher', wheel_fn);
+            this.zoom_container.on('DOMMouseScroll.escher', wheel_fn);
+            this.zoom_container.on('wheel.escher', wheel_fn);
+        }
     }
 
     // functions to scale and translate
-    function go_to(scale, translate, show_transition) {
-	utils.check_undefined(arguments, ['scale', 'translate']);
-	if (show_transition===undefined) show_transition = true;
+    function go_to(scale, translate) {
+        /** Zoom the container to a specified location.
+         *
+         * Arguments
+         * ---------
+         *
+         * scale: The scale, between 0 and 1.
+         *
+         * translate: The location, of the form {x: 2.0, y: 3.0}.
+         *
+         */
 
-	if (!scale) throw new Error('Bad scale value');
-	if (!translate || !('x' in translate) || !('y' in translate) ||
-	    isNaN(translate.x) || isNaN(translate.y))
-	    return console.error('Bad translate value');
+        utils.check_undefined(arguments, ['scale', 'translate']);
 
-	this.zoom_behavior.scale(scale);
-	this.window_scale = scale;
-	if (this.saved_scale !== null) this.saved_scale = scale;
+        var use_3d_transform = this._use_3d_transform;
 
-	var translate_array = [translate.x, translate.y];
-	this.zoom_behavior.translate(translate_array);
+        // check inputs
+        if (!scale) throw new Error('Bad scale value');
+        if (!translate || !('x' in translate) || !('y' in translate) ||
+            isNaN(translate.x) || isNaN(translate.y))
+            return console.error('Bad translate value');
+
+        // save inputs
+        this.window_scale = scale;
         this.window_translate = translate;
-	if (this.saved_translate !== null) this.saved_translate = translate_array;
 
-	var move_this = (show_transition ?
-			 this.zoomed_sel.transition() :
-			 this.zoomed_sel);
-        move_this.attr('transform',
-		  'translate('+this.window_translate.x+','+this.window_translate.y+')'+
-		  'scale('+this.window_scale+')');
+        // save to zoom behavior
+        if (!_.isNull(this._zoom_behavior)) {
+            this._zoom_behavior.scale(scale);
+            var translate_array = [translate.x, translate.y];
+            this._zoom_behavior.translate(translate_array);
+        }
 
-	this.callback_manager.run('go_to');
-	return null;
+        if (use_3d_transform) { // 3d tranform
+            // cancel all timeouts
+            if (!_.isNull(this._zoom_timeout))
+                window.clearTimeout(this._zoom_timeout);
+
+            // set the 3d transform
+            this._go_to_3d(scale, translate,
+                           this._svg_scale, this._svg_translate);
+
+            // if another go_to does not happen within the delay time, then
+            // redraw the svg
+            this._zoom_timeout = _.delay(function() {
+                // redraw the svg
+                this._go_to_svg(scale, translate);
+            }.bind(this), 100); // between 100 and 600 seems to be usable
+
+        } else { // no 3d transform
+            this._go_to_svg(scale, translate);
+        }
+
+        this.callback_manager.run('go_to');
+    }
+
+    function _go_to_3d(scale, translate, svg_scale, svg_translate) {
+        /** Zoom & pan the CSS 3D transform container */
+        var n_scale = scale / svg_scale,
+            n_translate = utils.c_minus_c(
+                translate,
+                utils.c_times_scalar(svg_translate, n_scale)
+            ),
+            tranform = ('translate(' + n_translate.x + 'px,' + n_translate.y + 'px) ' +
+                        'scale(' + n_scale + ')');
+        this.css3_transform_container.style('transform', tranform);
+        this.css3_transform_container.style('-webkit-transform', tranform);
+        this.css3_transform_container.style('transform-origin', '0 0');
+        this.css3_transform_container.style('-webkit-transform-origin', '0 0');
+    }
+
+    function _clear_3d() {
+        this.css3_transform_container.style('transform', null);
+        this.css3_transform_container.style('-webkit-transform', null);
+        this.css3_transform_container.style('transform-origin', null);
+        this.css3_transform_container.style('-webkit-transform-origin', null);
+    }
+
+    function _go_to_svg(scale, translate) {
+        /** Zoom & pan the svg element.
+         *
+         * Also runs the svg_start and svg_finish callbacks.
+         *
+         */
+
+        this.callback_manager.run('svg_start');
+
+        // defer to update callbacks
+        _.defer(function() {
+
+            // start time
+            // var start = new Date().getTime();
+
+            // reset the 3d transform
+            this._clear_3d();
+
+            // redraw the svg
+            this.zoomed_sel
+                .attr('transform',
+                      'translate(' + translate.x + ',' + translate.y + ') ' +
+                      'scale(' + scale + ')');
+            // save svg location
+            this._svg_scale = this.window_scale;
+            this._svg_translate = this.window_translate;
+
+            _.defer(function() {
+                // defer for callback after draw
+                this.callback_manager.run('svg_finish');
+
+                // wait a few ms to get a reliable end time
+                // _.delay(function() {
+                //     // end time
+                //     var t = new Date().getTime() - start;
+                //     this._last_svg_ms = t;
+                // }.bind(this), 20);
+            }.bind(this));
+        }.bind(this));
     }
 
     function zoom_by(amount) {
-	var size = this.get_size(),
-	    shift = { x: size.width/2 - ((size.width/2 - this.window_translate.x) * amount +
-					 this.window_translate.x),
-	 	      y: size.height/2 - ((size.height/2 - this.window_translate.y) * amount +
-					  this.window_translate.y) };
-	this.go_to(this.window_scale*amount,
-		   utils.c_plus_c(this.window_translate, shift),
-		   true);
+        /** Zoom by a specified multiplier.
+         *
+         * Arguments
+         * ---------
+         *
+         * amount: A multiplier for the zoom. Greater than 1 zooms in and less
+         * than 1 zooms out.
+         *
+         */
+        var size = this.get_size(),
+            shift = { x: size.width/2 - ((size.width/2 - this.window_translate.x) * amount +
+                                         this.window_translate.x),
+                      y: size.height/2 - ((size.height/2 - this.window_translate.y) * amount +
+                                          this.window_translate.y) };
+        this.go_to(this.window_scale * amount,
+                   utils.c_plus_c(this.window_translate, shift));
     }
+
     function zoom_in() {
-	this.zoom_by(1.5);
+        /** Zoom in by the default amount with the default options. */
+        this.zoom_by(1.5);
     }
+
     function zoom_out() {
-	this.zoom_by(0.667);
+        /** Zoom out by the default amount with the default options. */
+        this.zoom_by(0.667);
     }
 
     function get_size() {
-	return { width: parseInt(this.size_container.style('width'), 10),
-		 height: parseInt(this.size_container.style('height'), 10) };
+        /** Return the size of the zoom container as coordinates.
+         *
+         * e.g. {x: 2, y: 3}
+         *
+         */
+        return { width: parseInt(this.selection.style('width'), 10),
+                 height: parseInt(this.selection.style('height'), 10) };
     }
 
     function translate_off_screen(coords) {
-        // shift window if new reaction will draw off the screen
+        /** Shift window if new reaction will draw off the screen */
+
         // TODO BUG not accounting for scale correctly
+
         var margin = 120, // pixels
-	    size = this.get_size(),
-	    current = {'x': {'min': - this.window_translate.x / this.window_scale +
-			     margin / this.window_scale,
-			     'max': - this.window_translate.x / this.window_scale +
-			     (size.width-margin) / this.window_scale },
-		       'y': {'min': - this.window_translate.y / this.window_scale +
-			     margin / this.window_scale,
-			     'max': - this.window_translate.y / this.window_scale +
-			     (size.height-margin) / this.window_scale } };
+            size = this.get_size(),
+            current = {'x': {'min': - this.window_translate.x / this.window_scale +
+                             margin / this.window_scale,
+                             'max': - this.window_translate.x / this.window_scale +
+                             (size.width-margin) / this.window_scale },
+                       'y': {'min': - this.window_translate.y / this.window_scale +
+                             margin / this.window_scale,
+                             'max': - this.window_translate.y / this.window_scale +
+                             (size.height-margin) / this.window_scale } };
         if (coords.x < current.x.min) {
             this.window_translate.x = this.window_translate.x -
-		(coords.x - current.x.min) * this.window_scale;
+                (coords.x - current.x.min) * this.window_scale;
             this.go_to(this.window_scale, this.window_translate);
         } else if (coords.x > current.x.max) {
             this.window_translate.x = this.window_translate.x -
-		(coords.x - current.x.max) * this.window_scale;
+                (coords.x - current.x.max) * this.window_scale;
             this.go_to(this.window_scale, this.window_translate);
         }
         if (coords.y < current.y.min) {
             this.window_translate.y = this.window_translate.y -
-		(coords.y - current.y.min) * this.window_scale;
+                (coords.y - current.y.min) * this.window_scale;
             this.go_to(this.window_scale, this.window_translate);
         } else if (coords.y > current.y.max) {
             this.window_translate.y = this.window_translate.y -
-		(coords.y - current.y.max) * this.window_scale;
+                (coords.y - current.y.max) * this.window_scale;
             this.go_to(this.window_scale, this.window_translate);
         }
     }
-    function reset() {
-	this.go_to(1.0, {x: 0.0, y: 0.0});
-    }
 });
+
+/* global define, d3 */
 
 define('Draw',['utils', 'data_styles', 'CallbackManager'], function(utils, data_styles, CallbackManager) {
     /** Manages creating, updating, and removing objects during d3 data binding.
@@ -3708,7 +5546,7 @@ define('Draw',['utils', 'data_styles', 'CallbackManager'], function(utils, data_
      */
 
     var Draw = utils.make_class();
-    
+
     // instance methods
     Draw.prototype = { init: init,
                        create_reaction: create_reaction,
@@ -3725,7 +5563,6 @@ define('Draw',['utils', 'data_styles', 'CallbackManager'], function(utils, data_
                        update_reaction_label: update_reaction_label,
                        create_segment: create_segment,
                        update_segment: update_segment
-                       
                      };
 
     return Draw;
@@ -3736,7 +5573,7 @@ define('Draw',['utils', 'data_styles', 'CallbackManager'], function(utils, data_
         this.settings = settings;
         this.callback_manager = new CallbackManager();
     }
-    
+
     function create_membrane(enter_selection) {
         enter_selection.append('rect')
             .attr('class', 'membrane');
@@ -3751,7 +5588,7 @@ define('Draw',['utils', 'data_styles', 'CallbackManager'], function(utils, data_
             .style('stroke-width', function(d) { return 10; })
             .attr('rx', function(d){ return 20; })
             .attr('ry', function(d){ return 20; });
-        
+
         this.callback_manager.run('update_membrane', this, update_selection);
     }
 
@@ -3761,13 +5598,32 @@ define('Draw',['utils', 'data_styles', 'CallbackManager'], function(utils, data_
             .attr('id', function(d) { return 'r'+d.reaction_id; })
             .attr('class', 'reaction')
             .call(this.create_reaction_label.bind(this));
-        
+
         this.callback_manager.run('create_reaction', this, enter_selection);
         return;
     }
 
     function update_reaction(update_selection, scale, cobra_model, drawn_nodes,
                              defs, has_data_on_reactions) {
+        /** Run on the update selection for reactions.
+
+         Arguments
+         ---------
+
+         update_selection: The D3.js update selection.
+
+         scale: A Scale object.
+
+         cobra_model: A CobraModel object.
+
+         drawn_nodes: The nodes object (e.g. Map.nodes).
+
+         defs: The defs object generated by utils.setup_defs() (e.g. Map.defs).
+
+         has_data_on_reactions: Boolean to determine whether data needs to be
+         drawn.
+
+         */
 
         // update reaction label
         update_selection.select('.reaction-label-group')
@@ -3778,15 +5634,16 @@ define('Draw',['utils', 'data_styles', 'CallbackManager'], function(utils, data_
         // draw segments
         utils.draw_a_nested_object(update_selection, '.segment-group', 'segments', 'segment_id',
                                    this.create_segment.bind(this),
-                                   function(sel) { 
+                                   function(sel) {
                                        return this.update_segment(sel, scale, cobra_model,
-                                                                  drawn_nodes, defs, 
+                                                                  drawn_nodes, defs,
                                                                   has_data_on_reactions);
                                    }.bind(this),
                                    function(sel) {
                                        sel.remove();
                                    });
 
+        // run the callback
         this.callback_manager.run('update_reaction', this, update_selection);
     }
 
@@ -3794,73 +5651,118 @@ define('Draw',['utils', 'data_styles', 'CallbackManager'], function(utils, data_
         /** Draw reaction label for selection.
 
          */
-        
+
         var group = enter_selection.append('g')
                 .attr('class', 'reaction-label-group');
+        group.append('title'); // tooltip
         group.append('text')
             .attr('class', 'reaction-label label');
         group.append('g')
-            .attr('class', 'gene-label-group');
+            .attr('class', 'all-genes-label-group');
 
         this.callback_manager.run('create_reaction_label', this, enter_selection);
     }
 
-    function update_reaction_label(update_selection, has_data_on_reactions) {        
+    function update_reaction_label(update_selection, has_data_on_reactions) {
+        /** Run on the update selection for reaction labels.
+
+         Arguments
+         ---------
+
+         update_selection: The D3.js update selection.
+
+         has_data_on_reactions: Boolean to determine whether data needs to be
+         drawn.
+
+         */
+
         var decimal_format = d3.format('.4g'),
             identifiers_on_map = this.settings.get_option('identifiers_on_map'),
+            identifiers_in_tooltip = (identifiers_on_map == 'bigg_id' ? 'name' : 'bigg_id'),
             reaction_data_styles = this.settings.get_option('reaction_styles'),
             show_gene_reaction_rules = this.settings.get_option('show_gene_reaction_rules'),
+            hide_all_labels = this.settings.get_option('hide_all_labels'),
             gene_font_size = this.settings.get_option('gene_font_size'),
             label_mousedown_fn = this.behavior.label_mousedown,
             label_mouseover_fn = this.behavior.label_mouseover,
             label_mouseout_fn = this.behavior.label_mouseout;
-            
-        update_selection.attr('transform', function(d) {
-            return 'translate('+d.label_x+','+d.label_y+')';
-        })
+
+        // label location
+        update_selection
+            .attr('transform', function(d) {
+                return 'translate(' + d.label_x + ',' + d.label_y + ')';
+            })
             .call(this.behavior.turn_off_drag)
             .call(this.behavior.reaction_label_drag);
-        update_selection.select('.reaction-label')
-            .text(function(d) { 
-                var t = d[identifiers_on_map];
-                if (has_data_on_reactions && reaction_data_styles.indexOf('text') != -1)
-                    t += ' ' + d.data_string;
-                return t;
-            })
-            .on('mousedown', label_mousedown_fn)
-            .on('mouseover', label_mouseover_fn)
-            .on('mouseout', label_mouseout_fn);
+
+        // update label visibility
+        var label = update_selection.select('.reaction-label')
+                .attr('visibility', hide_all_labels ? 'hidden' : 'visible');
+        if (!hide_all_labels) {
+            label
+                .text(function(d) {
+                    var t = d[identifiers_on_map];
+                    if (has_data_on_reactions && reaction_data_styles.indexOf('text') != -1)
+                        t += ' ' + d.data_string;
+                    return t;
+                })
+                .on('mousedown', label_mousedown_fn)
+                .on('mouseover', label_mouseover_fn)
+                .on('mouseout', label_mouseout_fn);
+
+            // tooltip
+            update_selection.select('title').text(function(d) {
+                return d[identifiers_in_tooltip];
+            });
+        }
         // gene label
-        var gene_g = update_selection.select('.gene-label-group')
-                .selectAll('text')
+        var all_genes_g = update_selection.select('.all-genes-label-group')
+                .selectAll('.gene-label-group')
                 .data(function(d) {
                     var show_gene_string = ('gene_string' in d &&
-                                            d.gene_string !== null),
+                                            d.gene_string !== null &&
+                                            show_gene_reaction_rules &&
+                                            (!hide_all_labels) &&
+                                            reaction_data_styles.indexOf('text') !== -1),
                         show_gene_reaction_rule = ('gene_reaction_rule' in d &&
                                                    d.gene_reaction_rule !== null &&
-                                                   show_gene_reaction_rules); 
+                                                   show_gene_reaction_rules &&
+                                                   (!hide_all_labels) );
                     if (show_gene_string) {
-                        return d.gene_string.split('\n');
+                        return d.gene_string;
                     } else if (show_gene_reaction_rule) {
-                        var rule = data_styles.gene_string_for_data(d.gene_reaction_rule, null,
-                                                                    d.genes, null, identifiers_on_map,
-                                                                    null);
-                        return rule.split('\n');
+                        // make the gene string with no data
+                        return data_styles.gene_string_for_data(d.gene_reaction_rule, null,
+                                                                d.genes, null, identifiers_on_map,
+                                                                null);
                     } else {
                         return [];
                     }
                 });
-        gene_g.enter()
-            .append('text')
+        // enter
+        var gene_g = all_genes_g.enter()
+                .append('g')
+                .attr('class', 'gene-label-group');
+        gene_g.append('text')
             .attr('class', 'gene-label')
             .style('font-size', gene_font_size + 'px');
-        gene_g.attr('transform', function(d, i) {
+        gene_g.append('title');
+        // update
+        all_genes_g.attr('transform', function(d, i) {
             return 'translate(0, ' + (gene_font_size * 1.5 * (i + 1)) + ')';
-        })
-            .text(function(d) { return d; });
-        gene_g.exit()
+        });
+        // update text
+        all_genes_g.select('text').text(function(d) {
+            return d['text'];
+        });
+        // update tooltip
+        all_genes_g.select('title').text(function(d) {
+            return d[identifiers_in_tooltip];
+        });
+        // exit
+        all_genes_g.exit()
             .remove();
-        
+
         this.callback_manager.run('update_reaction_label', this, update_selection);
     }
 
@@ -3880,10 +5782,10 @@ define('Draw',['utils', 'data_styles', 'CallbackManager'], function(utils, data_
 
         g.append('g')
             .attr('class', 'stoichiometry-labels');
-        
+
         this.callback_manager.run('create_segment', this, enter_selection);
     }
-    
+
     function update_segment(update_selection, scale, cobra_model,
                             drawn_nodes, defs, has_data_on_reactions) {
         var reaction_data_styles = this.settings.get_option('reaction_styles'),
@@ -3891,30 +5793,30 @@ define('Draw',['utils', 'data_styles', 'CallbackManager'], function(utils, data_
             should_color = (has_data_on_reactions && reaction_data_styles.indexOf('color') != -1),
             no_data_size = this.settings.get_option('reaction_no_data_size'),
             no_data_color = this.settings.get_option('reaction_no_data_color');
-        
+
         // update segment attributes
         var highlight_missing  = this.settings.get_option('highlight_missing'),
-	    hide_secondary_metabolites = this.settings.get_option('hide_secondary_metabolites'),
-	    primary_r = this.settings.get_option('primary_metabolite_radius'),
-	    secondary_r = this.settings.get_option('secondary_metabolite_radius'),
-	    get_arrow_size = function(data, should_size) {
-		var width = 20,
-		    height = 13;
-		if (should_size) {
+            hide_secondary_metabolites = this.settings.get_option('hide_secondary_metabolites'),
+            primary_r = this.settings.get_option('primary_metabolite_radius'),
+            secondary_r = this.settings.get_option('secondary_metabolite_radius'),
+            get_arrow_size = function(data, should_size) {
+                var width = 20,
+                    height = 13;
+                if (should_size) {
                     height = (data === null ? no_data_size : scale.reaction_size(data));
                     // check for nan
                     if (isNaN(height))
                         height = no_data_size;
                     width = height * 2;
-		}           
-		return { width: width, height: height };
-	    }, 
+                }
+                return { width: width, height: height };
+            },
             get_disp = function(arrow_size, reversibility, coefficient, node_is_primary) {
-		var arrow_height = ((reversibility || coefficient > 0) ?
-				    arrow_size.height :
-				    0),
-		    r = node_is_primary ? primary_r : secondary_r;
-		return r + arrow_height + 10;
+                var arrow_height = ((reversibility || coefficient > 0) ?
+                                    arrow_size.height :
+                                    0),
+                    r = node_is_primary ? primary_r : secondary_r;
+                return r + arrow_height + 10;
             };
         // update arrows
         update_selection
@@ -3922,15 +5824,15 @@ define('Draw',['utils', 'data_styles', 'CallbackManager'], function(utils, data_
             .datum(function() {
                 return this.parentNode.__data__;
             })
-	    .style('visibility', function(d) {
-		var start = drawn_nodes[d.from_node_id],
+            .style('visibility', function(d) {
+                var start = drawn_nodes[d.from_node_id],
                     end = drawn_nodes[d.to_node_id];
-		if (hide_secondary_metabolites &&
-		    ((end['node_type']=='metabolite' && !end.node_is_primary) ||
-		     (start['node_type']=='metabolite' && !start.node_is_primary)))
-			return 'hidden';
-		return null;
-	    })
+                if (hide_secondary_metabolites &&
+                    ((end['node_type']=='metabolite' && !end.node_is_primary) ||
+                     (start['node_type']=='metabolite' && !start.node_is_primary)))
+                    return 'hidden';
+                return null;
+            })
             .attr('d', function(d) {
                 if (d.from_node_id === null || d.to_node_id === null)
                     return null;
@@ -3951,7 +5853,7 @@ define('Draw',['utils', 'data_styles', 'CallbackManager'], function(utils, data_
                     var arrow_size = get_arrow_size(d.data, should_size),
                         disp = get_disp(arrow_size, d.reversibility,
                                         d.to_node_coefficient,
-					end.node_is_primary);
+                                        end.node_is_primary);
                     var direction = (b2 === null) ? start : b2;
                     end = displaced_coords(disp, direction, end, 'end');
                 }
@@ -3990,22 +5892,22 @@ define('Draw',['utils', 'data_styles', 'CallbackManager'], function(utils, data_
         var arrowheads = update_selection.select('.arrowheads')
                 .selectAll('.arrowhead')
                 .data(function (d) {
-                    var arrowheads = [],   
+                    var arrowheads = [],
                         start = drawn_nodes[d.from_node_id],
                         b1 = d.b1,
-			end = drawn_nodes[d.to_node_id],
+                        end = drawn_nodes[d.to_node_id],
                         b2 = d.b2;
-		    // hide_secondary_metabolites option
-		    if (hide_secondary_metabolites &&
-			((end['node_type']=='metabolite' && !end.node_is_primary) ||
-			 (start['node_type']=='metabolite' && !start.node_is_primary)))
-			return arrowheads;
+                    // hide_secondary_metabolites option
+                    if (hide_secondary_metabolites &&
+                        ((end['node_type']=='metabolite' && !end.node_is_primary) ||
+                         (start['node_type']=='metabolite' && !start.node_is_primary)))
+                        return arrowheads;
 
                     if (start.node_type == 'metabolite' && (d.reversibility || d.from_node_coefficient > 0)) {
                         var arrow_size = get_arrow_size(d.data, should_size),
                             disp = get_disp(arrow_size, d.reversibility,
                                             d.from_node_coefficient,
-					    start.node_is_primary),
+                                            start.node_is_primary),
                             direction = (b1 === null) ? end : b1,
                             rotation = utils.to_degrees(utils.get_angle([start, direction])) + 90,
                             loc = displaced_coords(disp, start, direction, 'start');
@@ -4022,7 +5924,7 @@ define('Draw',['utils', 'data_styles', 'CallbackManager'], function(utils, data_
                         var arrow_size = get_arrow_size(d.data, should_size),
                             disp = get_disp(arrow_size, d.reversibility,
                                             d.to_node_coefficient,
-					    end.node_is_primary),
+                                            end.node_is_primary),
                             direction = (b2 === null) ? start : b2,
                             rotation = utils.to_degrees(utils.get_angle([end, direction])) + 90,
                             loc = displaced_coords(disp, direction, end, 'end');
@@ -4074,18 +5976,18 @@ define('Draw',['utils', 'data_styles', 'CallbackManager'], function(utils, data_
         // new stoichiometry labels
         var stoichiometry_labels = update_selection.select('.stoichiometry-labels')
                 .selectAll('.stoichiometry-label')
-                .data(function (d) {                    
+                .data(function (d) {
                     var labels = [],
                         start = drawn_nodes[d.from_node_id],
                         b1 = d.b1,
-		        end = drawn_nodes[d.to_node_id],
+                        end = drawn_nodes[d.to_node_id],
                         b2 = d.b2,
-			disp_factor = 1.5;
-		    // hide_secondary_metabolites option
-		    if (hide_secondary_metabolites &&
-			((end['node_type']=='metabolite' && !end.node_is_primary) ||
-			 (start['node_type']=='metabolite' && !start.node_is_primary)))
-			return labels;
+                        disp_factor = 1.5;
+                    // hide_secondary_metabolites option
+                    if (hide_secondary_metabolites &&
+                        ((end['node_type']=='metabolite' && !end.node_is_primary) ||
+                         (start['node_type']=='metabolite' && !start.node_is_primary)))
+                        return labels;
 
                     if (start.node_type=='metabolite' && (Math.abs(d.from_node_coefficient) != 1)) {
                         var arrow_size = get_arrow_size(d.data, should_size),
@@ -4135,10 +6037,10 @@ define('Draw',['utils', 'data_styles', 'CallbackManager'], function(utils, data_
                 }
                 // default segment color
                 return null;
-            }); 
+            });
         // remove
         stoichiometry_labels.exit().remove();
-        
+
         this.callback_manager.run('update_segment', this, update_selection);
     }
 
@@ -4150,30 +6052,44 @@ define('Draw',['utils', 'data_styles', 'CallbackManager'], function(utils, data_
             .attr('class', 'connect-line');
         g.append('circle')
             .attr('class', function(d) { return 'bezier-circle '+d.bezier; })
-            .style('stroke-width', String(1)+'px')      
+            .style('stroke-width', String(1)+'px')
             .attr('r', String(7)+'px');
-        
+
         this.callback_manager.run('create_bezier', this, enter_selection);
     }
 
     function update_bezier(update_selection, show_beziers, drag_behavior,
                            mouseover, mouseout, drawn_nodes, drawn_reactions) {
+        var hide_secondary_metabolites = this.settings.get_option('hide_secondary_metabolites');
+
         if (!show_beziers) {
             update_selection.attr('visibility', 'hidden');
             return;
         } else {
             update_selection.attr('visibility', 'visible');
         }
-        
-        // draw bezier points
+
+        // hide secondary
         update_selection
-            .select('.bezier-circle')
+            .style('visibility', function(d) {
+                var seg_data = drawn_reactions[d.reaction_id].segments[d.segment_id],
+                    start = drawn_nodes[seg_data.from_node_id],
+                    end = drawn_nodes[seg_data.to_node_id];
+                if (hide_secondary_metabolites &&
+                    ((end['node_type']=='metabolite' && !end.node_is_primary) ||
+                     (start['node_type']=='metabolite' && !start.node_is_primary)))
+                    return 'hidden';
+                return null;
+            });
+
+        // draw bezier points
+        update_selection.select('.bezier-circle')
             .call(this.behavior.turn_off_drag)
             .call(drag_behavior)
             .on('mouseover', mouseover)
             .on('mouseout', mouseout)
             .attr('transform', function(d) {
-                if (d.x==null || d.y==null) return ''; 
+                if (d.x==null || d.y==null) return '';
                 return 'translate('+d.x+','+d.y+')';
             });
 
@@ -4183,18 +6099,31 @@ define('Draw',['utils', 'data_styles', 'CallbackManager'], function(utils, data_
             .attr('d', function(d) {
                 var node,
                     segment_d = drawn_reactions[d.reaction_id].segments[d.segment_id];
-                node = (d.bezier=='b1' ? 
-                        drawn_nodes[segment_d.from_node_id] : 
-                        drawn_nodes[segment_d.to_node_id]);             
+                node = (d.bezier=='b1' ?
+                        drawn_nodes[segment_d.from_node_id] :
+                        drawn_nodes[segment_d.to_node_id]);
                 if (d.x==null || d.y==null || node.x==null || node.y==null)
                     return '';
                 return 'M'+d.x+', '+d.y+' '+(node.x)+','+(node.y);
             });
-        
+
         this.callback_manager.run('update_bezier', this, update_selection);
     }
 
     function create_node(enter_selection, drawn_nodes, drawn_reactions) {
+        /** Run on enter selection for nodes.
+
+         Arguments
+         ---------
+
+         enter_selection: The D3.js enter selection.
+
+         drawn_nodes: The nodes object (e.g. Map.nodes).
+
+         drawn_reactions: The reactions object (e.g. Map.reactions).
+
+         */
+
         // create nodes
         var g = enter_selection
                 .append('g')
@@ -4209,31 +6138,66 @@ define('Draw',['utils', 'data_styles', 'CallbackManager'], function(utils, data_
                     c += (' ' + d.node_type + '-circle');
                 return c;
             });
-        g.filter(function(d) { return d.node_type=='metabolite'; })
-            .append('text')
+        // labels
+        var metabolite_groups = g.filter(function(d) {
+            return d.node_type=='metabolite';
+        });
+        metabolite_groups.append('text')
             .attr('class', 'node-label label');
-        
+        metabolite_groups.append('title'); // tooltip
+
         this.callback_manager.run('create_node', this, enter_selection);
     }
 
     function update_node(update_selection, scale, has_data_on_nodes,
-                         identifiers_on_map, metabolite_data_styles, no_data_style,
                          mousedown_fn, click_fn, mouseover_fn, mouseout_fn,
                          drag_behavior, label_drag_behavior) {
+        /** Run on the update selection for nodes.
+
+         Arguments
+         ---------
+
+         update_selection: The D3.js update selection.
+
+         scale: A Scale object.
+
+         has_data_on_nodes: Boolean to determine whether data needs to be drawn.
+
+         mousedown_fn: A function to call on mousedown for a node.
+
+         click_fn: A function to call on click for a node.
+
+         mouseover_fn: A function to call on mouseover for a node.
+
+         mouseout_fn: A function to call on mouseout for a node.
+
+         drag_behavior: The D3.js drag behavior object for the nodes.
+
+         label_drag_behavior: The D3.js drag behavior object for the node labels.
+
+         */
 
         // update circle and label location
-	var hide_secondary_metabolites = this.settings.get_option('hide_secondary_metabolites'),
-	    primary_r = this.settings.get_option('primary_metabolite_radius'),
-	    secondary_r = this.settings.get_option('secondary_metabolite_radius'),
-	    marker_r = this.settings.get_option('marker_radius');
+        var hide_secondary_metabolites = this.settings.get_option('hide_secondary_metabolites'),
+            primary_r = this.settings.get_option('primary_metabolite_radius'),
+            secondary_r = this.settings.get_option('secondary_metabolite_radius'),
+            marker_r = this.settings.get_option('marker_radius'),
+            hide_all_labels = this.settings.get_option('hide_all_labels'),
+            identifiers_on_map = this.settings.get_option('identifiers_on_map'),
+            identifiers_in_tooltip = (identifiers_on_map == 'bigg_id' ? 'name' : 'bigg_id'),
+            metabolite_data_styles = this.settings.get_option('metabolite_styles'),
+            no_data_style = { color: this.settings.get_option('metabolite_no_data_color'),
+                              size: this.settings.get_option('metabolite_no_data_size') };
+
+
         var mg = update_selection
                 .select('.node-circle')
                 .attr('transform', function(d) {
                     return 'translate('+d.x+','+d.y+')';
                 })
-		.style('visibility', function(d) {
-		    return (hide_secondary_metabolites && !d.node_is_primary) ? 'hidden' : null;
-		})
+                .style('visibility', function(d) {
+                    return (hide_secondary_metabolites && !d.node_is_primary) ? 'hidden' : null;
+                })
                 .attr('r', function(d) {
                     if (d.node_type == 'metabolite') {
                         var should_scale = (has_data_on_nodes &&
@@ -4269,23 +6233,33 @@ define('Draw',['utils', 'data_styles', 'CallbackManager'], function(utils, data_
                 .on('mouseover', mouseover_fn)
                 .on('mouseout', mouseout_fn);
 
-        update_selection
-            .select('.node-label')
-            .style('visibility', function(d) {
-		return (hide_secondary_metabolites && !d.node_is_primary) ? 'hidden' : null;
-	    })
-            .attr('transform', function(d) {
-                return 'translate('+d.label_x+','+d.label_y+')';
-            })
-            .text(function(d) { 
-                var t = d[identifiers_on_map];
-                if (has_data_on_nodes && metabolite_data_styles.indexOf('text') != -1)
-                    t += ' ' + d.data_string;
-                return t;
-            })
-            .call(this.behavior.turn_off_drag)
-            .call(label_drag_behavior);
-        
+        // update node label visibility
+        var node_label = update_selection
+                .select('.node-label')
+                .attr('visibility', hide_all_labels ? 'hidden' : 'visible');
+        if (!hide_all_labels) {
+            node_label
+                .style('visibility', function(d) {
+                    return (hide_secondary_metabolites && !d.node_is_primary) ? 'hidden' : null;
+                })
+                .attr('transform', function(d) {
+                    return 'translate('+d.label_x+','+d.label_y+')';
+                })
+                .text(function(d) {
+                    var t = d[identifiers_on_map];
+                    if (has_data_on_nodes && metabolite_data_styles.indexOf('text') != -1)
+                        t += ' ' + d.data_string;
+                    return t;
+                })
+                .call(this.behavior.turn_off_drag)
+                .call(label_drag_behavior);
+
+            // tooltip
+            update_selection.select('title').text(function(d) {
+                return d[identifiers_in_tooltip];
+            });
+        }
+
         this.callback_manager.run('update_node', this, update_selection);
     }
 
@@ -4295,7 +6269,7 @@ define('Draw',['utils', 'data_styles', 'CallbackManager'], function(utils, data_
             .attr('class', 'text-label')
             .append('text')
             .attr('class', 'label');
-        
+
         this.callback_manager.run('create_text_label', this, enter_selection);
     }
 
@@ -4304,7 +6278,7 @@ define('Draw',['utils', 'data_styles', 'CallbackManager'], function(utils, data_
             click_fn = this.behavior.text_label_click,
             drag_behavior = this.behavior.selectable_drag,
             turn_off_drag = this.behavior.turn_off_drag;
-        
+
         update_selection
             .select('.label')
             .text(function(d) { return d.text; })
@@ -4313,7 +6287,7 @@ define('Draw',['utils', 'data_styles', 'CallbackManager'], function(utils, data_
             .on('click', click_fn)
             .call(turn_off_drag)
             .call(drag_behavior);
-        
+
         this.callback_manager.run('update_text_label', this, update_selection);
     }
 
@@ -4337,386 +6311,386 @@ define('Draw',['utils', 'data_styles', 'CallbackManager'], function(utils, data_
 
 define('build',["utils"], function(utils) {
     return { new_reaction: new_reaction,
-	     rotate_nodes: rotate_nodes,
-	     move_node_and_dependents: move_node_and_dependents,
-	     new_text_label: new_text_label,
-	     bezier_id_for_segment_id: bezier_id_for_segment_id,
-	     bezier_ids_for_reaction_ids: bezier_ids_for_reaction_ids,
-	     new_beziers_for_segments: new_beziers_for_segments,
-	     new_beziers_for_reactions: new_beziers_for_reactions };
+             rotate_nodes: rotate_nodes,
+             move_node_and_dependents: move_node_and_dependents,
+             new_text_label: new_text_label,
+             bezier_id_for_segment_id: bezier_id_for_segment_id,
+             bezier_ids_for_reaction_ids: bezier_ids_for_reaction_ids,
+             new_beziers_for_segments: new_beziers_for_segments,
+             new_beziers_for_reactions: new_beziers_for_reactions };
     
     // definitions
     function new_reaction(bigg_id, cobra_reaction, cobra_metabolites,
-			  selected_node_id, selected_node,
-			  largest_ids, cofactors, angle) {
+                          selected_node_id, selected_node,
+                          largest_ids, cofactors, angle) {
         /** New reaction.
 
-	 angle: clockwise from 'right', in degrees
+         angle: clockwise from 'right', in degrees
 
-	 */
-	
-	// rotate the new reaction around the selected metabolite
-	// convert to radians
-	angle = Math.PI / 180 * angle;
+         */
+        
+        // rotate the new reaction around the selected metabolite
+        // convert to radians
+        angle = Math.PI / 180 * angle;
 
-	// generate a new integer id
-	var new_reaction_id = String(++largest_ids.reactions);
+        // generate a new integer id
+        var new_reaction_id = String(++largest_ids.reactions);
 
         // calculate coordinates of reaction
-	var selected_node_coords = { x: selected_node.x,
-				     y: selected_node.y };
-		
-	// rotate main axis around angle with distance
-	var reaction_length = 300,
+        var selected_node_coords = { x: selected_node.x,
+                                     y: selected_node.y };
+        
+        // rotate main axis around angle with distance
+        var reaction_length = 300,
             main_axis = [ selected_node_coords,
-			  utils.c_plus_c(selected_node_coords,
-					 {'x': reaction_length, 'y': 0}) ],
-	    center = { 'x': (main_axis[0].x + main_axis[1].x)/2,  
+                          utils.c_plus_c(selected_node_coords,
+                                         {'x': reaction_length, 'y': 0}) ],
+            center = { 'x': (main_axis[0].x + main_axis[1].x)/2,  
                        'y': (main_axis[0].y + main_axis[1].y)/2 };
-	    
-	// relative label location
-	var label_d;
-	if (Math.abs(angle) < Math.PI/4 ||
-	    Math.abs(angle - Math.PI) < Math.PI/4 ) {
-	    label_d = { x: -50, y: -40 };
-	} else {
-	    label_d = { x: 30, y: 10 };
-	}
+        
+        // relative label location
+        var label_d;
+        if (Math.abs(angle) < Math.PI/4 ||
+            Math.abs(angle - Math.PI) < Math.PI/4 ) {
+                label_d = { x: -50, y: -40 };
+            } else {
+                label_d = { x: 30, y: 10 };
+            }
 
-	// relative anchor node distance
-	var anchor_distance = 20;
+        // relative anchor node distance
+        var anchor_distance = 20;
 
-	// new reaction structure
-	var new_reaction = utils.clone(cobra_reaction);
+        // new reaction structure
+        var new_reaction = utils.clone(cobra_reaction);
         utils.extend(new_reaction,
                      { label_x: center.x + label_d.x,
-		       label_y: center.y + label_d.y,
-		       segments: {} });
+                       label_y: center.y + label_d.y,
+                       segments: {} });
 
         // set primary metabolites and count reactants/products
 
-	// look for the selected metabolite, and record the indices
-	var reactant_ranks = [], product_ranks = [], 
+        // look for the selected metabolite, and record the indices
+        var reactant_ranks = [], product_ranks = [], 
             reactant_count = 0, product_count = 0,
-	    reaction_is_reversed = false;
-        for (var met_bigg_id in new_reaction.metabolites) {	
-	    // make the metabolites into objects
+            reaction_is_reversed = false;
+        for (var met_bigg_id in new_reaction.metabolites) { 
+            // make the metabolites into objects
             var metabolite = cobra_metabolites[met_bigg_id],
-		coefficient = new_reaction.metabolites[met_bigg_id],
-		formula = metabolite.formula,
-		new_metabolite = { coefficient: coefficient,
-				   bigg_id: met_bigg_id,
-				   name: metabolite.name };
-	    if (coefficient < 0) {
+                coefficient = new_reaction.metabolites[met_bigg_id],
+                formula = metabolite.formula,
+                new_metabolite = { coefficient: coefficient,
+                                   bigg_id: met_bigg_id,
+                                   name: metabolite.name };
+            if (coefficient < 0) {
                 new_metabolite.index = reactant_count;
-		// score the metabolites. Infinity == selected, >= 1 == carbon containing
-		var carbons = /C([0-9]+)/.exec(formula);
-		if (selected_node.bigg_id==new_metabolite.bigg_id) {
-		    reactant_ranks.push([new_metabolite.index, Infinity]);
-		} else if (carbons && cofactors.indexOf(utils.decompartmentalize(new_metabolite.bigg_id)[0])==-1) {
-		    reactant_ranks.push([new_metabolite.index, parseInt(carbons[1])]);
-		}
+                // score the metabolites. Infinity == selected, >= 1 == carbon containing
+                var carbons = /C([0-9]+)/.exec(formula);
+                if (selected_node.bigg_id==new_metabolite.bigg_id) {
+                    reactant_ranks.push([new_metabolite.index, Infinity]);
+                } else if (carbons && cofactors.indexOf(utils.decompartmentalize(new_metabolite.bigg_id)[0])==-1) {
+                    reactant_ranks.push([new_metabolite.index, parseInt(carbons[1])]);
+                }
                 reactant_count++;
-	    } else {
+            } else {
                 new_metabolite.index = product_count;
-		var carbons = /C([0-9]+)/.exec(formula);
-		if (selected_node.bigg_id==new_metabolite.bigg_id) {
-		    product_ranks.push([new_metabolite.index, Infinity]);
-		    reaction_is_reversed = true;
-		} else if (carbons && cofactors.indexOf(utils.decompartmentalize(new_metabolite.bigg_id)[0])==-1) {
-		    product_ranks.push([new_metabolite.index, parseInt(carbons[1])]);
-		}
+                var carbons = /C([0-9]+)/.exec(formula);
+                if (selected_node.bigg_id==new_metabolite.bigg_id) {
+                    product_ranks.push([new_metabolite.index, Infinity]);
+                    reaction_is_reversed = true;
+                } else if (carbons && cofactors.indexOf(utils.decompartmentalize(new_metabolite.bigg_id)[0])==-1) {
+                    product_ranks.push([new_metabolite.index, parseInt(carbons[1])]);
+                }
                 product_count++;
-	    }
-	    new_reaction.metabolites[met_bigg_id] = new_metabolite;
-	}
+            }
+            new_reaction.metabolites[met_bigg_id] = new_metabolite;
+        }
 
-	// get the rank with the highest score
-	var max_rank = function(old, current) { return current[1] > old[1] ? current : old; },
+        // get the rank with the highest score
+        var max_rank = function(old, current) { return current[1] > old[1] ? current : old; },
             primary_reactant_index = reactant_ranks.reduce(max_rank, [0,0])[0],
             primary_product_index = product_ranks.reduce(max_rank, [0,0])[0];
 
-	// set primary metabolites, and keep track of the total counts
+        // set primary metabolites, and keep track of the total counts
         for (var met_bigg_id in new_reaction.metabolites) {
             var metabolite = new_reaction.metabolites[met_bigg_id];
             if (metabolite.coefficient < 0) {
                 if (metabolite.index==primary_reactant_index) metabolite.is_primary = true;
-		metabolite.count = reactant_count + 1;
+                metabolite.count = reactant_count + 1;
             } else {
                 if (metabolite.index==primary_product_index) metabolite.is_primary = true;
-		metabolite.count = product_count + 1;
+                metabolite.count = product_count + 1;
             }
         }
 
-	// generate anchor nodes
-	var new_anchors = {},
-	    anchors = [ { node_type: 'anchor_reactants',
-			  dis: { x: anchor_distance * (reaction_is_reversed ? 1 : -1), y: 0 } },
-			{ node_type: 'center',
-			  dis: { x: 0, y: 0 } },
-			{ node_type: 'anchor_products',
-			  dis: { x: anchor_distance * (reaction_is_reversed ? -1 : 1), y: 0 } } ],
-	    anchor_ids = {};
-	anchors.map(function(n) {
-	    var new_id = String(++largest_ids.nodes),
-		general_node_type = (n.node_type=='center' ? 'midmarker' : 'multimarker');
-	    new_anchors[new_id] = { node_type: general_node_type,
-				    x: center.x + n.dis.x,
-				    y: center.y + n.dis.y,
-				    connected_segments: [],
-				    name: null,
-				    bigg_id: null,
-				    label_x: null,
-				    label_y: null,
-				    node_is_primary: null };
-	    anchor_ids[n.node_type] = new_id;
-	});
+        // generate anchor nodes
+        var new_anchors = {},
+            anchors = [ { node_type: 'anchor_reactants',
+                          dis: { x: anchor_distance * (reaction_is_reversed ? 1 : -1), y: 0 } },
+                        { node_type: 'center',
+                          dis: { x: 0, y: 0 } },
+                        { node_type: 'anchor_products',
+                          dis: { x: anchor_distance * (reaction_is_reversed ? -1 : 1), y: 0 } } ],
+            anchor_ids = {};
+        anchors.map(function(n) {
+            var new_id = String(++largest_ids.nodes),
+                general_node_type = (n.node_type=='center' ? 'midmarker' : 'multimarker');
+            new_anchors[new_id] = { node_type: general_node_type,
+                                    x: center.x + n.dis.x,
+                                    y: center.y + n.dis.y,
+                                    connected_segments: [],
+                                    name: null,
+                                    bigg_id: null,
+                                    label_x: null,
+                                    label_y: null,
+                                    node_is_primary: null };
+            anchor_ids[n.node_type] = new_id;
+        });
 
-	// add the segments, outside to inside
-	var new_anchor_groups = [ [ anchor_ids['anchor_reactants'], anchor_ids['center'] ],
-				  [ anchor_ids['anchor_products'],  anchor_ids['center'] ] ];
-	new_anchor_groups.map(function(l) {
-	    var from_id = l[0], to_id = l[1],
-		new_segment_id = String(++largest_ids.segments);
-	    new_reaction.segments[new_segment_id] =  { b1: null,
-						       b2: null,
-						       from_node_id: from_id,
-						       to_node_id: to_id,
-						       from_node_coefficient: null,
-						       to_node_coefficient: null,
-						       reversibility: new_reaction.reversibility,
+        // add the segments, outside to inside
+        var new_anchor_groups = [ [ anchor_ids['anchor_reactants'], anchor_ids['center'] ],
+                                  [ anchor_ids['anchor_products'],  anchor_ids['center'] ] ];
+        new_anchor_groups.map(function(l) {
+            var from_id = l[0], to_id = l[1],
+                new_segment_id = String(++largest_ids.segments);
+            new_reaction.segments[new_segment_id] =  { b1: null,
+                                                       b2: null,
+                                                       from_node_id: from_id,
+                                                       to_node_id: to_id,
+                                                       from_node_coefficient: null,
+                                                       to_node_coefficient: null,
+                                                       reversibility: new_reaction.reversibility,
                                                        data: new_reaction.data,
                                                        reverse_flux: new_reaction.reverse_flux };
-	    new_anchors[from_id].connected_segments.push({ segment_id: new_segment_id,
-							   reaction_id: new_reaction_id });
-	    new_anchors[to_id].connected_segments.push({ segment_id: new_segment_id,
-							 reaction_id: new_reaction_id });
-	});
+            new_anchors[from_id].connected_segments.push({ segment_id: new_segment_id,
+                                                           reaction_id: new_reaction_id });
+            new_anchors[to_id].connected_segments.push({ segment_id: new_segment_id,
+                                                         reaction_id: new_reaction_id });
+        });
 
         // Add the metabolites, keeping track of total reactants and products.
-	var new_nodes = new_anchors;
+        var new_nodes = new_anchors;
         for (var met_bigg_id in new_reaction.metabolites) {
             var metabolite = new_reaction.metabolites[met_bigg_id],
-		primary_index, from_node_id;
+                primary_index, from_node_id;
             if (metabolite.coefficient < 0) {
                 // metabolite.count = reactant_count + 1;
                 primary_index = primary_reactant_index;
-		from_node_id = anchor_ids['anchor_reactants'];
+                from_node_id = anchor_ids['anchor_reactants'];
             } else {
                 // metabolite.count = product_count + 1;
                 primary_index = primary_product_index;
-		from_node_id = anchor_ids['anchor_products'];
+                from_node_id = anchor_ids['anchor_products'];
             }
-	    
+            
             // calculate coordinates of metabolite components
             var met_loc = calculate_new_metabolite_coordinates(metabolite,
-							       primary_index,
-							       main_axis,
-							       center,
-							       reaction_length,
-							       reaction_is_reversed);
+                                                               primary_index,
+                                                               main_axis,
+                                                               center,
+                                                               reaction_length,
+                                                               reaction_is_reversed);
 
-	    // if this is the existing metabolite
-	    if (selected_node.bigg_id==metabolite.bigg_id) {
-		var new_segment_id = String(++largest_ids.segments);
-		new_reaction.segments[new_segment_id] = { b1: met_loc.b1,
-							  b2: met_loc.b2,
-							  from_node_id: from_node_id,
-							  to_node_id: selected_node_id,
-							  from_node_coefficient: null,
-							  to_node_coefficient: metabolite.coefficient,
-							  reversibility: new_reaction.reversibility,
+            // if this is the existing metabolite
+            if (selected_node.bigg_id==metabolite.bigg_id) {
+                var new_segment_id = String(++largest_ids.segments);
+                new_reaction.segments[new_segment_id] = { b1: met_loc.b1,
+                                                          b2: met_loc.b2,
+                                                          from_node_id: from_node_id,
+                                                          to_node_id: selected_node_id,
+                                                          from_node_coefficient: null,
+                                                          to_node_coefficient: metabolite.coefficient,
+                                                          reversibility: new_reaction.reversibility,
                                                           data: new_reaction.data,
                                                           reverse_flux: new_reaction.reverse_flux };
-		// update the existing node
-		selected_node.connected_segments.push({ segment_id: new_segment_id,
-							reaction_id: new_reaction_id });
-		new_nodes[from_node_id].connected_segments.push({ segment_id: new_segment_id,
-								  reaction_id: new_reaction_id });
-	    } else {
-		// save new metabolite
-		var new_segment_id = String(++largest_ids.segments),
-		    new_node_id = String(++largest_ids.nodes);
-		new_reaction.segments[new_segment_id] = { b1: met_loc.b1,
-							  b2: met_loc.b2,
-							  from_node_id: from_node_id,
-							  to_node_id: new_node_id,
-							  from_node_coefficient: null,
-							  to_node_coefficient: metabolite.coefficient,
-							  reversibility: new_reaction.reversibility,
+                // update the existing node
+                selected_node.connected_segments.push({ segment_id: new_segment_id,
+                                                        reaction_id: new_reaction_id });
+                new_nodes[from_node_id].connected_segments.push({ segment_id: new_segment_id,
+                                                                  reaction_id: new_reaction_id });
+            } else {
+                // save new metabolite
+                var new_segment_id = String(++largest_ids.segments),
+                    new_node_id = String(++largest_ids.nodes);
+                new_reaction.segments[new_segment_id] = { b1: met_loc.b1,
+                                                          b2: met_loc.b2,
+                                                          from_node_id: from_node_id,
+                                                          to_node_id: new_node_id,
+                                                          from_node_coefficient: null,
+                                                          to_node_coefficient: metabolite.coefficient,
+                                                          reversibility: new_reaction.reversibility,
                                                           data: new_reaction.data,
                                                           reverse_flux: new_reaction.reverse_flux };
-		// save new node
-		new_nodes[new_node_id] = { connected_segments: [{ segment_id: new_segment_id,
-								  reaction_id: new_reaction_id }],
-					   x: met_loc.circle.x,
-					   y: met_loc.circle.y,
-					   node_is_primary: Boolean(metabolite.is_primary),
-					   label_x: met_loc.circle.x + label_d.x,
-					   label_y: met_loc.circle.y + label_d.y,
-					   name: metabolite.name,
-					   bigg_id: metabolite.bigg_id,
-					   node_type: 'metabolite' };
-		new_nodes[from_node_id].connected_segments.push({ segment_id: new_segment_id,
-								  reaction_id: new_reaction_id });
-	    }
-	}
+                // save new node
+                new_nodes[new_node_id] = { connected_segments: [{ segment_id: new_segment_id,
+                                                                  reaction_id: new_reaction_id }],
+                                           x: met_loc.circle.x,
+                                           y: met_loc.circle.y,
+                                           node_is_primary: Boolean(metabolite.is_primary),
+                                           label_x: met_loc.circle.x + label_d.x,
+                                           label_y: met_loc.circle.y + label_d.y,
+                                           name: metabolite.name,
+                                           bigg_id: metabolite.bigg_id,
+                                           node_type: 'metabolite' };
+                new_nodes[from_node_id].connected_segments.push({ segment_id: new_segment_id,
+                                                                  reaction_id: new_reaction_id });
+            }
+        }
 
-	// now take out the extra reaction details
-	var metabolites_array = []
-	for (var bigg_id in new_reaction.metabolites) {
-	    metabolites_array.push({'bigg_id': bigg_id,
-				    'coefficient': new_reaction.metabolites[bigg_id].coefficient});
-	}
-	new_reaction.metabolites = metabolites_array;    
+        // now take out the extra reaction details
+        var metabolites_array = []
+        for (var bigg_id in new_reaction.metabolites) {
+            metabolites_array.push({'bigg_id': bigg_id,
+                                    'coefficient': new_reaction.metabolites[bigg_id].coefficient});
+        }
+        new_reaction.metabolites = metabolites_array;    
 
-	// new_reactions object
-	var new_reactions = {};
-	new_reactions[new_reaction_id] = new_reaction;
-	
-	// new_beziers object
-	var new_beziers = new_beziers_for_reactions(new_reactions);
+        // new_reactions object
+        var new_reactions = {};
+        new_reactions[new_reaction_id] = new_reaction;
+        
+        // new_beziers object
+        var new_beziers = new_beziers_for_reactions(new_reactions);
 
-	// add the selected node for rotation, and return it as a new (updated) node
-	new_nodes[selected_node_id] = selected_node;
-	rotate_nodes(new_nodes, new_reactions, new_beziers,
-		     angle, selected_node_coords);
+        // add the selected node for rotation, and return it as a new (updated) node
+        new_nodes[selected_node_id] = selected_node;
+        rotate_nodes(new_nodes, new_reactions, new_beziers,
+                     angle, selected_node_coords);
 
-	return { new_reactions: new_reactions,
-		 new_beziers: new_beziers,
-		 new_nodes: new_nodes };
+        return { new_reactions: new_reactions,
+                 new_beziers: new_beziers,
+                 new_nodes: new_nodes };
     }
 
     function rotate_nodes(selected_nodes, reactions, beziers, angle, center) {
-	/** Rotate the nodes around center.
+        /** Rotate the nodes around center.
 
-	 selected_nodes: Nodes to rotate.
-	 reactions: Only updates beziers for these reactions.
-	 beziers: Also update the bezier points.
-	 angle: Angle to rotate in radians.
-	 center: Point to rotate around.
+         selected_nodes: Nodes to rotate.
+         reactions: Only updates beziers for these reactions.
+         beziers: Also update the bezier points.
+         angle: Angle to rotate in radians.
+         center: Point to rotate around.
 
-	 */
-	
-	// functions
-	var rotate_around = function(coord) {
-	    if (coord === null)
-		return null;
-	    return utils.rotate_coords(coord, angle, center);
-	};
+         */
+        
+        // functions
+        var rotate_around = function(coord) {
+            if (coord === null)
+                return null;
+            return utils.rotate_coords(coord, angle, center);
+        };
 
-	// recalculate: node
-	var updated_node_ids = [], updated_reaction_ids = [];
-	for (var node_id in selected_nodes) {
-	    var node = selected_nodes[node_id],
-		// rotation distance
-		displacement = rotate_around({ x: node.x, y: node.y }),
-		// move the node
-		updated = move_node_and_labels(node, reactions,
-						   displacement);
-	    // move the bezier points
-	    node.connected_segments.map(function(segment_obj) {
-		var reaction = reactions[segment_obj.reaction_id];
-		// If the reaction was not passed in the reactions argument, then ignore
-		if (reaction === undefined) return;
+        // recalculate: node
+        var updated_node_ids = [], updated_reaction_ids = [];
+        for (var node_id in selected_nodes) {
+            var node = selected_nodes[node_id],
+                // rotation distance
+                displacement = rotate_around({ x: node.x, y: node.y }),
+                // move the node
+                updated = move_node_and_labels(node, reactions,
+                                               displacement);
+            // move the bezier points
+            node.connected_segments.map(function(segment_obj) {
+                var reaction = reactions[segment_obj.reaction_id];
+                // If the reaction was not passed in the reactions argument, then ignore
+                if (reaction === undefined) return;
 
-		// rotate the beziers
-		var segment_id = segment_obj.segment_id,
-		    segment = reaction.segments[segment_id];
-		if (segment.to_node_id==node_id && segment.b2) {
-		    var displacement = rotate_around(segment.b2),
-			bez_id = bezier_id_for_segment_id(segment_id, 'b2');
-		    segment.b2 = utils.c_plus_c(segment.b2, displacement);
-		    beziers[bez_id].x = segment.b2.x;
-		    beziers[bez_id].y = segment.b2.y; 
-		} else if (segment.from_node_id==node_id && segment.b1) {
-		    var displacement = rotate_around(segment.b1),
-			bez_id = bezier_id_for_segment_id(segment_id, 'b1');
-		    segment.b1 = utils.c_plus_c(segment.b1, displacement);
-		    beziers[bez_id].x = segment.b1.x;
-		    beziers[bez_id].y = segment.b1.y; 
-		}
-	    });
+                // rotate the beziers
+                var segment_id = segment_obj.segment_id,
+                    segment = reaction.segments[segment_id];
+                if (segment.to_node_id==node_id && segment.b2) {
+                    var displacement = rotate_around(segment.b2),
+                        bez_id = bezier_id_for_segment_id(segment_id, 'b2');
+                    segment.b2 = utils.c_plus_c(segment.b2, displacement);
+                    beziers[bez_id].x = segment.b2.x;
+                    beziers[bez_id].y = segment.b2.y; 
+                } else if (segment.from_node_id==node_id && segment.b1) {
+                    var displacement = rotate_around(segment.b1),
+                        bez_id = bezier_id_for_segment_id(segment_id, 'b1');
+                    segment.b1 = utils.c_plus_c(segment.b1, displacement);
+                    beziers[bez_id].x = segment.b1.x;
+                    beziers[bez_id].y = segment.b1.y; 
+                }
+            });
 
-	    updated_reaction_ids = utils.unique_concat([updated_reaction_ids,
-							updated.reaction_ids]);
-	    updated_node_ids.push(node_id);
-	}
+            updated_reaction_ids = utils.unique_concat([updated_reaction_ids,
+                                                        updated.reaction_ids]);
+            updated_node_ids.push(node_id);
+        }
 
-	return { node_ids: updated_node_ids,
-		 reaction_ids: updated_reaction_ids };
+        return { node_ids: updated_node_ids,
+                 reaction_ids: updated_reaction_ids };
     }
     
     function move_node_and_dependents(node, node_id, reactions, beziers, displacement) {
-	/** Move the node and its labels and beziers.
+        /** Move the node and its labels and beziers.
 
-	 */
-	var updated = move_node_and_labels(node, reactions, displacement);
+         */
+        var updated = move_node_and_labels(node, reactions, displacement);
 
-	// move beziers
-	node.connected_segments.map(function(segment_obj) {
-	    var reaction = reactions[segment_obj.reaction_id];
-	    // If the reaction was not passed in the reactions argument, then ignore
-	    if (reaction === undefined) return;
+        // move beziers
+        node.connected_segments.map(function(segment_obj) {
+            var reaction = reactions[segment_obj.reaction_id];
+            // If the reaction was not passed in the reactions argument, then ignore
+            if (reaction === undefined) return;
 
-	    // update beziers
-	    var segment_id = segment_obj.segment_id,
-		segment = reaction.segments[segment_id];
-	    [['b1', 'from_node_id'], ['b2', 'to_node_id']].forEach(function(c) {
-		var bez = c[0],
-		    node = c[1];
-		if (segment[node]==node_id && segment[bez]) {
-		    segment[bez] = utils.c_plus_c(segment[bez], displacement);
-		    var tbez = beziers[bezier_id_for_segment_id(segment_id, bez)];
-		    tbez.x = segment[bez].x;
-		    tbez.y = segment[bez].y;
-		}
-	    });
-	    
-	    // add to list of updated reaction ids if it isn't already there
-	    if (updated.reaction_ids.indexOf(segment_obj.reaction_id) < 0) {
-	        updated.reaction_ids.push(segment_obj.reaction_id);
-	    }
-	});
-	return updated;
+            // update beziers
+            var segment_id = segment_obj.segment_id,
+                segment = reaction.segments[segment_id];
+            [['b1', 'from_node_id'], ['b2', 'to_node_id']].forEach(function(c) {
+                var bez = c[0],
+                    node = c[1];
+                if (segment[node]==node_id && segment[bez]) {
+                    segment[bez] = utils.c_plus_c(segment[bez], displacement);
+                    var tbez = beziers[bezier_id_for_segment_id(segment_id, bez)];
+                    tbez.x = segment[bez].x;
+                    tbez.y = segment[bez].y;
+                }
+            });
+            
+            // add to list of updated reaction ids if it isn't already there
+            if (updated.reaction_ids.indexOf(segment_obj.reaction_id) < 0) {
+                updated.reaction_ids.push(segment_obj.reaction_id);
+            }
+        });
+        return updated;
     }
 
     function move_node_and_labels(node, reactions, displacement) {
-	node.x = node.x + displacement.x;
-	node.y = node.y + displacement.y;
-	    
-	// recalculate: node label
-	node.label_x = node.label_x + displacement.x;
-	node.label_y = node.label_y + displacement.y;
+        node.x = node.x + displacement.x;
+        node.y = node.y + displacement.y;
+        
+        // recalculate: node label
+        node.label_x = node.label_x + displacement.x;
+        node.label_y = node.label_y + displacement.y;
 
-	// recalculate: reaction label
-	var updated_reaction_ids = [];
-	node.connected_segments.map(function(segment_obj) {
-	    var reaction = reactions[segment_obj.reaction_id];
-	    // add to list of updated reaction ids if it isn't already there
-	    if (updated_reaction_ids.indexOf(segment_obj.reaction_id) < 0) {
-		updated_reaction_ids.push(segment_obj.reaction_id);
+        // recalculate: reaction label
+        var updated_reaction_ids = [];
+        node.connected_segments.map(function(segment_obj) {
+            var reaction = reactions[segment_obj.reaction_id];
+            // add to list of updated reaction ids if it isn't already there
+            if (updated_reaction_ids.indexOf(segment_obj.reaction_id) < 0) {
+                updated_reaction_ids.push(segment_obj.reaction_id);
 
-		// update reaction label (but only once per reaction
-		if (node.node_type == 'midmarker') {
-		    reaction.label_x = reaction.label_x + displacement.x;
-		    reaction.label_y = reaction.label_y + displacement.y;
-		}
-	    }
-	});
-	return { reaction_ids: updated_reaction_ids };
+                // update reaction label (but only once per reaction
+                if (node.node_type == 'midmarker') {
+                    reaction.label_x = reaction.label_x + displacement.x;
+                    reaction.label_y = reaction.label_y + displacement.y;
+                }
+            }
+        });
+        return { reaction_ids: updated_reaction_ids };
     }
 
     function calculate_new_metabolite_coordinates(met, primary_index, main_axis, center, dis, is_reversed) {
-	/** Calculate metabolite coordinates for a new reaction metabolite.
+        /** Calculate metabolite coordinates for a new reaction metabolite.
 
-	 */
-	// new local coordinate system
-	var displacement = main_axis[0],
-	    main_axis = [utils.c_minus_c(main_axis[0], displacement),
-			 utils.c_minus_c(main_axis[1], displacement)],
-	    center = utils.c_minus_c(center, displacement);
-	
+         */
+        // new local coordinate system
+        var displacement = main_axis[0],
+            main_axis = [utils.c_minus_c(main_axis[0], displacement),
+                         utils.c_minus_c(main_axis[1], displacement)],
+            center = utils.c_minus_c(center, displacement);
+        
         // Curve parameters
         var w = 80,  // distance between reactants and between products
             b1_strength = 0.4,
@@ -4754,7 +6728,7 @@ define('build',["utils"], function(utils) {
             circle = {'x': main_axis[0].x,
                       'y': main_axis[0].y};
         } else if ((met.coefficient < 0) != is_reversed) {
-	    end = {'x': reaction_axis[0].x + secondary_dis,
+            end = {'x': reaction_axis[0].x + secondary_dis,
                    'y': reaction_axis[0].y + (w2*draw_at_index - w2*(num_slots-1)/2)},
             b1 = {'x': center.x*(1-b1_strength) + reaction_axis[0].x*b1_strength,
                   'y': center.y*(1-b1_strength) + reaction_axis[0].y*b1_strength},
@@ -4781,101 +6755,101 @@ define('build',["utils"], function(utils) {
             circle = {'x': main_axis[1].x - secondary_dis,
                       'y': main_axis[1].y + (w*draw_at_index - w*(num_slots-1)/2)};
         }
-	var loc = {};
-	loc.b1 = utils.c_plus_c(displacement, b1);
-	loc.b2 = utils.c_plus_c(displacement, b2);
-	loc.circle = utils.c_plus_c(displacement, circle);
+        var loc = {};
+        loc.b1 = utils.c_plus_c(displacement, b1);
+        loc.b2 = utils.c_plus_c(displacement, b2);
+        loc.circle = utils.c_plus_c(displacement, circle);
         return loc;
     }
 
     function new_text_label(largest_ids, text, coords) {
-	var new_id = String(++largest_ids.text_labels),
-	    new_label = { text: text,
-			  x: coords.x,
-			  y: coords.y };
-	return {id: new_id, label: new_label};
+        var new_id = String(++largest_ids.text_labels),
+            new_label = { text: text,
+                          x: coords.x,
+                          y: coords.y };
+        return {id: new_id, label: new_label};
     }
 
     function bezier_id_for_segment_id(segment_id, bez) {
-	return segment_id+'_'+bez;
+        return segment_id+'_'+bez;
     }
 
     function bezier_ids_for_reaction_ids(reactions) {
-	/** Return an array of beziers ids for the array of reaction ids.
+        /** Return an array of beziers ids for the array of reaction ids.
 
-	 Arguments
-	 ---------
+         Arguments
+         ---------
 
-	 reactions: A reactions object, e.g. a subset of *escher.Map.reactions*.
+         reactions: A reactions object, e.g. a subset of *escher.Map.reactions*.
 
-	 */ 
-	var bezier_ids = [];
-	for (var reaction_id in reactions) {
-	    var reaction = reactions[reaction_id];
+         */ 
+        var bezier_ids = [];
+        for (var reaction_id in reactions) {
+            var reaction = reactions[reaction_id];
 
-	    for (var segment_id in reaction.segments) {
-		var segment = reaction.segments[segment_id];
+            for (var segment_id in reaction.segments) {
+                var segment = reaction.segments[segment_id];
 
-		['b1', 'b2'].forEach(function(bez) {
-		    var seg_bez = segment[bez];
-		    if (seg_bez !== null) {
-			bezier_ids.push(bezier_id_for_segment_id(segment_id, bez));
-		    }
-		});
-	    }
-	}
-	return bezier_ids;
+                ['b1', 'b2'].forEach(function(bez) {
+                    var seg_bez = segment[bez];
+                    if (seg_bez !== null) {
+                        bezier_ids.push(bezier_id_for_segment_id(segment_id, bez));
+                    }
+                });
+            }
+        }
+        return bezier_ids;
     }
 
     function new_beziers_for_segments(segments, reaction_id) {
-	/** Return an object containing beziers for the segments object.
+        /** Return an object containing beziers for the segments object.
 
-	 Arguments
-	 ---------
+         Arguments
+         ---------
 
-	 segments: A segments object, e.g. *escher.Map.segments*.
+         segments: A segments object, e.g. *escher.Map.segments*.
 
-	 reaction_id: The reaction id for the segments.
+         reaction_id: The reaction id for the segments.
 
-	 */
-	var beziers = {};
-	for (var segment_id in segments) {
-	    var segment = segments[segment_id];
+         */
+        var beziers = {};
+        for (var segment_id in segments) {
+            var segment = segments[segment_id];
 
-	    ['b1', 'b2'].forEach(function(bez) {
-		var seg_bez = segment[bez];
-		if (seg_bez !== null) {
-		    var bezier_id = bezier_id_for_segment_id(segment_id, bez);
-		    beziers[bezier_id] = {
-			bezier: bez,
-	    		x: seg_bez.x,
-	    		y: seg_bez.y,
-	    		reaction_id: reaction_id,
-	    		segment_id: segment_id
-		    };
-		}
-	    });
-	}
-	return beziers;
+            ['b1', 'b2'].forEach(function(bez) {
+                var seg_bez = segment[bez];
+                if (seg_bez !== null) {
+                    var bezier_id = bezier_id_for_segment_id(segment_id, bez);
+                    beziers[bezier_id] = {
+                        bezier: bez,
+                        x: seg_bez.x,
+                        y: seg_bez.y,
+                        reaction_id: reaction_id,
+                        segment_id: segment_id
+                    };
+                }
+            });
+        }
+        return beziers;
     }
 
     function new_beziers_for_reactions(reactions) {
-	/** Return an object containing beziers for the reactions object.
+        /** Return an object containing beziers for the reactions object.
 
-	 Arguments
-	 ---------
+         Arguments
+         ---------
 
-	 reactions: A reactions object, e.g. *escher.Map.reactions*.
+         reactions: A reactions object, e.g. *escher.Map.reactions*.
 
-	 */
-	var beziers = {};
-	for (var reaction_id in reactions) {
-	    var reaction = reactions[reaction_id];
+         */
+        var beziers = {};
+        for (var reaction_id in reactions) {
+            var reaction = reactions[reaction_id];
 
-	    var these = new_beziers_for_segments(reaction.segments, reaction_id);
-	    utils.extend(beziers, these);
-	}
-	return beziers;
+            var these = new_beziers_for_segments(reaction.segments, reaction_id);
+            utils.extend(beziers, these);
+        }
+        return beziers;
     }
 });
 
@@ -5068,8 +7042,7 @@ define('Behavior',["utils", "build"], function(utils, build) {
                                                                 undo_fn, redo_fn, center_fn,
                                                                 this.map.sel);
             selection_background.call(this.rotation_drag);
-
-
+            this.selectable_drag = this.rotation_drag;
         } else {
             // turn off all listeners
             hide_center.call(this);
@@ -5078,6 +7051,7 @@ define('Behavior',["utils", "build"], function(utils, build) {
             selection_background.on('mousedown.drag', null);
             selection_background.on('touchstart.drag', null);
             this.rotation_drag = null;
+            this.selectable_drag = null;
         }
 
         // definitions
@@ -5321,8 +7295,8 @@ define('Behavior',["utils", "build"], function(utils, build) {
     }
     
     function turn_off_drag(sel) {
-	sel.on('mousedown.drag', null);
-	sel.on('touchstart.drag', null);
+        sel.on('mousedown.drag', null);
+        sel.on('touchstart.drag', null);
     }    
 
     function _get_selectable_drag(map, undo_stack) {
@@ -5810,21 +7784,21 @@ define('Scale',["utils"], function(utils) {
 
     var Scale = utils.make_class();
     Scale.prototype = { init: init,
-			connect_to_settings: connect_to_settings };
+                        connect_to_settings: connect_to_settings };
 
     return Scale;
 
     // definitions
     function init() {
-	this.x = d3.scale.linear();
-	this.y = d3.scale.linear();
-	this.x_size = d3.scale.linear();
-	this.y_size = d3.scale.linear();
-	this.size = d3.scale.linear();
-	this.reaction_color = d3.scale.linear().clamp(true);
+        this.x = d3.scale.linear();
+        this.y = d3.scale.linear();
+        this.x_size = d3.scale.linear();
+        this.y_size = d3.scale.linear();
+        this.size = d3.scale.linear();
+        this.reaction_color = d3.scale.linear().clamp(true);
         this.reaction_size = d3.scale.linear().clamp(true);
-	this.metabolite_color = d3.scale.linear().clamp(true);
-	this.metabolite_size = d3.scale.linear().clamp(true);
+        this.metabolite_color = d3.scale.linear().clamp(true);
+        this.metabolite_size = d3.scale.linear().clamp(true);
         this.scale_path = function(path) {
             var x_fn = this.x, y_fn = this.y;
             // TODO: scale arrow width
@@ -5852,21 +7826,21 @@ define('Scale',["utils"], function(utils) {
     }
 
     function connect_to_settings(settings, map, get_data_statistics) {
-	// domains
+        // domains
         var update_reaction = function(s) {
-	    var out = sort_scale(s, get_data_statistics()['reaction']);
-	    this.reaction_color.domain(out.domain);
-	    this.reaction_size.domain(out.domain);
-	    this.reaction_color.range(out.color_range);
-	    this.reaction_size.range(out.size_range);
-	}.bind(this);
+            var out = sort_scale(s, get_data_statistics()['reaction']);
+            this.reaction_color.domain(out.domain);
+            this.reaction_size.domain(out.domain);
+            this.reaction_color.range(out.color_range);
+            this.reaction_size.range(out.size_range);
+        }.bind(this);
         var update_metabolite = function(s) {
-	    var out = sort_scale(s, get_data_statistics()['metabolite']);
-	    this.metabolite_color.domain(out.domain);
-	    this.metabolite_size.domain(out.domain);
-	    this.metabolite_color.range(out.color_range);
-	    this.metabolite_size.range(out.size_range);
-	}.bind(this);
+            var out = sort_scale(s, get_data_statistics()['metabolite']);
+            this.metabolite_color.domain(out.domain);
+            this.metabolite_size.domain(out.domain);
+            this.metabolite_color.range(out.color_range);
+            this.metabolite_size.range(out.size_range);
+        }.bind(this);
 
         // scale changes
         settings.streams['reaction_scale'].onValue(update_reaction);
@@ -5880,24 +7854,24 @@ define('Scale',["utils"], function(utils) {
         });
         
         // definitions
-	function sort_scale(scale, stats) {
-	    var sorted = scale.map(function(x) {
-		var v;
+        function sort_scale(scale, stats) {
+            var sorted = scale.map(function(x) {
+                var v;
                 if (x.type in stats)
                     v = stats[x.type];
                 else if (x.type == 'value')
                     v = x.value;
                 else
                     throw new Error('Bad domain type ' + x.type);
-		return { v: v,
-			 color: x.color,
-			 size: x.size };
+                return { v: v,
+                         color: x.color,
+                         size: x.size };
             }).sort(function(a, b) {
-		return a.v - b.v;
-	    });
-	    return { domain: sorted.map(function(x) { return x.v; }),
-		     color_range: sorted.map(function(x) { return x.color; }),
-		     size_range: sorted.map(function(x) { return x.size; }) };
+                return a.v - b.v;
+            });
+            return { domain: sorted.map(function(x) { return x.v; }),
+                     color_range: sorted.map(function(x) { return x.color; }),
+                     size_range: sorted.map(function(x) { return x.size; }) };
         }
     }
 });
@@ -5907,72 +7881,72 @@ define('UndoStack',["utils"], function(utils) {
      */
     var UndoStack = utils.make_class();
     UndoStack.prototype = { init: init,
-			    push: push,
-			    undo: undo,
-			    redo: redo };
+                            push: push,
+                            undo: undo,
+                            redo: redo };
     return UndoStack;
 
     // definitions
     function init() {
-	var stack_size = 40;
-	this.stack = Array(stack_size);
-	this.current = -1;
-	this.oldest = -1;
-	this.newest = -1;
-	this.end_of_stack = true;
-	this.top_of_stack = true;
+        var stack_size = 40;
+        this.stack = Array(stack_size);
+        this.current = -1;
+        this.oldest = -1;
+        this.newest = -1;
+        this.end_of_stack = true;
+        this.top_of_stack = true;
     }
     function push(undo_fn, redo_fn) {
-	this.current = incr(this.current, this.stack.length);
-	// var p2 = incr(p1, this.stack.length);
-	// change the oldest
-	if (this.end_of_stack)
-	    this.oldest = this.current;
-	else if (this.oldest == this.current)
-	    this.oldest = incr(this.oldest, this.stack.length);
-	this.stack[this.current] = { undo: undo_fn, redo: redo_fn };
-	this.newest = this.current;
+        this.current = incr(this.current, this.stack.length);
+        // var p2 = incr(p1, this.stack.length);
+        // change the oldest
+        if (this.end_of_stack)
+            this.oldest = this.current;
+        else if (this.oldest == this.current)
+            this.oldest = incr(this.oldest, this.stack.length);
+        this.stack[this.current] = { undo: undo_fn, redo: redo_fn };
+        this.newest = this.current;
 
-	// top of the stack
-	this.top_of_stack = true;
-	this.end_of_stack = false;
+        // top of the stack
+        this.top_of_stack = true;
+        this.end_of_stack = false;
     }
     function undo() {
-	// check that we haven't reached the end
-	if (this.end_of_stack) return console.warn('End of stack.');
-	// run the lastest stack function
-	this.stack[this.current].undo();
-	if (this.current == this.oldest) {
-	    // if the next index is less than the oldest, then the stack is dead
-	    this.end_of_stack = true;
-	} else {
-	    // reference the next fn
-	    this.current = decr(this.current, this.stack.length);
-	}
+        // check that we haven't reached the end
+        if (this.end_of_stack) return console.warn('End of stack.');
+        // run the lastest stack function
+        this.stack[this.current].undo();
+        if (this.current == this.oldest) {
+            // if the next index is less than the oldest, then the stack is dead
+            this.end_of_stack = true;
+        } else {
+            // reference the next fn
+            this.current = decr(this.current, this.stack.length);
+        }
 
-	// not at the top of the stack
-	this.top_of_stack = false;
+        // not at the top of the stack
+        this.top_of_stack = false;
     }
     function redo() {
-	// check that we haven't reached the end
-	if (this.top_of_stack) return console.warn('Top of stack.');
+        // check that we haven't reached the end
+        if (this.top_of_stack) return console.warn('Top of stack.');
 
-	if (!this.end_of_stack)
-	    this.current = incr(this.current, this.stack.length);
-	this.stack[this.current].redo();
+        if (!this.end_of_stack)
+            this.current = incr(this.current, this.stack.length);
+        this.stack[this.current].redo();
 
-	// if at top of stack
-	if (this.current == this.newest)
-	    this.top_of_stack = true;
+        // if at top of stack
+        if (this.current == this.newest)
+            this.top_of_stack = true;
 
-	// not at the end of the stack
-	this.end_of_stack = false;
+        // not at the end of the stack
+        this.end_of_stack = false;
     }
     function incr(a, l) {
-	return a + 1 > l - 1 ? 0 : a + 1;
+        return a + 1 > l - 1 ? 0 : a + 1;
     }
     function decr(a, l) {
-	return a - 1 < 0 ? l - 1 : a -  1;
+        return a - 1 < 0 ? l - 1 : a -  1;
     }
 });
 
@@ -5985,54 +7959,54 @@ define('KeyManager',['utils'], function(utils) {
     KeyManager.reset_held_keys = reset_held_keys;
     // instance methods
     KeyManager.prototype = { init: init,
-			     update: update,
-			     toggle: toggle,
-			     add_escape_listener: add_escape_listener,
-			     add_enter_listener: add_enter_listener,
-			     add_key_listener: add_key_listener };
+                             update: update,
+                             toggle: toggle,
+                             add_escape_listener: add_escape_listener,
+                             add_enter_listener: add_enter_listener,
+                             add_key_listener: add_key_listener };
 
     return KeyManager;
 
     // static methods
     function reset_held_keys(h) {
         h.command = false;
-	h.control = false;
-	h.option = false;
-	h.shift = false;
+        h.control = false;
+        h.option = false;
+        h.shift = false;
     }
     // instance methods
     function init(unique_map_id, assigned_keys, input_list, ctrl_equals_cmd) {
-	/** Assign keys for commands.
+        /** Assign keys for commands.
 
-	 */
+         */
 
         // identify this key manager
         if (unique_map_id===undefined) unique_map_id = null;
         this.unique_string = (unique_map_id === null ? '' : '.' + unique_map_id);        
 
-	if (assigned_keys===undefined) this.assigned_keys = {};
-	else this.assigned_keys = assigned_keys;
-	if (input_list===undefined) this.input_list = [];
-	else this.input_list = input_list;
+        if (assigned_keys===undefined) this.assigned_keys = {};
+        else this.assigned_keys = assigned_keys;
+        if (input_list===undefined) this.input_list = [];
+        else this.input_list = input_list;
 
-	if (ctrl_equals_cmd===undefined) ctrl_equals_cmd = true;
-	this.ctrl_equals_cmd = ctrl_equals_cmd;
+        if (ctrl_equals_cmd===undefined) ctrl_equals_cmd = true;
+        this.ctrl_equals_cmd = ctrl_equals_cmd;
 
-	this.held_keys = {};
-	reset_held_keys(this.held_keys);
+        this.held_keys = {};
+        reset_held_keys(this.held_keys);
 
-	this.enabled = true;
+        this.enabled = true;
 
-	this.update();
+        this.update();
     }
 
     function update() {
-	var held_keys = this.held_keys,
-	    keys = this.assigned_keys,
-	    self = this;
+        var held_keys = this.held_keys,
+            keys = this.assigned_keys,
+            self = this;
 
         var modifier_keys = { command: 91,
-			      command_right: 93,
+                              command_right: 93,
                               control: 17,
                               option: 18,
                               shift: 16 };
@@ -6040,43 +8014,43 @@ define('KeyManager',['utils'], function(utils) {
         d3.select(window).on('keydown.key_manager' + this.unique_string, null);
         d3.select(window).on('keyup.key_manager' + this.unique_string, null);
 
-	if (!(this.enabled)) return;
+        if (!(this.enabled)) return;
 
         d3.select(window).on('keydown.key_manager' + this.unique_string, function(ctrl_equals_cmd, input_list) {
             var kc = d3.event.keyCode,
-		meaningless = true;
-	    // check the inputs
-	    var input_visible = false;
-	    input_list.forEach(function(input) {
-		if (input.is_visible()) input_visible = true;
-	    });
+                meaningless = true;
+            // check the inputs
+            var input_visible = false;
+            input_list.forEach(function(input) {
+                if (input.is_visible()) input_visible = true;
+            });
             toggle_modifiers(modifier_keys, held_keys, kc, true);
-	    for (var key_id in keys) {
-		var assigned_key = keys[key_id];
-		if (check_key(assigned_key, kc, held_keys, ctrl_equals_cmd)) {
-		    meaningless = false;
-		    if (!(assigned_key.ignore_with_input && input_visible)) {
-			if (assigned_key.fn) {
-			    assigned_key.fn.call(assigned_key.target);
-			} else {
-			    console.warn('No function for key');
-			}
-			// prevent browser action
-			d3.event.preventDefault();
-		    }
-		}
-	    }
-	    // Sometimes modifiers get 'stuck', so reset them once in a while.
-	    // Only do this when a meaningless key is pressed
-	    for (var k in modifier_keys)
-		if (modifier_keys[k] == kc) meaningless = false;
-	    if (meaningless) 
-		reset_held_keys(held_keys);
+            for (var key_id in keys) {
+                var assigned_key = keys[key_id];
+                if (check_key(assigned_key, kc, held_keys, ctrl_equals_cmd)) {
+                    meaningless = false;
+                    if (!(assigned_key.ignore_with_input && input_visible)) {
+                        if (assigned_key.fn) {
+                            assigned_key.fn.call(assigned_key.target);
+                        } else {
+                            console.warn('No function for key');
+                        }
+                        // prevent browser action
+                        d3.event.preventDefault();
+                    }
+                }
+            }
+            // Sometimes modifiers get 'stuck', so reset them once in a while.
+            // Only do this when a meaningless key is pressed
+            for (var k in modifier_keys)
+                if (modifier_keys[k] == kc) meaningless = false;
+            if (meaningless) 
+                reset_held_keys(held_keys);
         }.bind(null, this.ctrl_equals_cmd, this.input_list))
-	    .on('keyup.key_manager' + this.unique_string, function() {
-            toggle_modifiers(modifier_keys, held_keys,
-			     d3.event.keyCode, false);
-        });
+            .on('keyup.key_manager' + this.unique_string, function() {
+                toggle_modifiers(modifier_keys, held_keys,
+                                 d3.event.keyCode, false);
+            });
         function toggle_modifiers(mod, held, kc, on_off) {
             for (var k in mod)
                 if (mod[k] == kc)
@@ -6091,12 +8065,12 @@ define('KeyManager',['utils'], function(utils) {
                         option: false,
                         shift: false };
             for (var k in held) {
-		if (ctrl_equals_cmd &&
-		    mod['control'] &&
-		    (k=='command' || k=='command_right' || k=='control') &&
-		    (held['command'] || held['command_right'] || held['control'])) {
-		    continue;
-		}
+                if (ctrl_equals_cmd &&
+                    mod['control'] &&
+                    (k=='command' || k=='command_right' || k=='control') &&
+                    (held['command'] || held['command_right'] || held['control'])) {
+                    continue;
+                }
                 if (mod[k] === undefined) mod[k] = false;
                 if (mod[k] != held[k]) return false;
             }
@@ -6104,46 +8078,46 @@ define('KeyManager',['utils'], function(utils) {
         }
     }
     function toggle(on_off) {
-	/** Turn the brush on or off
+        /** Turn the brush on or off
 
-	 */
-	if (on_off===undefined) on_off = !this.enabled;
+         */
+        if (on_off===undefined) on_off = !this.enabled;
 
-	this.enabled = on_off;
-	this.update();
-    }	
+        this.enabled = on_off;
+        this.update();
+    }   
     function add_enter_listener(callback, id) {
-	/** Call the callback when the enter key is pressed, then
-	 unregisters the listener.
+        /** Call the callback when the enter key is pressed, then
+         unregisters the listener.
 
-	 */
-	return this.add_key_listener(callback, 13, id);
+         */
+        return this.add_key_listener(callback, 13, id);
     }
     function add_escape_listener(callback, id) {
-	/** Call the callback when the escape key is pressed, then
-	 unregisters the listener.
+        /** Call the callback when the escape key is pressed, then
+         unregisters the listener.
 
-	 */
-	return this.add_key_listener(callback, 27, id);
+         */
+        return this.add_key_listener(callback, 27, id);
     }
     function add_key_listener(callback, kc, id) {
-	/** Call the callback when the key is pressed, then unregisters the
-	 listener.
+        /** Call the callback when the key is pressed, then unregisters the
+         listener.
 
-	*/
+         */
 
         var event_name = 'keydown.' + kc;
         if (id !== undefined)
             event_name += ('.' + id);
         event_name += this.unique_string;
         
-	var selection = d3.select(window);
-	selection.on(event_name, function() {
-	    if (d3.event.keyCode==kc) {
-		callback();
-	    }
-	});
-	return {
+        var selection = d3.select(window);
+        selection.on(event_name, function() {
+            if (d3.event.keyCode==kc) {
+                callback();
+            }
+        });
+        return {
             clear: function() {
                 selection.on(event_name, null);
             }
@@ -6162,240 +8136,240 @@ define('Canvas',["utils", "CallbackManager"], function(utils, CallbackManager) {
 
     var Canvas = utils.make_class();
     Canvas.prototype = { init: init,
-			 toggle_resize: toggle_resize,
-			 setup: setup,
-			 size_and_location: size_and_location };
+                         toggle_resize: toggle_resize,
+                         setup: setup,
+                         size_and_location: size_and_location };
 
     return Canvas;
 
     function init(selection, size_and_location) {
-	this.selection = selection;
-	this.x = size_and_location.x;
-	this.y = size_and_location.y;
-	this.width = size_and_location.width;
-	this.height = size_and_location.height;
+        this.selection = selection;
+        this.x = size_and_location.x;
+        this.y = size_and_location.y;
+        this.width = size_and_location.width;
+        this.height = size_and_location.height;
 
-	// enable by default
-	this.resize_enabled = true;
+        // enable by default
+        this.resize_enabled = true;
 
-	// set up the callbacks
-	this.callback_manager = new CallbackManager();
+        // set up the callbacks
+        this.callback_manager = new CallbackManager();
 
-	this.setup();
+        this.setup();
     }
 
     function toggle_resize(on_off) {
-	/** Turn the resize on or off
+        /** Turn the resize on or off
 
-	 */
-	if (on_off===undefined) on_off = !this.resize_enabled;
+         */
+        if (on_off===undefined) on_off = !this.resize_enabled;
 
-	if (on_off) {
-	    this.selection.selectAll('.drag-rect')
-		.style('pointer-events', 'auto');
-	} else {
-	    this.selection.selectAll('.drag-rect')
-		.style('pointer-events', 'none');
-	}
-    }	
+        if (on_off) {
+            this.selection.selectAll('.drag-rect')
+                .style('pointer-events', 'auto');
+        } else {
+            this.selection.selectAll('.drag-rect')
+                .style('pointer-events', 'none');
+        }
+    }   
 
-    function setup() {	
-	var self = this,
-	    extent = {"x": this.width, "y": this.height},
-	    dragbar_width = 100,
-	    mouse_node_mult = 10,
-	    new_sel = this.selection.append('g')
-		.classed('canvas-group', true)
-		.data([{x: this.x, y: this.y}]);
-	
-	var mouse_node = new_sel.append('rect')
-		.attr('id', 'mouse-node')
-		.attr("width", this.width*mouse_node_mult)
-		.attr("height", this.height*mouse_node_mult)
-		.attr("transform", "translate("+[self.x - this.width*mouse_node_mult/2,
-						 self.y - this.height*mouse_node_mult/2]+")")
-		.attr('pointer-events', 'all');
-	this.mouse_node = mouse_node;
-	
-	var rect = new_sel.append('rect')
-		.attr('id', 'canvas')
-		.attr("width", this.width)
-		.attr("height", this.height)
-		.attr("transform", "translate("+[self.x, self.y]+")");
+    function setup() {  
+        var self = this,
+            extent = {"x": this.width, "y": this.height},
+            dragbar_width = 100,
+            mouse_node_mult = 10,
+            new_sel = this.selection.append('g')
+                .classed('canvas-group', true)
+                .data([{x: this.x, y: this.y}]);
+        
+        var mouse_node = new_sel.append('rect')
+                .attr('id', 'mouse-node')
+                .attr("width", this.width*mouse_node_mult)
+                .attr("height", this.height*mouse_node_mult)
+                .attr("transform", "translate("+[self.x - this.width*mouse_node_mult/2,
+                                                 self.y - this.height*mouse_node_mult/2]+")")
+                .attr('pointer-events', 'all');
+        this.mouse_node = mouse_node;
+        
+        var rect = new_sel.append('rect')
+                .attr('id', 'canvas')
+                .attr("width", this.width)
+                .attr("height", this.height)
+                .attr("transform", "translate("+[self.x, self.y]+")");
 
-	var drag_right = d3.behavior.drag()
-		.origin(Object)
-		.on("dragstart", stop_propagation)
-		.on("drag", rdragresize),
-	    drag_left = d3.behavior.drag()
-		.origin(Object)
-		.on("dragstart", stop_propagation)
-		.on("drag", ldragresize),
-	    drag_top = d3.behavior.drag()
-		.origin(Object)
-		.on("dragstart", stop_propagation)
-		.on("drag", tdragresize),
-	    drag_bottom = d3.behavior.drag()
-		.origin(Object)
-		.on("dragstart", stop_propagation)
-		.on("drag", bdragresize);
+        var drag_right = d3.behavior.drag()
+                .origin(Object)
+                .on("dragstart", stop_propagation)
+                .on("drag", rdragresize),
+            drag_left = d3.behavior.drag()
+                .origin(Object)
+                .on("dragstart", stop_propagation)
+                .on("drag", ldragresize),
+            drag_top = d3.behavior.drag()
+                .origin(Object)
+                .on("dragstart", stop_propagation)
+                .on("drag", tdragresize),
+            drag_bottom = d3.behavior.drag()
+                .origin(Object)
+                .on("dragstart", stop_propagation)
+                .on("drag", bdragresize);
 
-	var left = new_sel.append("rect")
-		.classed('drag-rect', true)
-		.attr('transform', function(d) {
-		    return 'translate('+[ d.x - (dragbar_width/2),
-					  d.y + (dragbar_width/2) ]+')';
-		})
-		.attr("height", this.height - dragbar_width)
-		.attr("id", "dragleft")
-		.attr("width", dragbar_width)
-		.attr("cursor", "ew-resize")
-		.classed('resize-rect', true)
-		.call(drag_left);
-	
-	var right = new_sel.append("rect")
-		.classed('drag-rect', true)
-		.attr('transform', function(d) {
-		    return 'translate('+[ d.x + self.width - (dragbar_width/2),
-					  d.y + (dragbar_width/2) ]+')';
-		})
-		.attr("id", "dragright")
-		.attr("height", this.height - dragbar_width)
-		.attr("width", dragbar_width)
-		.attr("cursor", "ew-resize")
-		.classed('resize-rect', true)
-		.call(drag_right);
-	
-	var top = new_sel.append("rect")
-		.classed('drag-rect', true)
-		.attr('transform', function(d) {
-		    return 'translate('+[ d.x + (dragbar_width/2),
-					  d.y - (dragbar_width/2) ]+')';
-		})
-		.attr("height", dragbar_width)
-		.attr("id", "dragtop")
-		.attr("width", this.width - dragbar_width)
-		.attr("cursor", "ns-resize")
-		.classed('resize-rect', true)
-		.call(drag_top);
-	
-	var bottom = new_sel.append("rect")
-		.classed('drag-rect', true)
-		.attr('transform', function(d) {
-		    return 'translate('+[ d.x + (dragbar_width/2),
-					  d.y + self.height - (dragbar_width/2) ]+')';
-		})
-		.attr("id", "dragbottom")
-		.attr("height", dragbar_width)
-		.attr("width", this.width - dragbar_width)
-		.attr("cursor", "ns-resize")
-		.classed('resize-rect', true)
-		.call(drag_bottom);
-	
-	// definitions
-	function stop_propagation() {
-	    d3.event.sourceEvent.stopPropagation();
-	}
-	function transform_string(x, y, current_transform) {
-	    var tr = d3.transform(current_transform),
-		translate = tr.translate;	    
-	    if (x!==null) translate[0] = x;
-	    if (y!==null) translate[1] = y;
-	    return 'translate('+translate+')';
-	}
-	function ldragresize(d) {
-	    var oldx = d.x; 
-	    d.x = Math.min(d.x + self.width - (dragbar_width / 2), d3.event.x);
-	    self.x = d.x;
-	    self.width = self.width + (oldx - d.x);
-	    left.attr("transform", function(d) {
-		return transform_string(d.x - (dragbar_width / 2), null, left.attr('transform'));
-	    });
-	    mouse_node.attr("transform", function(d) {
-		return transform_string(d.x, null, mouse_node.attr('transform'));
-	    }).attr("width", self.width*mouse_node_mult);
-	    rect.attr("transform", function(d) {
-		return transform_string(d.x, null, rect.attr('transform'));
-	    }).attr("width", self.width);
-	    top.attr("transform", function(d) {
-		return transform_string(d.x + (dragbar_width/2), null, top.attr('transform'));
-	    }).attr("width", self.width - dragbar_width);
-	    bottom.attr("transform", function(d) {
-		return transform_string(d.x + (dragbar_width/2), null, bottom.attr('transform'));
-	    }).attr("width", self.width - dragbar_width);
+        var left = new_sel.append("rect")
+                .classed('drag-rect', true)
+                .attr('transform', function(d) {
+                    return 'translate('+[ d.x - (dragbar_width/2),
+                                          d.y + (dragbar_width/2) ]+')';
+                })
+                .attr("height", this.height - dragbar_width)
+                .attr("id", "dragleft")
+                .attr("width", dragbar_width)
+                .attr("cursor", "ew-resize")
+                .classed('resize-rect', true)
+                .call(drag_left);
+        
+        var right = new_sel.append("rect")
+                .classed('drag-rect', true)
+                .attr('transform', function(d) {
+                    return 'translate('+[ d.x + self.width - (dragbar_width/2),
+                                          d.y + (dragbar_width/2) ]+')';
+                })
+                .attr("id", "dragright")
+                .attr("height", this.height - dragbar_width)
+                .attr("width", dragbar_width)
+                .attr("cursor", "ew-resize")
+                .classed('resize-rect', true)
+                .call(drag_right);
+        
+        var top = new_sel.append("rect")
+                .classed('drag-rect', true)
+                .attr('transform', function(d) {
+                    return 'translate('+[ d.x + (dragbar_width/2),
+                                          d.y - (dragbar_width/2) ]+')';
+                })
+                .attr("height", dragbar_width)
+                .attr("id", "dragtop")
+                .attr("width", this.width - dragbar_width)
+                .attr("cursor", "ns-resize")
+                .classed('resize-rect', true)
+                .call(drag_top);
+        
+        var bottom = new_sel.append("rect")
+                .classed('drag-rect', true)
+                .attr('transform', function(d) {
+                    return 'translate('+[ d.x + (dragbar_width/2),
+                                          d.y + self.height - (dragbar_width/2) ]+')';
+                })
+                .attr("id", "dragbottom")
+                .attr("height", dragbar_width)
+                .attr("width", this.width - dragbar_width)
+                .attr("cursor", "ns-resize")
+                .classed('resize-rect', true)
+                .call(drag_bottom);
+        
+        // definitions
+        function stop_propagation() {
+            d3.event.sourceEvent.stopPropagation();
+        }
+        function transform_string(x, y, current_transform) {
+            var tr = d3.transform(current_transform),
+                translate = tr.translate;       
+            if (x!==null) translate[0] = x;
+            if (y!==null) translate[1] = y;
+            return 'translate('+translate+')';
+        }
+        function ldragresize(d) {
+            var oldx = d.x; 
+            d.x = Math.min(d.x + self.width - (dragbar_width / 2), d3.event.x);
+            self.x = d.x;
+            self.width = self.width + (oldx - d.x);
+            left.attr("transform", function(d) {
+                return transform_string(d.x - (dragbar_width / 2), null, left.attr('transform'));
+            });
+            mouse_node.attr("transform", function(d) {
+                return transform_string(d.x, null, mouse_node.attr('transform'));
+            }).attr("width", self.width*mouse_node_mult);
+            rect.attr("transform", function(d) {
+                return transform_string(d.x, null, rect.attr('transform'));
+            }).attr("width", self.width);
+            top.attr("transform", function(d) {
+                return transform_string(d.x + (dragbar_width/2), null, top.attr('transform'));
+            }).attr("width", self.width - dragbar_width);
+            bottom.attr("transform", function(d) {
+                return transform_string(d.x + (dragbar_width/2), null, bottom.attr('transform'));
+            }).attr("width", self.width - dragbar_width);
 
-	    self.callback_manager.run('resize');
-	}
+            self.callback_manager.run('resize');
+        }
 
-	function rdragresize(d) {
-	    d3.event.sourceEvent.stopPropagation();
-	    var dragx = Math.max(d.x + (dragbar_width/2), d.x + self.width + d3.event.dx);
-	    //recalculate width
-	    self.width = dragx - d.x;
-	    //move the right drag handle
-	    right.attr("transform", function(d) {
-		return transform_string(dragx - (dragbar_width/2), null, right.attr('transform'));
-	    });
-	    //resize the drag rectangle
-	    //as we are only resizing from the right, the x coordinate does not need to change
-	    mouse_node.attr("width", self.width*mouse_node_mult);
-	    rect.attr("width", self.width);
-	    top.attr("width", self.width - dragbar_width);
-	    bottom.attr("width", self.width - dragbar_width);
+        function rdragresize(d) {
+            d3.event.sourceEvent.stopPropagation();
+            var dragx = Math.max(d.x + (dragbar_width/2), d.x + self.width + d3.event.dx);
+            //recalculate width
+            self.width = dragx - d.x;
+            //move the right drag handle
+            right.attr("transform", function(d) {
+                return transform_string(dragx - (dragbar_width/2), null, right.attr('transform'));
+            });
+            //resize the drag rectangle
+            //as we are only resizing from the right, the x coordinate does not need to change
+            mouse_node.attr("width", self.width*mouse_node_mult);
+            rect.attr("width", self.width);
+            top.attr("width", self.width - dragbar_width);
+            bottom.attr("width", self.width - dragbar_width);
 
-	    self.callback_manager.run('resize');
-	}
+            self.callback_manager.run('resize');
+        }
 
-	function tdragresize(d) {
-	    d3.event.sourceEvent.stopPropagation();	    
-	    var oldy = d.y; 
-	    d.y = Math.min(d.y + self.height - (dragbar_width / 2), d3.event.y);
-	    self.y = d.y;
-	    self.height = self.height + (oldy - d.y);
-	    top.attr("transform", function(d) {
-		return transform_string(null, d.y - (dragbar_width / 2), top.attr('transform'));
-	    });
-	    mouse_node.attr("transform", function(d) {
-		return transform_string(null, d.y, mouse_node.attr('transform'));
-	    }).attr("width", self.height*mouse_node_mult);
-	    rect.attr("transform", function(d) {
-		return transform_string(null, d.y, rect.attr('transform'));
-	    }).attr("height", self.height);
-	    left.attr("transform", function(d) {
-		return transform_string(null, d.y + (dragbar_width/2), left.attr('transform'));
-	    }).attr("height", self.height - dragbar_width);
-	    right.attr("transform", function(d) {
-		return transform_string(null, d.y + (dragbar_width/2), right.attr('transform'));
-	    }).attr("height", self.height - dragbar_width);
+        function tdragresize(d) {
+            d3.event.sourceEvent.stopPropagation();     
+            var oldy = d.y; 
+            d.y = Math.min(d.y + self.height - (dragbar_width / 2), d3.event.y);
+            self.y = d.y;
+            self.height = self.height + (oldy - d.y);
+            top.attr("transform", function(d) {
+                return transform_string(null, d.y - (dragbar_width / 2), top.attr('transform'));
+            });
+            mouse_node.attr("transform", function(d) {
+                return transform_string(null, d.y, mouse_node.attr('transform'));
+            }).attr("width", self.height*mouse_node_mult);
+            rect.attr("transform", function(d) {
+                return transform_string(null, d.y, rect.attr('transform'));
+            }).attr("height", self.height);
+            left.attr("transform", function(d) {
+                return transform_string(null, d.y + (dragbar_width/2), left.attr('transform'));
+            }).attr("height", self.height - dragbar_width);
+            right.attr("transform", function(d) {
+                return transform_string(null, d.y + (dragbar_width/2), right.attr('transform'));
+            }).attr("height", self.height - dragbar_width);
 
-	    self.callback_manager.run('resize');
-	}
+            self.callback_manager.run('resize');
+        }
 
-	function bdragresize(d) {
-	    d3.event.sourceEvent.stopPropagation();
-	    var dragy = Math.max(d.y + (dragbar_width/2), d.y + self.height + d3.event.dy);
-	    //recalculate width
-	    self.height = dragy - d.y;
-	    //move the right drag handle
-	    bottom.attr("transform", function(d) {
-		return transform_string(null, dragy - (dragbar_width/2), bottom.attr('transform'));
-	    });
-	    //resize the drag rectangle
-	    //as we are only resizing from the right, the x coordinate does not need to change
-	    mouse_node.attr("height", self.height*mouse_node_mult);
-	    rect.attr("height", self.height);
-	    left.attr("height", self.height - dragbar_width);
-	    right.attr("height", self.height - dragbar_width);
+        function bdragresize(d) {
+            d3.event.sourceEvent.stopPropagation();
+            var dragy = Math.max(d.y + (dragbar_width/2), d.y + self.height + d3.event.dy);
+            //recalculate width
+            self.height = dragy - d.y;
+            //move the right drag handle
+            bottom.attr("transform", function(d) {
+                return transform_string(null, dragy - (dragbar_width/2), bottom.attr('transform'));
+            });
+            //resize the drag rectangle
+            //as we are only resizing from the right, the x coordinate does not need to change
+            mouse_node.attr("height", self.height*mouse_node_mult);
+            rect.attr("height", self.height);
+            left.attr("height", self.height - dragbar_width);
+            right.attr("height", self.height - dragbar_width);
 
-	    self.callback_manager.run('resize');
-	}
+            self.callback_manager.run('resize');
+        }
     }
 
     function size_and_location() {
-	return { x: this.x,
-		 y: this.y,
-		 width: this.width,
-		 height: this.height };
+        return { x: this.x,
+                 y: this.y,
+                 width: this.width,
+                 height: this.height };
     }
 });
 
@@ -6408,76 +8382,76 @@ define('SearchIndex',["utils"], function(utils) {
 
     var SearchIndex = utils.make_class();
     SearchIndex.prototype = { init: init,
-			      insert: insert,
-			      remove: remove,
-			      find: find };
+                              insert: insert,
+                              remove: remove,
+                              find: find };
 
     return SearchIndex;
 
     // definitions
     function init() {
-	this.index = {};
+        this.index = {};
     }
 
     function insert(id, record, overwrite, check_record) {
-	/** Insert a record into the index.
+        /** Insert a record into the index.
 
-	 id: A unique string id.
+         id: A unique string id.
 
-	 record: Records have the form:
+         record: Records have the form:
 
-	 { 'name': '',
-	   'data': {} }
+         { 'name': '',
+         'data': {} }
 
-	 Search is performed on substrings of the name.
+         Search is performed on substrings of the name.
 
-	 overwrite: (Default false) For faster performance, make overwrite true,
-	 and records will be inserted without checking for an existing record.
+         overwrite: (Default false) For faster performance, make overwrite true,
+         and records will be inserted without checking for an existing record.
 
-	 check_record: (Default false) For faster performance, make check_record
-	 false. If true, records will be checked to make sure they have name and
-	 data attributes.
+         check_record: (Default false) For faster performance, make check_record
+         false. If true, records will be checked to make sure they have name and
+         data attributes.
 
-	 Returns undefined.
+         Returns undefined.
 
-	 */
-	if (!overwrite && (id in this.index))
-	    throw new Error("id is already in the index");
-	if (check_record && !(('name' in record) && ('data' in record)))
-	    throw new Error("malformed record");
-	this.index[id] = record;
+         */
+        if (!overwrite && (id in this.index))
+            throw new Error("id is already in the index");
+        if (check_record && !(('name' in record) && ('data' in record)))
+            throw new Error("malformed record");
+        this.index[id] = record;
     }
 
     function remove(record_id) {
-	/** Remove the matching record.
+        /** Remove the matching record.
 
-	 Returns true is a record is found, or false if no match is found.
+         Returns true is a record is found, or false if no match is found.
 
-	 */
-	if (record_id in this.index) {
-	    delete this.index[record_id];
-	    return true;
-	} else {
-	    return false;
-	}
+         */
+        if (record_id in this.index) {
+            delete this.index[record_id];
+            return true;
+        } else {
+            return false;
+        }
     }
 
     function find(substring) {
-	/** Find a record that matches the substring.
+        /** Find a record that matches the substring.
 
-	 Returns an array of data from matching records.
+         Returns an array of data from matching records.
 
-	 */
+         */
 
-	var re = RegExp(substring, "i"), // ignore case
-	    matches = [];
-	for (var id in this.index) {
-	    var record = this.index[id];
-	    if (re.exec(record.name))
-		matches.push(record.data);
-	}
-	return matches;
-	    
+        var re = RegExp(substring, "i"), // ignore case
+            matches = [];
+        for (var id in this.index) {
+            var record = this.index[id];
+            if (re.exec(record.name))
+                matches.push(record.data);
+        }
+        return matches;
+        
     }
 });
 
@@ -9462,6 +11436,8 @@ define('SearchIndex',["utils"], function(utils) {
 }).call(this);
 
 !function(a,b){"function"==typeof define&&define.amd?define('lib/tv4',[],b):"undefined"!=typeof module&&module.exports?module.exports=b():a.tv4=b()}(this,function(){function a(a){return encodeURI(a).replace(/%25[0-9][0-9]/g,function(a){return"%"+a.substring(3)})}function b(b){var c="";l[b.charAt(0)]&&(c=b.charAt(0),b=b.substring(1));var d="",e="",f=!0,g=!1,h=!1;"+"===c?f=!1:"."===c?(e=".",d="."):"/"===c?(e="/",d="/"):"#"===c?(e="#",f=!1):";"===c?(e=";",d=";",g=!0,h=!0):"?"===c?(e="?",d="&",g=!0):"&"===c&&(e="&",d="&",g=!0);for(var i=[],j=b.split(","),k=[],n={},o=0;o<j.length;o++){var p=j[o],q=null;if(-1!==p.indexOf(":")){var r=p.split(":");p=r[0],q=parseInt(r[1],10)}for(var s={};m[p.charAt(p.length-1)];)s[p.charAt(p.length-1)]=!0,p=p.substring(0,p.length-1);var t={truncate:q,name:p,suffices:s};k.push(t),n[p]=t,i.push(p)}var u=function(b){for(var c="",i=0,j=0;j<k.length;j++){var l=k[j],m=b(l.name);if(null===m||void 0===m||Array.isArray(m)&&0===m.length||"object"==typeof m&&0===Object.keys(m).length)i++;else if(c+=j===i?e:d||",",Array.isArray(m)){g&&(c+=l.name+"=");for(var n=0;n<m.length;n++)n>0&&(c+=l.suffices["*"]?d||",":",",l.suffices["*"]&&g&&(c+=l.name+"=")),c+=f?encodeURIComponent(m[n]).replace(/!/g,"%21"):a(m[n])}else if("object"==typeof m){g&&!l.suffices["*"]&&(c+=l.name+"=");var o=!0;for(var p in m)o||(c+=l.suffices["*"]?d||",":","),o=!1,c+=f?encodeURIComponent(p).replace(/!/g,"%21"):a(p),c+=l.suffices["*"]?"=":",",c+=f?encodeURIComponent(m[p]).replace(/!/g,"%21"):a(m[p])}else g&&(c+=l.name,h&&""===m||(c+="=")),null!=l.truncate&&(m=m.substring(0,l.truncate)),c+=f?encodeURIComponent(m).replace(/!/g,"%21"):a(m)}return c};return u.varNames=i,{prefix:e,substitution:u}}function c(a){if(!(this instanceof c))return new c(a);for(var d=a.split("{"),e=[d.shift()],f=[],g=[],h=[];d.length>0;){var i=d.shift(),j=i.split("}")[0],k=i.substring(j.length+1),l=b(j);g.push(l.substitution),f.push(l.prefix),e.push(k),h=h.concat(l.substitution.varNames)}this.fill=function(a){for(var b=e[0],c=0;c<g.length;c++){var d=g[c];b+=d(a),b+=e[c+1]}return b},this.varNames=h,this.template=a}function d(a,b){if(a===b)return!0;if("object"==typeof a&&"object"==typeof b){if(Array.isArray(a)!==Array.isArray(b))return!1;if(Array.isArray(a)){if(a.length!==b.length)return!1;for(var c=0;c<a.length;c++)if(!d(a[c],b[c]))return!1}else{var e;for(e in a)if(void 0===b[e]&&void 0!==a[e])return!1;for(e in b)if(void 0===a[e]&&void 0!==b[e])return!1;for(e in a)if(!d(a[e],b[e]))return!1}return!0}return!1}function e(a){var b=String(a).replace(/^\s+|\s+$/g,"").match(/^([^:\/?#]+:)?(\/\/(?:[^:@]*(?::[^:@]*)?@)?(([^:\/?#]*)(?::(\d*))?))?([^?#]*)(\?[^#]*)?(#[\s\S]*)?/);return b?{href:b[0]||"",protocol:b[1]||"",authority:b[2]||"",host:b[3]||"",hostname:b[4]||"",port:b[5]||"",pathname:b[6]||"",search:b[7]||"",hash:b[8]||""}:null}function f(a,b){function c(a){var b=[];return a.replace(/^(\.\.?(\/|$))+/,"").replace(/\/(\.(\/|$))+/g,"/").replace(/\/\.\.$/,"/../").replace(/\/?[^\/]*/g,function(a){"/.."===a?b.pop():b.push(a)}),b.join("").replace(/^\//,"/"===a.charAt(0)?"/":"")}return b=e(b||""),a=e(a||""),b&&a?(b.protocol||a.protocol)+(b.protocol||b.authority?b.authority:a.authority)+c(b.protocol||b.authority||"/"===b.pathname.charAt(0)?b.pathname:b.pathname?(a.authority&&!a.pathname?"/":"")+a.pathname.slice(0,a.pathname.lastIndexOf("/")+1)+b.pathname:a.pathname)+(b.protocol||b.authority||b.pathname?b.search:b.search||a.search)+b.hash:null}function g(a){return a.split("#")[0]}function h(a,b){if(a&&"object"==typeof a)if(void 0===b?b=a.id:"string"==typeof a.id&&(b=f(b,a.id),a.id=b),Array.isArray(a))for(var c=0;c<a.length;c++)h(a[c],b);else{"string"==typeof a.$ref&&(a.$ref=f(b,a.$ref));for(var d in a)"enum"!==d&&h(a[d],b)}}function i(a,b,c,d,e,f){if(Error.call(this),void 0===a)throw new Error("No code supplied for error: "+b);this.message=b,this.params=c,this.code=a,this.dataPath=d||"",this.schemaPath=e||"",this.subErrors=f||null;var g=new Error(this.message);if(this.stack=g.stack||g.stacktrace,!this.stack)try{throw g}catch(g){this.stack=g.stack||g.stacktrace}}function j(a,b){if(b.substring(0,a.length)===a){var c=b.substring(a.length);if(b.length>0&&"/"===b.charAt(a.length-1)||"#"===c.charAt(0)||"?"===c.charAt(0))return!0}return!1}function k(a){var b=new n,c=a||"en",d={addFormat:function(){b.addFormat.apply(b,arguments)},language:function(a){return a?(s[a]||(a=a.split("-")[0]),s[a]?(c=a,a):!1):c},addLanguage:function(a,b){var c;for(c in o)b[c]&&!b[o[c]]&&(b[o[c]]=b[c]);var d=a.split("-")[0];if(s[d]){s[a]=Object.create(s[d]);for(c in b)"undefined"==typeof s[d][c]&&(s[d][c]=b[c]),s[a][c]=b[c]}else s[a]=b,s[d]=b;return this},freshApi:function(a){var b=k();return a&&b.language(a),b},validate:function(a,d,e,f){var g=new n(b,!1,s[c],e,f);"string"==typeof d&&(d={$ref:d}),g.addSchema("",d);var h=g.validateAll(a,d,null,null,"");return!h&&f&&(h=g.banUnknownProperties()),this.error=h,this.missing=g.missing,this.valid=null===h,this.valid},validateResult:function(){var a={};return this.validate.apply(a,arguments),a},validateMultiple:function(a,d,e,f){var g=new n(b,!0,s[c],e,f);"string"==typeof d&&(d={$ref:d}),g.addSchema("",d),g.validateAll(a,d,null,null,""),f&&g.banUnknownProperties();var h={};return h.errors=g.errors,h.missing=g.missing,h.valid=0===h.errors.length,h},addSchema:function(){return b.addSchema.apply(b,arguments)},getSchema:function(){return b.getSchema.apply(b,arguments)},getSchemaMap:function(){return b.getSchemaMap.apply(b,arguments)},getSchemaUris:function(){return b.getSchemaUris.apply(b,arguments)},getMissingUris:function(){return b.getMissingUris.apply(b,arguments)},dropSchemas:function(){b.dropSchemas.apply(b,arguments)},defineKeyword:function(){b.defineKeyword.apply(b,arguments)},defineError:function(a,b,c){if("string"!=typeof a||!/^[A-Z]+(_[A-Z]+)*$/.test(a))throw new Error("Code name must be a string in UPPER_CASE_WITH_UNDERSCORES");if("number"!=typeof b||b%1!==0||1e4>b)throw new Error("Code number must be an integer > 10000");if("undefined"!=typeof o[a])throw new Error("Error already defined: "+a+" as "+o[a]);if("undefined"!=typeof p[b])throw new Error("Error code already used: "+p[b]+" as "+b);o[a]=b,p[b]=a,r[a]=r[b]=c;for(var d in s){var e=s[d];e[a]&&(e[b]=e[b]||e[a])}},reset:function(){b.reset(),this.error=null,this.missing=[],this.valid=!0},missing:[],error:null,valid:!0,normSchema:h,resolveUrl:f,getDocumentUri:g,errorCodes:o};return d}Object.keys||(Object.keys=function(){var a=Object.prototype.hasOwnProperty,b=!{toString:null}.propertyIsEnumerable("toString"),c=["toString","toLocaleString","valueOf","hasOwnProperty","isPrototypeOf","propertyIsEnumerable","constructor"],d=c.length;return function(e){if("object"!=typeof e&&"function"!=typeof e||null===e)throw new TypeError("Object.keys called on non-object");var f=[];for(var g in e)a.call(e,g)&&f.push(g);if(b)for(var h=0;d>h;h++)a.call(e,c[h])&&f.push(c[h]);return f}}()),Object.create||(Object.create=function(){function a(){}return function(b){if(1!==arguments.length)throw new Error("Object.create implementation only accepts one parameter.");return a.prototype=b,new a}}()),Array.isArray||(Array.isArray=function(a){return"[object Array]"===Object.prototype.toString.call(a)}),Array.prototype.indexOf||(Array.prototype.indexOf=function(a){if(null===this)throw new TypeError;var b=Object(this),c=b.length>>>0;if(0===c)return-1;var d=0;if(arguments.length>1&&(d=Number(arguments[1]),d!==d?d=0:0!==d&&1/0!==d&&d!==-1/0&&(d=(d>0||-1)*Math.floor(Math.abs(d)))),d>=c)return-1;for(var e=d>=0?d:Math.max(c-Math.abs(d),0);c>e;e++)if(e in b&&b[e]===a)return e;return-1}),Object.isFrozen||(Object.isFrozen=function(a){for(var b="tv4_test_frozen_key";a.hasOwnProperty(b);)b+=Math.random();try{return a[b]=!0,delete a[b],!1}catch(c){return!0}});var l={"+":!0,"#":!0,".":!0,"/":!0,";":!0,"?":!0,"&":!0},m={"*":!0};c.prototype={toString:function(){return this.template},fillFromObject:function(a){return this.fill(function(b){return a[b]})}};var n=function(a,b,c,d,e){if(this.missing=[],this.missingMap={},this.formatValidators=a?Object.create(a.formatValidators):{},this.schemas=a?Object.create(a.schemas):{},this.collectMultiple=b,this.errors=[],this.handleError=b?this.collectError:this.returnError,d&&(this.checkRecursive=!0,this.scanned=[],this.scannedFrozen=[],this.scannedFrozenSchemas=[],this.scannedFrozenValidationErrors=[],this.validatedSchemasKey="tv4_validation_id",this.validationErrorsKey="tv4_validation_errors_id"),e&&(this.trackUnknownProperties=!0,this.knownPropertyPaths={},this.unknownPropertyPaths={}),this.errorMessages=c,this.definedKeywords={},a)for(var f in a.definedKeywords)this.definedKeywords[f]=a.definedKeywords[f].slice(0)};n.prototype.defineKeyword=function(a,b){this.definedKeywords[a]=this.definedKeywords[a]||[],this.definedKeywords[a].push(b)},n.prototype.createError=function(a,b,c,d,e){var f=this.errorMessages[a]||r[a];if("string"!=typeof f)return new i(a,"Unknown error code "+a+": "+JSON.stringify(b),b,c,d,e);var g=f.replace(/\{([^{}]*)\}/g,function(a,c){var d=b[c];return"string"==typeof d||"number"==typeof d?d:a});return new i(a,g,b,c,d,e)},n.prototype.returnError=function(a){return a},n.prototype.collectError=function(a){return a&&this.errors.push(a),null},n.prototype.prefixErrors=function(a,b,c){for(var d=a;d<this.errors.length;d++)this.errors[d]=this.errors[d].prefixWith(b,c);return this},n.prototype.banUnknownProperties=function(){for(var a in this.unknownPropertyPaths){var b=this.createError(o.UNKNOWN_PROPERTY,{path:a},a,""),c=this.handleError(b);if(c)return c}return null},n.prototype.addFormat=function(a,b){if("object"==typeof a){for(var c in a)this.addFormat(c,a[c]);return this}this.formatValidators[a]=b},n.prototype.resolveRefs=function(a,b){if(void 0!==a.$ref){if(b=b||{},b[a.$ref])return this.createError(o.CIRCULAR_REFERENCE,{urls:Object.keys(b).join(", ")},"","");b[a.$ref]=!0,a=this.getSchema(a.$ref,b)}return a},n.prototype.getSchema=function(a,b){var c;if(void 0!==this.schemas[a])return c=this.schemas[a],this.resolveRefs(c,b);var d=a,e="";if(-1!==a.indexOf("#")&&(e=a.substring(a.indexOf("#")+1),d=a.substring(0,a.indexOf("#"))),"object"==typeof this.schemas[d]){c=this.schemas[d];var f=decodeURIComponent(e);if(""===f)return this.resolveRefs(c,b);if("/"!==f.charAt(0))return void 0;for(var g=f.split("/").slice(1),h=0;h<g.length;h++){var i=g[h].replace(/~1/g,"/").replace(/~0/g,"~");if(void 0===c[i]){c=void 0;break}c=c[i]}if(void 0!==c)return this.resolveRefs(c,b)}void 0===this.missing[d]&&(this.missing.push(d),this.missing[d]=d,this.missingMap[d]=d)},n.prototype.searchSchemas=function(a,b){if(a&&"object"==typeof a){"string"==typeof a.id&&j(b,a.id)&&void 0===this.schemas[a.id]&&(this.schemas[a.id]=a);for(var c in a)if("enum"!==c)if("object"==typeof a[c])this.searchSchemas(a[c],b);else if("$ref"===c){var d=g(a[c]);d&&void 0===this.schemas[d]&&void 0===this.missingMap[d]&&(this.missingMap[d]=d)}}},n.prototype.addSchema=function(a,b){if("string"!=typeof a||"undefined"==typeof b){if("object"!=typeof a||"string"!=typeof a.id)return;b=a,a=b.id}a===g(a)+"#"&&(a=g(a)),this.schemas[a]=b,delete this.missingMap[a],h(b,a),this.searchSchemas(b,a)},n.prototype.getSchemaMap=function(){var a={};for(var b in this.schemas)a[b]=this.schemas[b];return a},n.prototype.getSchemaUris=function(a){var b=[];for(var c in this.schemas)(!a||a.test(c))&&b.push(c);return b},n.prototype.getMissingUris=function(a){var b=[];for(var c in this.missingMap)(!a||a.test(c))&&b.push(c);return b},n.prototype.dropSchemas=function(){this.schemas={},this.reset()},n.prototype.reset=function(){this.missing=[],this.missingMap={},this.errors=[]},n.prototype.validateAll=function(a,b,c,d,e){var f;if(b=this.resolveRefs(b),!b)return null;if(b instanceof i)return this.errors.push(b),b;var g,h=this.errors.length,j=null,k=null;if(this.checkRecursive&&a&&"object"==typeof a){if(f=!this.scanned.length,a[this.validatedSchemasKey]){var l=a[this.validatedSchemasKey].indexOf(b);if(-1!==l)return this.errors=this.errors.concat(a[this.validationErrorsKey][l]),null}if(Object.isFrozen(a)&&(g=this.scannedFrozen.indexOf(a),-1!==g)){var m=this.scannedFrozenSchemas[g].indexOf(b);if(-1!==m)return this.errors=this.errors.concat(this.scannedFrozenValidationErrors[g][m]),null}if(this.scanned.push(a),Object.isFrozen(a))-1===g&&(g=this.scannedFrozen.length,this.scannedFrozen.push(a),this.scannedFrozenSchemas.push([])),j=this.scannedFrozenSchemas[g].length,this.scannedFrozenSchemas[g][j]=b,this.scannedFrozenValidationErrors[g][j]=[];else{if(!a[this.validatedSchemasKey])try{Object.defineProperty(a,this.validatedSchemasKey,{value:[],configurable:!0}),Object.defineProperty(a,this.validationErrorsKey,{value:[],configurable:!0})}catch(n){a[this.validatedSchemasKey]=[],a[this.validationErrorsKey]=[]}k=a[this.validatedSchemasKey].length,a[this.validatedSchemasKey][k]=b,a[this.validationErrorsKey][k]=[]}}var o=this.errors.length,p=this.validateBasic(a,b,e)||this.validateNumeric(a,b,e)||this.validateString(a,b,e)||this.validateArray(a,b,e)||this.validateObject(a,b,e)||this.validateCombinations(a,b,e)||this.validateHypermedia(a,b,e)||this.validateFormat(a,b,e)||this.validateDefinedKeywords(a,b,e)||null;if(f){for(;this.scanned.length;){var q=this.scanned.pop();delete q[this.validatedSchemasKey]}this.scannedFrozen=[],this.scannedFrozenSchemas=[]}if(p||o!==this.errors.length)for(;c&&c.length||d&&d.length;){var r=c&&c.length?""+c.pop():null,s=d&&d.length?""+d.pop():null;p&&(p=p.prefixWith(r,s)),this.prefixErrors(o,r,s)}return null!==j?this.scannedFrozenValidationErrors[g][j]=this.errors.slice(h):null!==k&&(a[this.validationErrorsKey][k]=this.errors.slice(h)),this.handleError(p)},n.prototype.validateFormat=function(a,b){if("string"!=typeof b.format||!this.formatValidators[b.format])return null;var c=this.formatValidators[b.format].call(null,a,b);return"string"==typeof c||"number"==typeof c?this.createError(o.FORMAT_CUSTOM,{message:c}).prefixWith(null,"format"):c&&"object"==typeof c?this.createError(o.FORMAT_CUSTOM,{message:c.message||"?"},c.dataPath||null,c.schemaPath||"/format"):null},n.prototype.validateDefinedKeywords=function(a,b){for(var c in this.definedKeywords)if("undefined"!=typeof b[c])for(var d=this.definedKeywords[c],e=0;e<d.length;e++){var f=d[e],g=f(a,b[c],b);if("string"==typeof g||"number"==typeof g)return this.createError(o.KEYWORD_CUSTOM,{key:c,message:g}).prefixWith(null,"format");if(g&&"object"==typeof g){var h=g.code||o.KEYWORD_CUSTOM;if("string"==typeof h){if(!o[h])throw new Error("Undefined error code (use defineError): "+h);h=o[h]}var i="object"==typeof g.message?g.message:{key:c,message:g.message||"?"},j=g.schemaPath||"/"+c.replace(/~/g,"~0").replace(/\//g,"~1");return this.createError(h,i,g.dataPath||null,j)}}return null},n.prototype.validateBasic=function(a,b,c){var d;return(d=this.validateType(a,b,c))?d.prefixWith(null,"type"):(d=this.validateEnum(a,b,c))?d.prefixWith(null,"type"):null},n.prototype.validateType=function(a,b){if(void 0===b.type)return null;var c=typeof a;null===a?c="null":Array.isArray(a)&&(c="array");var d=b.type;"object"!=typeof d&&(d=[d]);for(var e=0;e<d.length;e++){var f=d[e];if(f===c||"integer"===f&&"number"===c&&a%1===0)return null}return this.createError(o.INVALID_TYPE,{type:c,expected:d.join("/")})},n.prototype.validateEnum=function(a,b){if(void 0===b["enum"])return null;for(var c=0;c<b["enum"].length;c++){var e=b["enum"][c];if(d(a,e))return null}return this.createError(o.ENUM_MISMATCH,{value:"undefined"!=typeof JSON?JSON.stringify(a):a})},n.prototype.validateNumeric=function(a,b,c){return this.validateMultipleOf(a,b,c)||this.validateMinMax(a,b,c)||null},n.prototype.validateMultipleOf=function(a,b){var c=b.multipleOf||b.divisibleBy;return void 0===c?null:"number"==typeof a&&a%c!==0?this.createError(o.NUMBER_MULTIPLE_OF,{value:a,multipleOf:c}):null},n.prototype.validateMinMax=function(a,b){if("number"!=typeof a)return null;if(void 0!==b.minimum){if(a<b.minimum)return this.createError(o.NUMBER_MINIMUM,{value:a,minimum:b.minimum}).prefixWith(null,"minimum");if(b.exclusiveMinimum&&a===b.minimum)return this.createError(o.NUMBER_MINIMUM_EXCLUSIVE,{value:a,minimum:b.minimum}).prefixWith(null,"exclusiveMinimum")}if(void 0!==b.maximum){if(a>b.maximum)return this.createError(o.NUMBER_MAXIMUM,{value:a,maximum:b.maximum}).prefixWith(null,"maximum");if(b.exclusiveMaximum&&a===b.maximum)return this.createError(o.NUMBER_MAXIMUM_EXCLUSIVE,{value:a,maximum:b.maximum}).prefixWith(null,"exclusiveMaximum")}return null},n.prototype.validateString=function(a,b,c){return this.validateStringLength(a,b,c)||this.validateStringPattern(a,b,c)||null},n.prototype.validateStringLength=function(a,b){return"string"!=typeof a?null:void 0!==b.minLength&&a.length<b.minLength?this.createError(o.STRING_LENGTH_SHORT,{length:a.length,minimum:b.minLength}).prefixWith(null,"minLength"):void 0!==b.maxLength&&a.length>b.maxLength?this.createError(o.STRING_LENGTH_LONG,{length:a.length,maximum:b.maxLength}).prefixWith(null,"maxLength"):null},n.prototype.validateStringPattern=function(a,b){if("string"!=typeof a||void 0===b.pattern)return null;var c=new RegExp(b.pattern);return c.test(a)?null:this.createError(o.STRING_PATTERN,{pattern:b.pattern}).prefixWith(null,"pattern")},n.prototype.validateArray=function(a,b,c){return Array.isArray(a)?this.validateArrayLength(a,b,c)||this.validateArrayUniqueItems(a,b,c)||this.validateArrayItems(a,b,c)||null:null},n.prototype.validateArrayLength=function(a,b){var c;return void 0!==b.minItems&&a.length<b.minItems&&(c=this.createError(o.ARRAY_LENGTH_SHORT,{length:a.length,minimum:b.minItems}).prefixWith(null,"minItems"),this.handleError(c))?c:void 0!==b.maxItems&&a.length>b.maxItems&&(c=this.createError(o.ARRAY_LENGTH_LONG,{length:a.length,maximum:b.maxItems}).prefixWith(null,"maxItems"),this.handleError(c))?c:null},n.prototype.validateArrayUniqueItems=function(a,b){if(b.uniqueItems)for(var c=0;c<a.length;c++)for(var e=c+1;e<a.length;e++)if(d(a[c],a[e])){var f=this.createError(o.ARRAY_UNIQUE,{match1:c,match2:e}).prefixWith(null,"uniqueItems");if(this.handleError(f))return f}return null},n.prototype.validateArrayItems=function(a,b,c){if(void 0===b.items)return null;var d,e;if(Array.isArray(b.items)){for(e=0;e<a.length;e++)if(e<b.items.length){if(d=this.validateAll(a[e],b.items[e],[e],["items",e],c+"/"+e))return d}else if(void 0!==b.additionalItems)if("boolean"==typeof b.additionalItems){if(!b.additionalItems&&(d=this.createError(o.ARRAY_ADDITIONAL_ITEMS,{}).prefixWith(""+e,"additionalItems"),this.handleError(d)))return d}else if(d=this.validateAll(a[e],b.additionalItems,[e],["additionalItems"],c+"/"+e))return d}else for(e=0;e<a.length;e++)if(d=this.validateAll(a[e],b.items,[e],["items"],c+"/"+e))return d;return null},n.prototype.validateObject=function(a,b,c){return"object"!=typeof a||null===a||Array.isArray(a)?null:this.validateObjectMinMaxProperties(a,b,c)||this.validateObjectRequiredProperties(a,b,c)||this.validateObjectProperties(a,b,c)||this.validateObjectDependencies(a,b,c)||null},n.prototype.validateObjectMinMaxProperties=function(a,b){var c,d=Object.keys(a);return void 0!==b.minProperties&&d.length<b.minProperties&&(c=this.createError(o.OBJECT_PROPERTIES_MINIMUM,{propertyCount:d.length,minimum:b.minProperties}).prefixWith(null,"minProperties"),this.handleError(c))?c:void 0!==b.maxProperties&&d.length>b.maxProperties&&(c=this.createError(o.OBJECT_PROPERTIES_MAXIMUM,{propertyCount:d.length,maximum:b.maxProperties}).prefixWith(null,"maxProperties"),this.handleError(c))?c:null},n.prototype.validateObjectRequiredProperties=function(a,b){if(void 0!==b.required)for(var c=0;c<b.required.length;c++){var d=b.required[c];if(void 0===a[d]){var e=this.createError(o.OBJECT_REQUIRED,{key:d}).prefixWith(null,""+c).prefixWith(null,"required");if(this.handleError(e))return e}}return null},n.prototype.validateObjectProperties=function(a,b,c){var d;for(var e in a){var f=c+"/"+e.replace(/~/g,"~0").replace(/\//g,"~1"),g=!1;if(void 0!==b.properties&&void 0!==b.properties[e]&&(g=!0,d=this.validateAll(a[e],b.properties[e],[e],["properties",e],f)))return d;if(void 0!==b.patternProperties)for(var h in b.patternProperties){var i=new RegExp(h);if(i.test(e)&&(g=!0,d=this.validateAll(a[e],b.patternProperties[h],[e],["patternProperties",h],f)))return d}if(g)this.trackUnknownProperties&&(this.knownPropertyPaths[f]=!0,delete this.unknownPropertyPaths[f]);else if(void 0!==b.additionalProperties){if(this.trackUnknownProperties&&(this.knownPropertyPaths[f]=!0,delete this.unknownPropertyPaths[f]),"boolean"==typeof b.additionalProperties){if(!b.additionalProperties&&(d=this.createError(o.OBJECT_ADDITIONAL_PROPERTIES,{}).prefixWith(e,"additionalProperties"),this.handleError(d)))return d}else if(d=this.validateAll(a[e],b.additionalProperties,[e],["additionalProperties"],f))return d}else this.trackUnknownProperties&&!this.knownPropertyPaths[f]&&(this.unknownPropertyPaths[f]=!0)}return null},n.prototype.validateObjectDependencies=function(a,b,c){var d;if(void 0!==b.dependencies)for(var e in b.dependencies)if(void 0!==a[e]){var f=b.dependencies[e];if("string"==typeof f){if(void 0===a[f]&&(d=this.createError(o.OBJECT_DEPENDENCY_KEY,{key:e,missing:f}).prefixWith(null,e).prefixWith(null,"dependencies"),this.handleError(d)))return d}else if(Array.isArray(f))for(var g=0;g<f.length;g++){var h=f[g];if(void 0===a[h]&&(d=this.createError(o.OBJECT_DEPENDENCY_KEY,{key:e,missing:h}).prefixWith(null,""+g).prefixWith(null,e).prefixWith(null,"dependencies"),this.handleError(d)))return d}else if(d=this.validateAll(a,f,[],["dependencies",e],c))return d}return null},n.prototype.validateCombinations=function(a,b,c){return this.validateAllOf(a,b,c)||this.validateAnyOf(a,b,c)||this.validateOneOf(a,b,c)||this.validateNot(a,b,c)||null},n.prototype.validateAllOf=function(a,b,c){if(void 0===b.allOf)return null;for(var d,e=0;e<b.allOf.length;e++){var f=b.allOf[e];if(d=this.validateAll(a,f,[],["allOf",e],c))return d}return null},n.prototype.validateAnyOf=function(a,b,c){if(void 0===b.anyOf)return null;var d,e,f=[],g=this.errors.length;this.trackUnknownProperties&&(d=this.unknownPropertyPaths,e=this.knownPropertyPaths);for(var h=!0,i=0;i<b.anyOf.length;i++){this.trackUnknownProperties&&(this.unknownPropertyPaths={},this.knownPropertyPaths={});var j=b.anyOf[i],k=this.errors.length,l=this.validateAll(a,j,[],["anyOf",i],c);if(null===l&&k===this.errors.length){if(this.errors=this.errors.slice(0,g),this.trackUnknownProperties){for(var m in this.knownPropertyPaths)e[m]=!0,delete d[m];for(var n in this.unknownPropertyPaths)e[n]||(d[n]=!0);h=!1;continue}return null}l&&f.push(l.prefixWith(null,""+i).prefixWith(null,"anyOf"))}return this.trackUnknownProperties&&(this.unknownPropertyPaths=d,this.knownPropertyPaths=e),h?(f=f.concat(this.errors.slice(g)),this.errors=this.errors.slice(0,g),this.createError(o.ANY_OF_MISSING,{},"","/anyOf",f)):void 0},n.prototype.validateOneOf=function(a,b,c){if(void 0===b.oneOf)return null;var d,e,f=null,g=[],h=this.errors.length;this.trackUnknownProperties&&(d=this.unknownPropertyPaths,e=this.knownPropertyPaths);for(var i=0;i<b.oneOf.length;i++){this.trackUnknownProperties&&(this.unknownPropertyPaths={},this.knownPropertyPaths={});var j=b.oneOf[i],k=this.errors.length,l=this.validateAll(a,j,[],["oneOf",i],c);if(null===l&&k===this.errors.length){if(null!==f)return this.errors=this.errors.slice(0,h),this.createError(o.ONE_OF_MULTIPLE,{index1:f,index2:i},"","/oneOf");if(f=i,this.trackUnknownProperties){for(var m in this.knownPropertyPaths)e[m]=!0,delete d[m];for(var n in this.unknownPropertyPaths)e[n]||(d[n]=!0)}}else l&&g.push(l)}return this.trackUnknownProperties&&(this.unknownPropertyPaths=d,this.knownPropertyPaths=e),null===f?(g=g.concat(this.errors.slice(h)),this.errors=this.errors.slice(0,h),this.createError(o.ONE_OF_MISSING,{},"","/oneOf",g)):(this.errors=this.errors.slice(0,h),null)},n.prototype.validateNot=function(a,b,c){if(void 0===b.not)return null;var d,e,f=this.errors.length;this.trackUnknownProperties&&(d=this.unknownPropertyPaths,e=this.knownPropertyPaths,this.unknownPropertyPaths={},this.knownPropertyPaths={});var g=this.validateAll(a,b.not,null,null,c),h=this.errors.slice(f);return this.errors=this.errors.slice(0,f),this.trackUnknownProperties&&(this.unknownPropertyPaths=d,this.knownPropertyPaths=e),null===g&&0===h.length?this.createError(o.NOT_PASSED,{},"","/not"):null},n.prototype.validateHypermedia=function(a,b,d){if(!b.links)return null;for(var e,f=0;f<b.links.length;f++){var g=b.links[f];if("describedby"===g.rel){for(var h=new c(g.href),i=!0,j=0;j<h.varNames.length;j++)if(!(h.varNames[j]in a)){i=!1;break}if(i){var k=h.fillFromObject(a),l={$ref:k};if(e=this.validateAll(a,l,[],["links",f],d))return e}}}};var o={INVALID_TYPE:0,ENUM_MISMATCH:1,ANY_OF_MISSING:10,ONE_OF_MISSING:11,ONE_OF_MULTIPLE:12,NOT_PASSED:13,NUMBER_MULTIPLE_OF:100,NUMBER_MINIMUM:101,NUMBER_MINIMUM_EXCLUSIVE:102,NUMBER_MAXIMUM:103,NUMBER_MAXIMUM_EXCLUSIVE:104,STRING_LENGTH_SHORT:200,STRING_LENGTH_LONG:201,STRING_PATTERN:202,OBJECT_PROPERTIES_MINIMUM:300,OBJECT_PROPERTIES_MAXIMUM:301,OBJECT_REQUIRED:302,OBJECT_ADDITIONAL_PROPERTIES:303,OBJECT_DEPENDENCY_KEY:304,ARRAY_LENGTH_SHORT:400,ARRAY_LENGTH_LONG:401,ARRAY_UNIQUE:402,ARRAY_ADDITIONAL_ITEMS:403,FORMAT_CUSTOM:500,KEYWORD_CUSTOM:501,CIRCULAR_REFERENCE:600,UNKNOWN_PROPERTY:1e3},p={};for(var q in o)p[o[q]]=q;var r={INVALID_TYPE:"Invalid type: {type} (expected {expected})",ENUM_MISMATCH:"No enum match for: {value}",ANY_OF_MISSING:'Data does not match any schemas from "anyOf"',ONE_OF_MISSING:'Data does not match any schemas from "oneOf"',ONE_OF_MULTIPLE:'Data is valid against more than one schema from "oneOf": indices {index1} and {index2}',NOT_PASSED:'Data matches schema from "not"',NUMBER_MULTIPLE_OF:"Value {value} is not a multiple of {multipleOf}",NUMBER_MINIMUM:"Value {value} is less than minimum {minimum}",NUMBER_MINIMUM_EXCLUSIVE:"Value {value} is equal to exclusive minimum {minimum}",NUMBER_MAXIMUM:"Value {value} is greater than maximum {maximum}",NUMBER_MAXIMUM_EXCLUSIVE:"Value {value} is equal to exclusive maximum {maximum}",STRING_LENGTH_SHORT:"String is too short ({length} chars), minimum {minimum}",STRING_LENGTH_LONG:"String is too long ({length} chars), maximum {maximum}",STRING_PATTERN:"String does not match pattern: {pattern}",OBJECT_PROPERTIES_MINIMUM:"Too few properties defined ({propertyCount}), minimum {minimum}",OBJECT_PROPERTIES_MAXIMUM:"Too many properties defined ({propertyCount}), maximum {maximum}",OBJECT_REQUIRED:"Missing required property: {key}",OBJECT_ADDITIONAL_PROPERTIES:"Additional properties not allowed",OBJECT_DEPENDENCY_KEY:"Dependency failed - key must exist: {missing} (due to key: {key})",ARRAY_LENGTH_SHORT:"Array is too short ({length}), minimum {minimum}",ARRAY_LENGTH_LONG:"Array is too long ({length}), maximum {maximum}",ARRAY_UNIQUE:"Array items are not unique (indices {match1} and {match2})",ARRAY_ADDITIONAL_ITEMS:"Additional items not allowed",FORMAT_CUSTOM:"Format validation failed ({message})",KEYWORD_CUSTOM:"Keyword failed: {key} ({message})",CIRCULAR_REFERENCE:"Circular $refs: {urls}",UNKNOWN_PROPERTY:"Unknown property (not in schema)"};i.prototype=Object.create(Error.prototype),i.prototype.constructor=i,i.prototype.name="ValidationError",i.prototype.prefixWith=function(a,b){if(null!==a&&(a=a.replace(/~/g,"~0").replace(/\//g,"~1"),this.dataPath="/"+a+this.dataPath),null!==b&&(b=b.replace(/~/g,"~0").replace(/\//g,"~1"),this.schemaPath="/"+b+this.schemaPath),null!==this.subErrors)for(var c=0;c<this.subErrors.length;c++)this.subErrors[c].prefixWith(a,b);return this};var s={},t=k();return t.addLanguage("en-gb",r),t.tv4=t,t});
+/* global define, d3 */
+
 define('Map',['utils', 'Draw', 'Behavior', 'Scale', 'build', 'UndoStack', 'CallbackManager', 'KeyManager', 'Canvas', 'data_styles', 'SearchIndex', 'lib/bacon', 'lib/tv4'], function(utils, Draw, Behavior, Scale, build, UndoStack, CallbackManager, KeyManager, Canvas, data_styles, SearchIndex, bacon, tv4) {
     /** Defines the metabolic map data, and manages drawing and building.
 
@@ -9503,6 +11479,8 @@ define('Map',['utils', 'Draw', 'Behavior', 'Scale', 'build', 'UndoStack', 'Callb
      map.callback_manager.run('select_text_label');
      map.callback_manager.run('before_svg_export');
      map.callback_manager.run('after_svg_export');
+     map.callback_manager.run('before_convert_map');
+     map.callback_manager.run('after_convert_map');
      this.callback_manager.run('calc_data_stats__reaction', null, changed);
      this.callback_manager.run('calc_data_stats__metabolite', null, changed);
 
@@ -9597,7 +11575,8 @@ define('Map',['utils', 'Draw', 'Behavior', 'Scale', 'build', 'UndoStack', 'Callb
         // io
         save: save,
         map_for_export: map_for_export,
-        save_svg: save_svg
+        save_svg: save_svg,
+        convert_map: convert_map
     };
 
     return Map;
@@ -9619,7 +11598,7 @@ define('Map',['utils', 'Draw', 'Behavior', 'Scale', 'build', 'UndoStack', 'Callb
         else
             map_name = String(map_name);
         if (map_id === undefined || map_id === null || map_id == '')
-            map_id = utils.random_characters(12);
+            map_id = utils.generate_map_id();
         else
             map_id = String(map_id);
         if (map_description === undefined || map_description === null)
@@ -9629,7 +11608,7 @@ define('Map',['utils', 'Draw', 'Behavior', 'Scale', 'build', 'UndoStack', 'Callb
 
         // set up the callbacks
         this.callback_manager = new CallbackManager();
-        
+
         // set up the defs
         this.svg = svg;
         this.defs = utils.setup_defs(svg, css);
@@ -9679,7 +11658,7 @@ define('Map',['utils', 'Draw', 'Behavior', 'Scale', 'build', 'UndoStack', 'Callb
         this.map_name = map_name;
         this.map_id = map_id;
         this.map_description = map_description;
-        
+
         // deal with the window
         var window_translate = {'x': 0, 'y': 0},
             window_scale = 1;
@@ -9806,7 +11785,7 @@ define('Map',['utils', 'Draw', 'Behavior', 'Scale', 'build', 'UndoStack', 'Callb
                 // build connected segments
                 [from_node, to_node].forEach(function(node) {
                     node.connected_segments.push({ segment_id: s_id,
-						   reaction_id: r_id });
+                                                   reaction_id: r_id });
                 });
 
                 // If the metabolite has no bezier points, then add them.
@@ -9929,6 +11908,9 @@ define('Map',['utils', 'Draw', 'Behavior', 'Scale', 'build', 'UndoStack', 'Callb
         this.beziers = {};
         this.nodes = {};
         this.text_labels = {};
+        this.map_name = 'new_map';
+        this.map_id = utils.generate_map_id();
+        this.map_description = '';
         // reaction_data onto existing map reactions
         this.apply_reaction_data_to_map(null);
         this.apply_metabolite_data_to_map(null);
@@ -9946,7 +11928,7 @@ define('Map',['utils', 'Draw', 'Behavior', 'Scale', 'build', 'UndoStack', 'Callb
         this.draw_all_nodes(true);
         this.draw_all_text_labels();
     }
-    
+
     function draw_all_reactions(draw_beziers, clear_deleted) {
         /** Draw all reactions, and clear deleted reactions.
 
@@ -10061,7 +12043,7 @@ define('Map',['utils', 'Draw', 'Behavior', 'Scale', 'build', 'UndoStack', 'Callb
 
          */
         if (clear_deleted === undefined) clear_deleted = true;
-        
+
         var node_ids = [];
         for (var node_id in this.nodes) {
             node_ids.push(node_id);
@@ -10091,23 +12073,19 @@ define('Map',['utils', 'Draw', 'Behavior', 'Scale', 'build', 'UndoStack', 'Callb
         // functions to create and update nodes
         var create_fn = function(sel) {
             return this.draw.create_node(sel,
-                                    this.nodes,
-                                    this.reactions);
+                                         this.nodes,
+                                         this.reactions);
         }.bind(this),
             update_fn = function(sel) {
                 return this.draw.update_node(sel,
-                                        this.scale,
-                                        this.has_data_on_nodes,
-                                        this.settings.get_option('identifiers_on_map'),
-                                        this.settings.get_option('metabolite_styles'),
-                                        { color: this.settings.get_option('metabolite_no_data_color'),
-                                          size: this.settings.get_option('metabolite_no_data_size') },
-                                        this.behavior.selectable_mousedown,
-                                        this.behavior.selectable_click,
-                                        this.behavior.node_mouseover,
-                                        this.behavior.node_mouseout,
-                                        this.behavior.selectable_drag,
-                                        this.behavior.node_label_drag);
+                                             this.scale,
+                                             this.has_data_on_nodes,
+                                             this.behavior.selectable_mousedown,
+                                             this.behavior.selectable_click,
+                                             this.behavior.node_mouseover,
+                                             this.behavior.node_mouseout,
+                                             this.behavior.selectable_drag,
+                                             this.behavior.node_label_drag);
             }.bind(this);
 
         // draw the nodes
@@ -10176,7 +12154,7 @@ define('Map',['utils', 'Draw', 'Behavior', 'Scale', 'build', 'UndoStack', 'Callb
     function draw_all_beziers() {
         /** Draw all beziers, and clear deleted reactions.
 
-         */        
+         */
         var bezier_ids = [];
         for (var bezier_id in this.beziers) {
             bezier_ids.push(bezier_id);
@@ -10198,7 +12176,7 @@ define('Map',['utils', 'Draw', 'Behavior', 'Scale', 'build', 'UndoStack', 'Callb
 
          beziers_ids: An array of bezier_ids to update.
 
-         */        
+         */
         // find reactions for reaction_ids
         var bezier_subset = utils.object_slice_for_ids_ref(this.beziers, bezier_ids);
 
@@ -10256,14 +12234,14 @@ define('Map',['utils', 'Draw', 'Behavior', 'Scale', 'build', 'UndoStack', 'Callb
 
         return this.calc_data_stats('reaction');
     }
-    
+
     function apply_metabolite_data_to_map(data) {
         /**  Returns True if the scale has changed.
 
          */
         var styles = this.settings.get_option('metabolite_styles'),
             compare_style = this.settings.get_option('metabolite_compare_style');
-        
+
         var has_data = data_styles.apply_metabolite_data_to_nodes(this.nodes, data,
                                                                   styles, compare_style);
         this.has_data_on_nodes = has_data;
@@ -10292,7 +12270,7 @@ define('Map',['utils', 'Draw', 'Behavior', 'Scale', 'build', 'UndoStack', 'Callb
                                                                 compare_style,
                                                                 and_method_in_gene_reaction_rule);
         this.has_data_on_reactions = has_data;
-        
+
         return this.calc_data_stats('reaction');
     }
 
@@ -10301,13 +12279,13 @@ define('Map',['utils', 'Draw', 'Behavior', 'Scale', 'build', 'UndoStack', 'Callb
     function get_data_statistics() {
         return this.data_statistics;
     }
-    
+
     function calc_data_stats(type) {
         /** Returns True if the stats have changed.
 
          Arguments
          ---------
-         
+
          type: Either 'metabolite' or 'reaction'
 
          */
@@ -10322,7 +12300,7 @@ define('Map',['utils', 'Draw', 'Behavior', 'Scale', 'build', 'UndoStack', 'Callb
         } else if (!(type in this.data_statistics)) {
             this.data_statistics[type] = {};
         }
-        
+
         var same = true;
         // default min and max
         var vals = [];
@@ -10362,7 +12340,7 @@ define('Map',['utils', 'Draw', 'Behavior', 'Scale', 'build', 'UndoStack', 'Callb
                 same = false;
             this.data_statistics[type][name] = new_val;
         }.bind(this));
-        
+
         if (type == 'reaction')
             this.callback_manager.run('calc_data_stats__reaction', null, !same);
         else
@@ -10601,7 +12579,7 @@ define('Map',['utils', 'Draw', 'Behavior', 'Scale', 'build', 'UndoStack', 'Callb
                     changed_r_scale = this.calc_data_stats('reaction');
                 if (this.has_data_on_nodes)
                     changed_m_scale = this.calc_data_stats('metabolite');
-                
+
                 // redraw
                 if (should_draw) {
                     if (changed_r_scale)
@@ -10835,7 +12813,7 @@ define('Map',['utils', 'Draw', 'Behavior', 'Scale', 'build', 'UndoStack', 'Callb
                                                    direction, false),
             reaction_redo = out.redo,
             reaction_undo = out.undo;
-        
+
         // add to undo/redo stack
         this.undo_stack.push(function() {
             // undo
@@ -10921,7 +12899,7 @@ define('Map',['utils', 'Draw', 'Behavior', 'Scale', 'build', 'UndoStack', 'Callb
         }
         utils.extend(this.reactions, new_reactions);
     }
-    
+
     function new_reaction_for_metabolite(reaction_bigg_id, selected_node_id,
                                          direction, apply_undo_redo) {
         /** Build a new reaction starting with selected_met.
@@ -10944,13 +12922,13 @@ define('Map',['utils', 'Draw', 'Behavior', 'Scale', 'build', 'UndoStack', 'Callb
          -------
 
          { undo: undo_function,
-           redo: redo_function }
+         redo: redo_function }
 
          */
 
         // default args
         if (apply_undo_redo === undefined) apply_undo_redo = true;
-        
+
         // get the metabolite node
         var selected_node = this.nodes[selected_node_id];
 
@@ -11132,13 +13110,13 @@ define('Map',['utils', 'Draw', 'Behavior', 'Scale', 'build', 'UndoStack', 'Callb
             console.warn('Too many connected segments for node ' + last_node.node_id);
         var last_segment_info = last_node.connected_segments[0], // guaranteed above to have only one
             last_segment;
-            try {
-                last_segment = reactions[last_segment_info.reaction_id].segments[last_segment_info.segment_id];
-                if (last_segment === undefined) throw new Error('undefined segment');
-            } catch (e) {
-                console.error('Could not find connected segment ' + last_segment_info.segment_id);
-                return;
-            }
+        try {
+            last_segment = reactions[last_segment_info.reaction_id].segments[last_segment_info.segment_id];
+            if (last_segment === undefined) throw new Error('undefined segment');
+        } catch (e) {
+            console.error('Could not find connected segment ' + last_segment_info.segment_id);
+            return;
+        }
         var last_bezier = { b1: last_segment.b1, b2: last_segment.b2 },
             primary_node_id;
         related_node_ids.forEach(function(related_node_id) {
@@ -11175,13 +13153,13 @@ define('Map',['utils', 'Draw', 'Behavior', 'Scale', 'build', 'UndoStack', 'Callb
         this.select_metabolite_with_id(primary_node_id);
         return;
     }
-    
+
     function toggle_selected_node_primary() {
         /** Toggle the primary/secondary status of each selected node.
 
-            Undoable.
+         Undoable.
 
-            */
+         */
         var selected_node_ids = this.get_selected_node_ids(),
             go = function(ids) {
                 var nodes_to_draw = {},
@@ -11266,16 +13244,16 @@ define('Map',['utils', 'Draw', 'Behavior', 'Scale', 'build', 'UndoStack', 'Callb
 
     function new_text_label(coords, text) {
         // make an label
-	var out = build.new_text_label(this.largest_ids, text, coords);
-	this.text_labels[out.id] = out.label;
-	var sel = this.draw_these_text_labels([out.id]);
+        var out = build.new_text_label(this.largest_ids, text, coords);
+        this.text_labels[out.id] = out.label;
+        var sel = this.draw_these_text_labels([out.id]);
         // add to the search index
         this.search_index.insert('l' + out.id, { 'name': text,
                                                  'data': { type: 'text_label',
                                                            text_label_id: out.id }});
         return out.id;
     }
-    
+
     function edit_text_label(text_label_id, new_value, should_draw) {
         // save old value
         var saved_value = this.text_labels[text_label_id].text,
@@ -11328,12 +13306,15 @@ define('Map',['utils', 'Draw', 'Behavior', 'Scale', 'build', 'UndoStack', 'Callb
         this._zoom_extent(margin, 'canvas');
     }
     function _zoom_extent(margin, mode) {
-        /** Zoom to fit all the nodes.
+        /** Zoom to fit the canvas or all the nodes. Returns error if one is
+         raised.
+
+         Arguments
+         ---------
 
          margin: optional argument to set the margins.
-         mode: Values are 'nodes', 'canvas'.
 
-         Returns error if one is raised.
+         mode: Values are 'nodes', 'canvas'.
 
          */
 
@@ -11410,19 +13391,19 @@ define('Map',['utils', 'Draw', 'Behavior', 'Scale', 'build', 'UndoStack', 'Callb
                         y: - text_label.y * new_zoom + size.height/2 };
         this.zoom_container.go_to(new_zoom, new_pos);
     }
-    
+
     function highlight_reaction(reaction_id) {
         this.highlight(this.sel.selectAll('#r'+reaction_id).selectAll('text'));
     }
-    
+
     function highlight_node(node_id) {
         this.highlight(this.sel.selectAll('#n'+node_id).selectAll('text'));
     }
-    
+
     function highlight_text_label(text_label_id) {
         this.highlight(this.sel.selectAll('#l'+text_label_id).selectAll('text'));
     }
-    
+
     function highlight(sel) {
         this.sel.selectAll('.highlight')
             .classed('highlight', false);
@@ -11536,7 +13517,7 @@ define('Map',['utils', 'Draw', 'Behavior', 'Scale', 'build', 'UndoStack', 'Callb
                 .style('visibility', 'hidden');
 
         // do the epxort
-        utils.export_svg('saved_map', this.svg, true);
+        utils.download_svg('saved_map', this.svg, true);
 
         // revert everything
         this.zoom_container.go_to(window_scale, window_translate, false);
@@ -11550,6 +13531,94 @@ define('Map',['utils', 'Draw', 'Behavior', 'Scale', 'build', 'UndoStack', 'Callb
 
         // run the after callback
         this.callback_manager.run('after_svg_export');
+    }
+
+    function convert_map() {
+        /** Assign the descriptive names and gene_reaction_rules from the model
+         to the map.
+
+         If no map is loaded, then throw an Error.
+
+         If some reactions are not in the model, then warn in the status.
+
+         */
+        // run the before callback
+        this.callback_manager.run('before_convert_map');
+
+        // check the model
+        if (!this.has_cobra_model()) throw Error('No COBRA model loaded.');
+        var model = this.cobra_model;
+
+        // ids for reactions and metabolites not found in the model
+        var reactions_not_found = {},
+            reaction_attrs = ['name', 'gene_reaction_rule', 'genes'],
+            met_nodes_not_found = {},
+            metabolite_attrs = ['name'],
+            found;
+        // convert reactions
+        for (var reaction_id in this.reactions) {
+            var reaction = this.reactions[reaction_id];
+            found = false;
+            // find in cobra model
+            for (var model_reaction_id in model.reactions) {
+                var model_reaction = model.reactions[model_reaction_id];
+                if (model_reaction.bigg_id == reaction.bigg_id) {
+                    reaction_attrs.forEach(function(attr) {
+                        reaction[attr] = model_reaction[attr];
+                    });
+                    found = true;
+                }
+            }
+            if (!found)
+                reactions_not_found[reaction_id] = true;
+        }
+        // convert metabolites
+        for (var node_id in this.nodes) {
+            var node = this.nodes[node_id];
+            // only look at metabolites
+            if (node.node_type != 'metabolite') continue;
+            found = false;
+            // find in cobra model
+            for (var model_metabolite_id in model.metabolites) {
+                var model_metabolite = model.metabolites[model_metabolite_id];
+                if (model_metabolite.bigg_id == node.bigg_id) {
+                    metabolite_attrs.forEach(function(attr) {
+                        node[attr] = model_metabolite[attr];
+                    });
+                    found = true;
+                }
+            }
+            if (!found)
+                met_nodes_not_found[node_id] = true;
+        }
+
+        // status
+        var n_reactions_not_found = Object.keys(reactions_not_found).length,
+            n_met_nodes_not_found = Object.keys(met_nodes_not_found).length,
+            status_delay = 3000;
+        if (n_reactions_not_found == 0 &&
+            n_met_nodes_not_found == 0) {
+            this.set_status('Successfully converted attributes.', status_delay);
+        } else if (n_met_nodes_not_found == 0) {
+            this.set_status('Converted attributes, but count not find ' + n_reactions_not_found +
+                            ' reactions in the model.', status_delay);
+            this.settings.set_conditional('highlight_missing', true);
+        } else if (n_reactions_not_found == 0) {
+            this.set_status('Converted attributes, but count not find ' + n_met_nodes_not_found +
+                            ' metabolites in the model.', status_delay);
+            this.settings.set_conditional('highlight_missing', true);
+        } else {
+            this.set_status('Converted attributes, but count not find ' + n_reactions_not_found +
+                            ' reactions and ' + n_met_nodes_not_found + ' metabolites in the model.',
+                            status_delay);
+            this.settings.set_conditional('highlight_missing', true);
+        }
+
+        // redraw
+        this.draw_everything();
+
+        // run the after callback
+        this.callback_manager.run('after_convert_map');
     }
 });
 
@@ -11572,90 +13641,90 @@ define('Brush',["utils"], function(utils) {
 
     var Brush = utils.make_class();
     Brush.prototype = { init: init,
-			toggle: toggle,
-			setup_selection_brush: setup_selection_brush };
+                        toggle: toggle,
+                        setup_selection_brush: setup_selection_brush };
 
     return Brush;
 
     // definitions
     function init(selection, is_enabled, map, insert_after) {
-	this.brush_sel = selection.append('g')
-	    .attr('id', 'brush-container');
-	var node = this.brush_sel.node(),
-	    insert_before_node = selection.select(insert_after).node().nextSibling;
-	if (!(node===insert_before_node))
-	    node.parentNode.insertBefore(node, insert_before_node);
-	this.enabled = is_enabled;
-	this.map = map;
+        this.brush_sel = selection.append('g')
+            .attr('id', 'brush-container');
+        var node = this.brush_sel.node(),
+            insert_before_node = selection.select(insert_after).node().nextSibling;
+        if (!(node===insert_before_node))
+            node.parentNode.insertBefore(node, insert_before_node);
+        this.enabled = is_enabled;
+        this.map = map;
     };
 
     function brush_is_enabled() {
-	/** Returns a boolean for the on/off status of the brush
+        /** Returns a boolean for the on/off status of the brush
 
-	 */
-	return this.map.sel.select('.brush').empty();
+         */
+        return this.map.sel.select('.brush').empty();
     }
     function toggle(on_off) {
-	/** Turn the brush on or off
+        /** Turn the brush on or off
 
-	 */
-	if (on_off===undefined) on_off = !this.enabled;
+         */
+        if (on_off===undefined) on_off = !this.enabled;
 
-	if (on_off) {
-	    this.selection_brush = this.setup_selection_brush();
-	} else {
-	    this.brush_sel.selectAll('.brush').remove();
-	}
-    }	
+        if (on_off) {
+            this.selection_brush = this.setup_selection_brush();
+        } else {
+            this.brush_sel.selectAll('.brush').remove();
+        }
+    }   
     function setup_selection_brush() {
-	var selection = this.brush_sel, 
-	    selectable_selection = this.map.sel.selectAll('#nodes,#text-labels'),
-	    size_and_location = this.map.canvas.size_and_location(),
-	    width = size_and_location.width,
-	    height = size_and_location.height,
-	    x = size_and_location.x,
-	    y = size_and_location.y;
+        var selection = this.brush_sel, 
+            selectable_selection = this.map.sel.selectAll('#nodes,#text-labels'),
+            size_and_location = this.map.canvas.size_and_location(),
+            width = size_and_location.width,
+            height = size_and_location.height,
+            x = size_and_location.x,
+            y = size_and_location.y;
 
         // clear existing brush
         selection.selectAll('g').remove();
 
-	var brush_fn = d3.svg.brush()
-		.x(d3.scale.identity().domain([x, x+width]))
-		.y(d3.scale.identity().domain([y, y+height]))
-		.on("brush", function(key_manager) {	    
-		    var shift_key_on = key_manager.held_keys.shift,
-			extent = d3.event.target.extent(),
-			selection;
-		    if (shift_key_on) {
-			// when shift is pressed, ignore the currently selected nodes
-			selection = selectable_selection
-			    .selectAll('.node:not(.selected),.text-label:not(.selected)');
-		    } else {
-			// otherwise, brush all nodes
-			selection = selectable_selection
-			    .selectAll('.node,.text-label');
-		    }
-		    selection.classed("selected", function(d) { 
-			var sx = d.x, sy = d.y;
-			return extent[0][0] <= sx && sx < extent[1][0]
-			    && extent[0][1] <= sy && sy < extent[1][1];
-		    });
-		}.bind(null, this.map.key_manager))
-		.on("brushend", function() {
-		    d3.event.target.clear();
-		    d3.select(this).call(d3.event.target);
-		}),
-	    brush = selection.append("g")
-		.attr("class", "brush")
-		.call(brush_fn);
+        var brush_fn = d3.svg.brush()
+                .x(d3.scale.identity().domain([x, x+width]))
+                .y(d3.scale.identity().domain([y, y+height]))
+                .on("brush", function(key_manager) {        
+                    var shift_key_on = key_manager.held_keys.shift,
+                        extent = d3.event.target.extent(),
+                        selection;
+                    if (shift_key_on) {
+                        // when shift is pressed, ignore the currently selected nodes
+                        selection = selectable_selection
+                            .selectAll('.node:not(.selected),.text-label:not(.selected)');
+                    } else {
+                        // otherwise, brush all nodes
+                        selection = selectable_selection
+                            .selectAll('.node,.text-label');
+                    }
+                    selection.classed("selected", function(d) { 
+                        var sx = d.x, sy = d.y;
+                        return extent[0][0] <= sx && sx < extent[1][0]
+                            && extent[0][1] <= sy && sy < extent[1][1];
+                    });
+                }.bind(null, this.map.key_manager))
+                .on("brushend", function() {
+                    d3.event.target.clear();
+                    d3.select(this).call(d3.event.target);
+                }),
+            brush = selection.append("g")
+                .attr("class", "brush")
+                .call(brush_fn);
 
-	// turn off the mouse crosshair
-	selection.selectAll('.background')
-	    .classed('cursor-grab', false)
-	    .classed('cursor-grabbing', false)
-	    .style('cursor', null);
+        // turn off the mouse crosshair
+        selection.selectAll('.background')
+            .classed('cursor-grab', false)
+            .classed('cursor-grabbing', false)
+            .style('cursor', null);
 
-	return brush;
+        return brush;
     }
 });
 
@@ -11883,11 +13952,12 @@ define('SearchBar',["utils", "CallbackManager"], function(utils, CallbackManager
         this.current = 1;
         this.results = null;
 
-        this.input.on('input', function(input) {
+        var on_input_fn = function(input) {
             this.current = 1;
             this.results = this.search_index.find(input.value);
             this.update();
-        }.bind(this, this.input.node()));
+        }.bind(this, this.input.node());
+        this.input.on('input', utils.debounce(on_input_fn, 200));
     }
     function is_visible() {
         return this.selection.style('display') != 'none';
@@ -11928,11 +13998,9 @@ define('SearchBar',["utils", "CallbackManager"], function(utils, CallbackManager
     function update() {
         if (this.results == null) {
             this.counter.text("");
-            this.map.zoom_extent_canvas();
             this.map.highlight(null);
         } else if (this.results.length == 0) {
             this.counter.text("0 / 0");
-            this.map.zoom_extent_canvas();
             this.map.highlight(null);
         } else {
             this.counter.text(this.current + " / " + this.results.length);
@@ -11969,6 +14037,8 @@ define('SearchBar',["utils", "CallbackManager"], function(utils, CallbackManager
     } 
 });
 
+/* global define, d3 */
+
 define('Settings',["utils", "lib/bacon"], function(utils, bacon) {
     /** A class to manage settings for a Map.
 
@@ -12001,7 +14071,7 @@ define('Settings',["utils", "lib/bacon"], function(utils, bacon) {
     function init(set_option, get_option, conditional_options) {
         this.set_option = set_option;
         this.get_option = get_option;
-        
+
         // manage accepting/abandoning changes
         this.status_bus = new bacon.Bus();
 
@@ -12023,7 +14093,7 @@ define('Settings',["utils", "lib/bacon"], function(utils, bacon) {
             this.streams[name] = out.stream;
         }
     }
-    
+
     function _convert_to_conditional_stream(status_stream) {
         /** Hold on to event when hold_property is true, and only keep them
          if accept_property is true (when hold_property becomes false).
@@ -12074,14 +14144,14 @@ define('Settings',["utils", "lib/bacon"], function(utils, bacon) {
         return unheld.merge(held);
     }
 
-    function _force_update_with_bus(bus) {        
+    function _force_update_with_bus(bus) {
         return bacon
             .combineAsArray(this, bus.toProperty(false))
             .map(function(t) {
                 return t[0];
             });
     }
-    
+
     function _create_conditional_setting(name, initial_value, set_option,
                                          status_bus, force_update_bus) {
         // set up the bus
@@ -12092,12 +14162,12 @@ define('Settings',["utils", "lib/bacon"], function(utils, bacon) {
                 .convert_to_conditional_stream(status_bus)
         // force updates
                 .force_update_with_bus(force_update_bus);
-        
+
         // get the latest
         stream.onValue(function(v) {
             set_option(name, v);
         });
-        
+
         // push the initial value
         bus.push(initial_value);
 
@@ -12125,19 +14195,18 @@ define('Settings',["utils", "lib/bacon"], function(utils, bacon) {
     function hold_changes() {
         this.status_bus.push('hold');
     }
-    
+
     function abandon_changes() {
         this.status_bus.push('reject');
         this.status_bus.push('rejected');
         this.force_update_bus.push(true);
     }
-    
+
     function accept_changes() {
         this.status_bus.push('accept');
         this.status_bus.push('accepted');
     }
 });
-
 
 define('ScaleEditor',["utils", "lib/bacon"], function(utils, bacon) {
     /** An interactive UI to edit color and size scales.
@@ -12181,8 +14250,8 @@ define('ScaleEditor',["utils", "lib/bacon"], function(utils, bacon) {
             .attr('class', 'input-label-group');
         // no data
         var nd = b.append('div')
-            .style('top', this.input_height * 3 + 56 + 10 + 'px')
-            .attr('class', 'no-data');
+                .style('top', this.input_height * 3 + 56 + 10 + 'px')
+                .attr('class', 'no-data');
         nd.append('span').text('Styles for ' + type + 's with no data')
             .attr('class', 'no-data-heading');
         this.no_data_container = nd.append('div');
@@ -12273,20 +14342,20 @@ define('ScaleEditor',["utils", "lib/bacon"], function(utils, bacon) {
 
         // ---------------------------------------------------------------------
         // make the gradient
-	var sorted_domain = scale.map(function(d) {
-	    return { frac: (get_this_val(d) - stats.min) / (stats.max - stats.min),
-		     color: d.color };
-	}).filter(function(d) {
-	    return (d.frac >= 0 && d.frac <= 1.0);
-	}).sort(function(a, b) {
-	    return a.frac - b.frac;
-	});
+        var sorted_domain = scale.map(function(d) {
+            return { frac: (get_this_val(d) - stats.min) / (stats.max - stats.min),
+                     color: d.color };
+        }).filter(function(d) {
+            return (d.frac >= 0 && d.frac <= 1.0);
+        }).sort(function(a, b) {
+            return a.frac - b.frac;
+        });
         var stops = this.gradient.selectAll('stop')
                 .data(sorted_domain);
         stops.enter()
             .append('stop');
         stops.attr('offset', function(d) {
-	    return d.frac * 100 + '%';
+            return d.frac * 100 + '%';
         }).style('stop-color', function (d) {
             return d.color === null ? '#F1ECFA' : d.color;
         });
@@ -12305,8 +14374,12 @@ define('ScaleEditor',["utils", "lib/bacon"], function(utils, bacon) {
         // drag 
         var drag = d3.behavior.drag();
         drag.on('drag', function(d, i) {
-            if (scale[i].type != 'value')
-                return;
+            // on drag, make it a value type
+            if (['value', 'min', 'max'].indexOf(scale[i].type) === -1) {
+                // get the current value and set it
+                scale[i].value = get_this_val(d);
+                scale[i].type = 'value';
+            }
             // change the model on drag
             var new_d = scale[i].value + sc_size(d3.event.dx),
                 buf = sc_size(bar_w + 2);
@@ -12328,12 +14401,12 @@ define('ScaleEditor',["utils", "lib/bacon"], function(utils, bacon) {
         // update
         pickers.select('rect')
             .attr('x', function(d, i) {
-		var val = get_this_val(d),
-		    buf = bar_w + 2;
-		if (d.type == 'value' && val <= stats.min)
-		    return sc.invert(stats.min) - (bar_w / 2) + x_disp - buf;
-		if (d.type == 'value' && val >= stats.max)
-		    return sc.invert(stats.max) - (bar_w / 2) + x_disp + buf;
+                var val = get_this_val(d),
+                    buf = bar_w + 2;
+                if (d.type == 'value' && val <= stats.min)
+                    return sc.invert(stats.min) - (bar_w / 2) + x_disp - buf;
+                if (d.type == 'value' && val >= stats.max)
+                    return sc.invert(stats.max) - (bar_w / 2) + x_disp + buf;
                 return sc.invert(val) - (bar_w / 2) + x_disp;
             })
             .attr('width', bar_w + 'px')
@@ -12378,14 +14451,14 @@ define('ScaleEditor',["utils", "lib/bacon"], function(utils, bacon) {
             .attr('class', 'add glyphicon glyphicon-plus');
         // update
         add.on('click', function (d) {
-	    if (data_not_loaded) return;
+            if (data_not_loaded) return;
 
             var new_d = (stats.max + stats.min) / 2,
                 buf = sc_size(bar_w + 2),
                 last_ind = 0;
             // try to make the new point not overlap
             for (var j = 0, l = scale.length; j < l; j++) {
-		var th = get_this_val(scale[j]);
+                var th = get_this_val(scale[j]);
                 if (Math.abs(th - new_d) < buf) {
                     new_d = new_d + buf;
                     if (new_d > stats.max - buf) new_d = stats.max - buf;
@@ -12396,10 +14469,10 @@ define('ScaleEditor',["utils", "lib/bacon"], function(utils, bacon) {
             }
             // add
             scale.push({ type: 'value',
-			 value: new_d,
-			 color: scale[last_ind].color,
-			 size: scale[last_ind].size });
-	    set_scale(scale);
+                         value: new_d,
+                         color: scale[last_ind].color,
+                         size: scale[last_ind].size });
+            set_scale(scale);
         }.bind(this));
         // exit
         add.exit().remove();
@@ -12410,9 +14483,9 @@ define('ScaleEditor',["utils", "lib/bacon"], function(utils, bacon) {
                 .data(['Value:', 'Color:', 'Size:']);
         // enter
         labels.enter().append('div')
-	    .attr('class', 'row-label')
-	    .style('height', this.input_height + 'px')
-	    .style('line-height', this.input_height + 'px');
+            .attr('class', 'row-label')
+            .style('height', this.input_height + 'px')
+            .style('line-height', this.input_height + 'px');
         // update
         labels
             .style('top', function(d, i) {
@@ -12437,7 +14510,7 @@ define('ScaleEditor',["utils", "lib/bacon"], function(utils, bacon) {
         // type picker
         i.append('select')
             .attr('class', 'domain-type-picker'),
-	// color input
+        // color input
         i.append('input')
             .attr('class', 'color-input')
             .style('width', this.input_width + 'px');
@@ -12456,21 +14529,21 @@ define('ScaleEditor',["utils", "lib/bacon"], function(utils, bacon) {
         inputs.style('height', this.input_height * 3 + 'px')
             .style('width', this.input_width + 'px')
             .style('left', function(d) {
-		var val = get_this_val(d),
-		    buf = bar_w + 2,
-		    l;
-		if (d.type == 'value' && val <= stats.min)
-		    l = sc.invert(stats.min) - (bar_w / 2) + x_disp - buf;
-		else if (d.type == 'value' && val >= stats.max)
-		    l = sc.invert(stats.max) - (bar_w / 2) + x_disp + buf;
-		else
+                var val = get_this_val(d),
+                    buf = bar_w + 2,
+                    l;
+                if (d.type == 'value' && val <= stats.min)
+                    l = sc.invert(stats.min) - (bar_w / 2) + x_disp - buf;
+                else if (d.type == 'value' && val >= stats.max)
+                    l = sc.invert(stats.max) - (bar_w / 2) + x_disp + buf;
+                else
                     l = sc.invert(val) - (bar_w / 2) + x_disp;
                 // don't go over the right edge of the bar
                 if (l + this.input_width > this.w + this.x)
                     l = l - this.input_width + (bar_w / 2);
                 return l + 'px';
             }.bind(this))
-	    .on('mousedown', bring_to_front);
+            .on('mousedown', bring_to_front);
 
         var format = d3.format('.4g');
         inputs.select('.domain-input')
@@ -12479,7 +14552,7 @@ define('ScaleEditor',["utils", "lib/bacon"], function(utils, bacon) {
                 if (d.type == 'value') {
                     this.value = get_this_val(d);
                     this.disabled = false;
-		} else {
+                } else {
                     this.value = d.type + ' (' + format(get_this_val(d)) + ')';
                     this.disabled = true;
                 } 
@@ -12496,30 +14569,30 @@ define('ScaleEditor',["utils", "lib/bacon"], function(utils, bacon) {
                           .filter(function(x) {
                               return x != 'min' && x != 'max';
                           })),
-	    opts = select.selectAll('option').data(stat_types);
-	opts.enter().append('option');
-	opts.attr('value', function(d) { return d; })
-	    .text(function(d) { return d; });
+            opts = select.selectAll('option').data(stat_types);
+        opts.enter().append('option');
+        opts.attr('value', function(d) { return d; })
+            .text(function(d) { return d; });
         opts.exit().remove();
         select.style('visibility', function(d) {
-                return (d.type == 'min' || d.type == 'max') ? 'hidden' : null;
-            })
+            return (d.type == 'min' || d.type == 'max') ? 'hidden' : null;
+        })
             .style('left', (this.input_width - 20) + 'px')
             .style('width', '20px')
             .each(function (d, i) {
                 var sind = 0;
-		d3.select(this).selectAll('option').each(function(_, i) {
-		    if (this.value == d.type)
-			sind = i;
-		});
-		this.selectedIndex = sind;
+                d3.select(this).selectAll('option').each(function(_, i) {
+                    if (this.value == d.type)
+                        sind = i;
+                });
+                this.selectedIndex = sind;
             }).on('change', function(d, i) {
-		// set the value to the current location
-		if (this.value == 'value')
-		    scale[i].value = stats[d.type];
-		// switch to the new type
-		scale[i].type = this.value;
-		// reload
+                // set the value to the current location
+                if (this.value == 'value')
+                    scale[i].value = stats[d.type];
+                // switch to the new type
+                scale[i].type = this.value;
+                // reload
                 set_scale(scale);
             });
         // update color input
@@ -12584,8 +14657,8 @@ define('ScaleEditor',["utils", "lib/bacon"], function(utils, bacon) {
         // update
         ins.select('span')
             .text(function(d) { return d[1]; })
-	    .style('height', this.input_height + 'px')
-	    .style('line-height', this.input_height + 'px')
+            .style('height', this.input_height + 'px')
+            .style('line-height', this.input_height + 'px')
             .style('left', function(d, i) {
                 return ((label_w + this.input_width + 10) * i) + 'px';
             }.bind(this));
@@ -12610,7 +14683,7 @@ define('ScaleEditor',["utils", "lib/bacon"], function(utils, bacon) {
                 this.no_data[d[0]] = val;
                 this.settings.set_conditional(this.type + '_no_data_' + d[0], val);
                 this.update_no_data();
-	    }.bind(this));
+            }.bind(this));
         ins.select('.color-picker')
             .style('left', function(d, i) {
                 return ((label_w + this.input_width) * (i + 1) - this.input_height) + 'px';
@@ -12638,71 +14711,71 @@ define('ScaleEditor',["utils", "lib/bacon"], function(utils, bacon) {
 });
 
 define('SettingsMenu',["utils", "CallbackManager", "ScaleEditor"], function(utils, CallbackManager, ScaleEditor) {
-    /** 
+    /**
      */
 
     var SettingsMenu = utils.make_class();
     // instance methods
     SettingsMenu.prototype = { init: init,
-			       is_visible: is_visible,
-			       toggle: toggle,
-			       hold_changes: hold_changes,
-			       abandon_changes: abandon_changes,
-			       accept_changes: accept_changes,
-			       style_gui: style_gui,
-			       view_gui: view_gui };
+                               is_visible: is_visible,
+                               toggle: toggle,
+                               hold_changes: hold_changes,
+                               abandon_changes: abandon_changes,
+                               accept_changes: accept_changes,
+                               style_gui: style_gui,
+                               view_gui: view_gui };
 
     return SettingsMenu;
 
     // instance methods
     function init(sel, settings, map, toggle_abs_and_apply_data) {
-	this.sel = sel;
-	this.settings = settings;
-	this.draw = false;
-        
+        this.sel = sel;
+        this.settings = settings;
+        this.draw = false;
+
         var unique_map_id = this.settings.get_option('unique_map_id');
         this.unique_string = (unique_map_id === null ? '' : '.' + unique_map_id);
 
-	var background = sel.append('div')
-		.attr('class', 'settings-box-background')
-		.style('display', 'none'),
-	    container = background.append('div')
+        var background = sel.append('div')
+                .attr('class', 'settings-box-background')
+                .style('display', 'none'),
+            container = background.append('div')
                 .attr('class', 'settings-box-container')
-		.style('display', 'none');
+                .style('display', 'none');
 
-	// done button
-	container.append('button')
-	    .attr("class", "btn btn-sm btn-default settings-button")
-	    .on('click', function() {
-		this.accept_changes();
-	    }.bind(this))
-	    .append("span").attr("class",  "glyphicon glyphicon-ok");
-	// quit button
-	container.append('button')
-	    .attr("class", "btn btn-sm btn-default settings-button settings-button-close")
-	    .on('click', function() {
-		this.abandon_changes();
-	    }.bind(this))
-	    .append("span").attr("class",  "glyphicon glyphicon-remove");
+        // done button
+        container.append('button')
+            .attr("class", "btn btn-sm btn-default settings-button")
+            .on('click', function() {
+                this.accept_changes();
+            }.bind(this))
+            .append("span").attr("class",  "glyphicon glyphicon-ok");
+        // quit button
+        container.append('button')
+            .attr("class", "btn btn-sm btn-default settings-button settings-button-close")
+            .on('click', function() {
+                this.abandon_changes();
+            }.bind(this))
+            .append("span").attr("class",  "glyphicon glyphicon-remove");
 
         var box = container.append('div')
-		.attr('class', 'settings-box');
-	
+                .attr('class', 'settings-box');
+
         // Tip
         box.append('div')
             .text('Tip: Hover over an option to see more details about it.')
-            .style('font-style', 'italic');
+            .classed('settings-tip', true);
         box.append('hr');
-        
-	// view and build
-	box.append('div').text('View and build options')
-	    .attr('class', 'settings-section-heading-large');
-	this.view_gui(box.append('div'));
-	
+
+        // view and build
+        box.append('div').text('View and build options')
+            .attr('class', 'settings-section-heading-large');
+        this.view_gui(box.append('div'));
+
         // reactions
         box.append('hr');
-	box.append('div')
-	    .text('Reactions').attr('class', 'settings-section-heading-large');
+        box.append('div')
+            .text('Reactions').attr('class', 'settings-section-heading-large');
         var rse = new ScaleEditor(box.append('div'), 'reaction', this.settings,
                                   map.get_data_statistics.bind(map));
         map.callback_manager.set('calc_data_stats__reaction', function(changed) {
@@ -12711,9 +14784,9 @@ define('SettingsMenu',["utils", "CallbackManager", "ScaleEditor"], function(util
                 rse.update_no_data();
             }
         });
-	box.append('div')
-	    .text('Reaction or Gene data').attr('class', 'settings-section-heading');
-	this.style_gui(box.append('div'), 'reaction', function(on_off) {
+        box.append('div')
+            .text('Reaction or Gene data').attr('class', 'settings-section-heading');
+        this.style_gui(box.append('div'), 'reaction', function(on_off) {
             if (toggle_abs_and_apply_data) {
                 toggle_abs_and_apply_data('reaction', on_off);
                 rse.update();
@@ -12721,10 +14794,10 @@ define('SettingsMenu',["utils", "CallbackManager", "ScaleEditor"], function(util
             }
         });
 
-	// metabolite data
+        // metabolite data
         box.append('hr');
-	box.append('div').text('Metabolites')
-	    .attr('class', 'settings-section-heading-large');
+        box.append('div').text('Metabolites')
+            .attr('class', 'settings-section-heading-large');
         var mse = new ScaleEditor(box.append('div'), 'metabolite', this.settings,
                                   map.get_data_statistics.bind(map));
         map.callback_manager.set('calc_data_stats__metabolite', function(changed) {
@@ -12733,94 +14806,94 @@ define('SettingsMenu',["utils", "CallbackManager", "ScaleEditor"], function(util
                 mse.update_no_data();
             }
         });
-	box.append('div').text('Metabolite data')
-	    .attr('class', 'settings-section-heading');
-	this.style_gui(box.append('div'), 'metabolite', function(on_off) {
+        box.append('div').text('Metabolite data')
+            .attr('class', 'settings-section-heading');
+        this.style_gui(box.append('div'), 'metabolite', function(on_off) {
             if (toggle_abs_and_apply_data) {
                 toggle_abs_and_apply_data('metabolite', on_off);
                 mse.update();
                 mse.update_no_data();
             }
         });
-        
-	this.callback_manager = new CallbackManager();
 
-	this.map = map;
-	this.selection = container;
+        this.callback_manager = new CallbackManager();
+
+        this.map = map;
+        this.selection = container;
         this.background = background;
     }
     function is_visible() {
-	return this.selection.style('display') != 'none';
+        return this.selection.style('display') != 'none';
     }
     function toggle(on_off) {
-	if (on_off===undefined) on_off = !this.is_visible();
+        if (on_off===undefined) on_off = !this.is_visible();
 
-	if (on_off) {
-	    // hold changes until accepting/abandoning
-	    this.hold_changes();
-	    // show the menu
-	    this.selection.style("display", "inline-block");
-	    this.background.style("display", "block");
-	    this.selection.select('input').node().focus();
-	    // escape key
-	    this.escape = this.map.key_manager
-		.add_escape_listener(function() {
-		    this.abandon_changes();
-		}.bind(this), 'settings');
-	    // enter key
-	    this.enter = this.map.key_manager
-		.add_enter_listener(function() {
-		    this.accept_changes();
-		}.bind(this), 'settings');
-	    // run the show callback
-	    this.callback_manager.run('show');
-	} else {
-	    // draw on finish
-	    if (this.draw) this.map.draw_everything();
-	    // hide the menu
-	    this.selection.style("display", "none");
-	    this.background.style("display", "none");
-	    if (this.escape) this.escape.clear();
-	    if (this.enter) this.enter.clear();
-	    this.escape = null;
-	    this.enter = null;
-	    // run the hide callback
-	    this.callback_manager.run('hide');
-	}
+        if (on_off) {
+            // hold changes until accepting/abandoning
+            this.hold_changes();
+            // show the menu
+            this.selection.style("display", "inline-block");
+            this.background.style("display", "block");
+            this.selection.select('input').node().focus();
+            // escape key
+            this.escape = this.map.key_manager
+                .add_escape_listener(function() {
+                    this.abandon_changes();
+                }.bind(this), 'settings');
+            // enter key
+            this.enter = this.map.key_manager
+                .add_enter_listener(function() {
+                    this.accept_changes();
+                }.bind(this), 'settings');
+            // run the show callback
+            this.callback_manager.run('show');
+        } else {
+            // draw on finish
+            if (this.draw) this.map.draw_everything();
+            // hide the menu
+            this.selection.style("display", "none");
+            this.background.style("display", "none");
+            if (this.escape) this.escape.clear();
+            if (this.enter) this.enter.clear();
+            this.escape = null;
+            this.enter = null;
+            // run the hide callback
+            this.callback_manager.run('hide');
+        }
     }
     function hold_changes() {
-	this.settings.hold_changes();
+        this.settings.hold_changes();
     }
     function abandon_changes() {
-	this.draw = false;
-	this.settings.abandon_changes();
-	this.toggle(false);
+        this.draw = false;
+        this.settings.abandon_changes();
+        this.toggle(false);
     }
     function accept_changes() {
-	this.sel.selectAll('input').each(function (s) { 
-	    this.blur();
-	});
-	this.draw = true;
-	this.settings.accept_changes();
-	this.toggle(false);
+        this.sel.selectAll('input').each(function (s) {
+            this.blur();
+        });
+        this.draw = true;
+        this.settings.accept_changes();
+        this.toggle(false);
     }
-        
+
     function style_gui(sel, type, abs_callback) {
-	/** A UI to edit style.
+        /** A UI to edit style.
 
          */
 
-	var t = sel.append('table').attr('class', 'settings-table'),
-	    settings = this.settings;
+        var t = sel.append('table').attr('class', 'settings-table'),
+            settings = this.settings;
 
-	// styles
-	t.append('tr').call(function(r) {
-	    r.append('td').text('Options:')
+        // styles
+        t.append('tr').call(function(r) {
+            r.append('td').text('Options:')
                 .attr('class', 'options-label')
                 .attr('title', ('Options for ' + type + ' data.'));
-	    var cell = r.append('td');
+            var cell = r.append('td');
 
-	    var styles = [['Absolute value', 'abs',
+            var styles = [['Absolute value', 'abs',
                            ('If checked, use the absolute value when ' +
                             'calculating colors and sizes of ' + type + 's on the map')],
                           ['Size', 'size',
@@ -12831,16 +14904,16 @@ define('SettingsMenu',["utils", "CallbackManager", "ScaleEditor"], function(util
                            ('If checked, then color the ' +
                             (type == 'metabolite' ? 'metabolite circles ' : 'reaction lines ') +
                             'according to the value of the ' + type + ' data')],
-                          ['Text', 'text',
+                          ['Text (Show data in label)', 'text',
                            ('If checked, then show data values in the ' + type + ' ' +
                             'labels')]],
-		style_cells = cell.selectAll('.option-group')
-		    .data(styles),
-		s = style_cells.enter()
-		    .append('span')
-		    .attr('class', 'option-group');
+                style_cells = cell.selectAll('.option-group')
+                    .data(styles),
+                s = style_cells.enter()
+                    .append('label')
+                    .attr('class', 'option-group');
 
-	    // make the checkbox
+            // make the checkbox
             var streams = [],
                 get_styles = function() {
                     var styles = [];
@@ -12848,187 +14921,216 @@ define('SettingsMenu',["utils", "CallbackManager", "ScaleEditor"], function(util
                         .each(function(d) { if (this.checked) styles.push(d[1]); });
                     return styles;
                 };
-	    s.append('input').attr('type', 'checkbox')
+            s.append('input').attr('type', 'checkbox')
                 .on('change', function(d) {
                     settings.set_conditional(type + '_styles', get_styles());
                     if (d[1] == 'abs')
                         abs_callback(this.checked);
                 }).each(function(d) {
                     // subscribe to changes in the model
-		    settings.streams[type + '_styles'].onValue(function(ar) {
-		        // check the box if the style is present
-		        this.checked = (ar.indexOf(d[1]) != -1);
-		    }.bind(this));
+                    settings.streams[type + '_styles'].onValue(function(ar) {
+                        // check the box if the style is present
+                        this.checked = (ar.indexOf(d[1]) != -1);
+                    }.bind(this));
                 });
-	    s.append('span')
+            s.append('span')
                 .text(function(d) { return d[0]; })
                 .attr('title', function(d) { return d[2]; });
-	});
+        });
 
-	// compare_style
-	t.append('tr').call(function(r) {
-	    r.append('td')
+        // compare_style
+        t.append('tr').call(function(r) {
+            r.append('td')
                 .text('Comparison:')
                 .attr('class', 'options-label')
                 .attr('title', ('The function that will be used to compare ' +
                                 'datasets, when paired data is loaded'));
-	    var cell = r.append('td')
-                .attr('title', ('The function that will be used to compare ' +
-                                'datasets, when paired data is loaded'));;
+            var cell = r.append('td')
+                    .attr('title', ('The function that will be used to compare ' +
+                                    'datasets, when paired data is loaded'));;
 
-	    var styles = [['Fold Change', 'fold'],
+            var styles = [['Fold Change', 'fold'],
                           ['Log2(Fold Change)', 'log2_fold'],
                           ['Difference', 'diff']],
-		style_cells = cell.selectAll('.option-group')
-		    .data(styles),
-		s = style_cells.enter()
-		    .append('span')
-		    .attr('class', 'option-group');
-            
-	    // make the radio
-	    s.append('input').attr('type', 'radio')
+                style_cells = cell.selectAll('.option-group')
+                    .data(styles),
+                s = style_cells.enter()
+                    .append('label')
+                    .attr('class', 'option-group');
+
+            // make the radio
+            s.append('input').attr('type', 'radio')
                 .attr('name', type + '_compare_style' + this.unique_string)
                 .attr('value', function(d) { return d[1]; })
                 .on('change', function() {
                     if (this.checked)
                         settings.set_conditional(type + '_compare_style', this.value);
                 })
-		.each(function() {
-		    // subscribe to changes in the model
-		    settings.streams[type + '_compare_style'].onValue(function(value) {
-		        // check the box for the new value
-		        this.checked = (this.value == value);
-		    }.bind(this));
-		});
-	    s.append('span')
+                .each(function() {
+                    // subscribe to changes in the model
+                    settings.streams[type + '_compare_style'].onValue(function(value) {
+                        // check the box for the new value
+                        this.checked = (this.value == value);
+                    }.bind(this));
+                });
+            s.append('span')
                 .text(function(d) { return d[0]; });
 
         }.bind(this));
 
         // gene-specific settings
         if (type=='reaction') {
-	    var t = sel.append('table').attr('class', 'settings-table')
+            var t = sel.append('table').attr('class', 'settings-table')
                     .attr('title', ('The function that will be used to evaluate ' +
                                     'AND connections in gene reaction rules (AND ' +
                                     'connections generally connect components of ' +
                                     'an enzyme complex)'));
-            
-	    // and_method_in_gene_reaction_rule
-	    t.append('tr').call(function(r) {
-	        r.append('td')
+
+            // and_method_in_gene_reaction_rule
+            t.append('tr').call(function(r) {
+                r.append('td')
                     .text('Method for evaluating AND:')
                     .attr('class', 'options-label-wide');
-	        var cell = r.append('td');
+                var cell = r.append('td');
 
-	        var styles = [['Mean', 'mean'], ['Min', 'min']],
-		    style_cells = cell.selectAll('.option-group')
-		        .data(styles),
-		    s = style_cells.enter()
-		        .append('span')
-		        .attr('class', 'option-group');
+                var styles = [['Mean', 'mean'], ['Min', 'min']],
+                    style_cells = cell.selectAll('.option-group')
+                        .data(styles),
+                    s = style_cells.enter()
+                        .append('label')
+                        .attr('class', 'option-group');
 
-	        // make the radio
+                // make the radio
                 var name = 'and_method_in_gene_reaction_rule';
-	        s.append('input').attr('type', 'radio')
+                s.append('input').attr('type', 'radio')
                     .attr('name', name + this.unique_string)
                     .attr('value', function(d) { return d[1]; })
-                .on('change', function() {
-                    if (this.checked)
-                        settings.set_conditional(name, this.value);
-                })
-		.each(function() {
-		    // subscribe to changes in the model
-		    settings.streams[name].onValue(function(value) {
-		        // check the box for the new value
-		        this.checked = (this.value == value);
-		    }.bind(this));
-		});
+                    .on('change', function() {
+                        if (this.checked)
+                            settings.set_conditional(name, this.value);
+                    })
+                    .each(function() {
+                        // subscribe to changes in the model
+                        settings.streams[name].onValue(function(value) {
+                            // check the box for the new value
+                            this.checked = (this.value == value);
+                        }.bind(this));
+                    });
                 s.append('span')
                     .text(function(d) { return d[0]; });
             }.bind(this));
 
         }
     }
-        
+
     function view_gui(s, option_name, string, options) {
 
-	// columns
-	var settings = this.settings;
+        // columns
+        var settings = this.settings;
 
-	var t = s.append('table').attr('class', 'settings-table');
-	t.append('tr').call(function(r) {
+        var t = s.append('table').attr('class', 'settings-table');
+        t.append('tr').call(function(r) {
             // identifiers
             r.attr('title', ('The identifiers that are show in the reaction, ' +
                              'gene, and metabolite labels on the map.'));
-	    r.append('td').text('Identifiers:')
+            r.append('td').text('Identifiers:')
                 .attr('class', 'options-label');
-	    var cell = r.append('td');
+            var cell = r.append('td');
 
-	    var options = [['ID\'s', 'bigg_id'], ['Descriptive names', 'name']],
-		style_cells = cell.selectAll('.option-group')
-		    .data(options),
-		s = style_cells.enter()
-		    .append('span')
-		    .attr('class', 'option-group');
+            var options = [['ID\'s', 'bigg_id'], ['Descriptive names', 'name']],
+                style_cells = cell.selectAll('.option-group')
+                    .data(options),
+                s = style_cells.enter()
+                    .append('label')
+                    .attr('class', 'option-group');
 
-	    // make the checkbox
+            // make the checkbox
             var name = 'identifiers_on_map';
-	    s.append('input').attr('type', 'radio')
-		.attr('name', name + this.unique_string)
-		.attr('value', function(d) { return d[1]; })
+            s.append('input').attr('type', 'radio')
+                .attr('name', name + this.unique_string)
+                .attr('value', function(d) { return d[1]; })
                 .on('change', function() {
                     if (this.checked)
                         settings.set_conditional(name, this.value);
                 })
-		.each(function() {
-		    // subscribe to changes in the model
-		    settings.streams[name].onValue(function(value) {
-		        // check the box for the new value
-		        this.checked = (this.value == value);
-		    }.bind(this));
-		});
+                .each(function() {
+                    // subscribe to changes in the model
+                    settings.streams[name].onValue(function(value) {
+                        // check the box for the new value
+                        this.checked = (this.value == value);
+                    }.bind(this));
+                });
             s.append('span').text(function(d) { return d[0]; });
 
         }.bind(this));
 
-        var boolean_options = [['hide_secondary_metabolites', 'Hide secondary metabolites',
-                                ('If checked, then only the primary metabolites ' +
-                                 'will be displayed.')],
-                               ['show_gene_reaction_rules', 'Show gene reaction rules',
-                                ('If checked, then gene reaction rules will be displayed ' +
-                                 'below each reaction label. (Gene reaction rules are always ' +
-                                 'shown when gene data is loaded.)')],
-                               ['highlight_missing', 'Highlight reactions not in model',
-                                ('If checked, then highlight in red all the ' +
-                                 'reactions on the map that are not present in ' +
-                                 'the loaded model.')],
-                               ['allow_building_duplicate_reactions', 'Allow duplicate reactions',
-                                ('If checked, then allow duplicate reactions during model building.')]];
-        
-	var opts = s.append('div').attr('class', 'settings-container')
+        var boolean_options = [
+            ['scroll_behavior', 'Scroll to zoom (instead of scroll to pan)',
+             ('If checked, then the scroll wheel and trackpad will control zoom ' +
+              'rather than pan.'), {'zoom': true, 'pan': false}],
+            ['use_3d_transform', 'Use CSS3 for faster pan and zoom (only works in new browsers)',
+             ('Depending on your browser, this option may help or hurt ' +
+              'performance when panning and zooming. Try both options')],
+            ['hide_secondary_metabolites', 'Hide secondary metabolites',
+             ('If checked, then only the primary metabolites ' +
+              'will be displayed.')],
+            ['show_gene_reaction_rules', 'Show gene reaction rules',
+             ('If checked, then gene reaction rules will be displayed ' +
+              'below each reaction label. (Gene reaction rules are always ' +
+              'shown when gene data is loaded.)')],
+            ['hide_all_labels', 'Hide reaction, gene, and metabolite labels',
+             ('If checked, hide all reaction, gene, and metabolite labels')],
+            ['allow_building_duplicate_reactions', 'Allow duplicate reactions',
+             ('If checked, then allow duplicate reactions during model building.')],
+            ['highlight_missing', 'Highlight reactions not in model',
+             ('If checked, then highlight in red all the ' +
+              'reactions on the map that are not present in ' +
+              'the loaded model.')],
+        ];
+
+        var opts = s.append('div').attr('class', 'settings-container')
                 .selectAll('.option-group')
                 .data(boolean_options);
         // enter
         var e = opts.enter()
-            .append('div')
-            .attr('class', 'option-group');
+                .append('label')
+                .attr('class', 'option-group full-line');
         e.append('input').attr('type', 'checkbox');
         e.append('span');
         // update
         opts.attr('title', function(d) { return d[2]; });
         opts.select('input')
             .on('change', function(d) {
-                settings.set_conditional(d[0], this.checked);
+                if (d.length >= 4) { // not a boolean setting
+                    for (var key in d[3]) {
+                        if (d[3][key] == this.checked) {
+                            settings.set_conditional(d[0], key);
+                            break;
+                        }
+                    }
+                } else { // boolean setting
+                    settings.set_conditional(d[0], this.checked);
+                }
             })
             .each(function(d) {
                 settings.streams[d[0]].onValue(function(value) {
-                    this.checked = value;
+                    if (d.length >= 4) { // not a boolean setting
+                        this.checked = d[3][value];
+                    } else { // boolean setting
+                        this.checked = value;
+                    }
                 }.bind(this));
             });
         opts.select('span')
             .text(function(d) { return d[1]; });
         // exit
         opts.exit().remove();
+
+        // message about text performance
+        s.append('div')
+            .style('margin-top', '16px')
+            .classed('settings-tip', true)
+            .text('Tip: To increase map performance, turn off text boxes (i.e. labels and gene reaction rules).');
     }
 });
 
@@ -13039,43 +15141,43 @@ define('TextEditInput',['utils', 'PlacedDiv', 'build'], function(utils, PlacedDi
     var TextEditInput = utils.make_class();
     // instance methods
     TextEditInput.prototype = { init: init,
-				setup_map_callbacks: setup_map_callbacks,
-				setup_zoom_callbacks: setup_zoom_callbacks,
-				is_visible: is_visible,
-				show: show,
-				hide: hide,
-				_accept_changes: _accept_changes,
-				_add_and_edit: _add_and_edit };
+                                setup_map_callbacks: setup_map_callbacks,
+                                setup_zoom_callbacks: setup_zoom_callbacks,
+                                is_visible: is_visible,
+                                show: show,
+                                hide: hide,
+                                _accept_changes: _accept_changes,
+                                _add_and_edit: _add_and_edit };
 
     return TextEditInput;
 
     // definitions
     function init(selection, map, zoom_container) {
-	var div = selection.append('div')
-		.attr('id', 'text-edit-input');
-	this.placed_div = PlacedDiv(div, map);
-	this.placed_div.hide();
-	this.input = div.append('input');
+        var div = selection.append('div')
+                .attr('id', 'text-edit-input');
+        this.placed_div = PlacedDiv(div, map);
+        this.placed_div.hide();
+        this.input = div.append('input');
 
-	this.map = map;
-	this.setup_map_callbacks(map);
-	this.zoom_container = zoom_container;
-	this.setup_zoom_callbacks(zoom_container);
+        this.map = map;
+        this.setup_map_callbacks(map);
+        this.zoom_container = zoom_container;
+        this.setup_zoom_callbacks(zoom_container);
     }
 
     function setup_map_callbacks(map) {
-	// input
-	map.callback_manager.set('edit_text_label.text_edit_input', function(target, coords) {
-	    this.show(target, coords);
-	}.bind(this));
+        // input
+        map.callback_manager.set('edit_text_label.text_edit_input', function(target, coords) {
+            this.show(target, coords);
+        }.bind(this));
 
-	// new text_label
-	map.callback_manager.set('new_text_label.text_edit_input', function(coords) {
-	    if (this.active_target !== null)
-		this._accept_changes(this.active_target.target);
-	    this.hide();
-	    this._add_and_edit(coords);
-	}.bind(this));
+        // new text_label
+        map.callback_manager.set('new_text_label.text_edit_input', function(coords) {
+            if (this.active_target !== null)
+                this._accept_changes(this.active_target.target);
+            this.hide();
+            this._add_and_edit(coords);
+        }.bind(this));
         
         map.callback_manager.set('hide_text_label_editor.text_edit_input', function() {
             this.hide();
@@ -13083,117 +15185,117 @@ define('TextEditInput',['utils', 'PlacedDiv', 'build'], function(utils, PlacedDi
     }
 
     function setup_zoom_callbacks(zoom_container) {
-	zoom_container.callback_manager.set('zoom.text_edit_input', function() {
-	    if (this.active_target)
-		this._accept_changes(this.active_target.target);
-	    this.hide();
-	}.bind(this));
-	zoom_container.callback_manager.set('go_to.text_edit_input', function() {
-	    if (this.active_target)
-		this._accept_changes(this.active_target.target);
-	    this.hide();
-	}.bind(this));
+        zoom_container.callback_manager.set('zoom.text_edit_input', function() {
+            if (this.active_target)
+                this._accept_changes(this.active_target.target);
+            this.hide();
+        }.bind(this));
+        zoom_container.callback_manager.set('go_to.text_edit_input', function() {
+            if (this.active_target)
+                this._accept_changes(this.active_target.target);
+            this.hide();
+        }.bind(this));
     }
 
     function is_visible() {
-	return this.placed_div.is_visible();
+        return this.placed_div.is_visible();
     }
 
     function show(target, coords) {
-	// save any existing edit
-	if (this.active_target) {
-	    this._accept_changes(this.active_target.target);
-	}
+        // save any existing edit
+        if (this.active_target) {
+            this._accept_changes(this.active_target.target);
+        }
 
-	// set the current target
-	this.active_target = { target: target,
-			       coords: coords };
+        // set the current target
+        this.active_target = { target: target,
+                               coords: coords };
 
-	// set the new value
-	target.each(function(d) {
-	    this.input.node().value = d.text;
-	}.bind(this));
+        // set the new value
+        target.each(function(d) {
+            this.input.node().value = d.text;
+        }.bind(this));
 
-	// place the input
-	this.placed_div.place(coords);
-	this.input.node().focus();
+        // place the input
+        this.placed_div.place(coords);
+        this.input.node().focus();
 
-	// escape key
-	this.escape = this.map.key_manager
-	    .add_escape_listener(function() {
-		this._accept_changes(target);
-		this.hide();
-	    }.bind(this));
-	// enter key
-	this.enter = this.map.key_manager
-	    .add_enter_listener(function(target) {
-		this._accept_changes(target);
-		this.hide();
-	    }.bind(this, target));
+        // escape key
+        this.escape = this.map.key_manager
+            .add_escape_listener(function() {
+                this._accept_changes(target);
+                this.hide();
+            }.bind(this));
+        // enter key
+        this.enter = this.map.key_manager
+            .add_enter_listener(function(target) {
+                this._accept_changes(target);
+                this.hide();
+            }.bind(this, target));
     }
 
     function hide() {
-	// hide the input
-	this.placed_div.hide();
+        // hide the input
+        this.placed_div.hide();
 
-	// clear the value
-	this.input.attr('value', '');
-	this.active_target = null;
+        // clear the value
+        this.input.attr('value', '');
+        this.active_target = null;
 
-	// clear escape
-	if (this.escape)
-	    this.escape.clear();
-	this.escape = null;
-	// clear enter
-	if (this.enter)
-	    this.enter.clear();
-	this.enter = null;
-	// turn off click listener
-	// this.map.sel.on('click.', null);
+        // clear escape
+        if (this.escape)
+            this.escape.clear();
+        this.escape = null;
+        // clear enter
+        if (this.enter)
+            this.enter.clear();
+        this.enter = null;
+        // turn off click listener
+        // this.map.sel.on('click.', null);
     }
 
     function _accept_changes(target) {
-	if (this.input.node().value == '') {
-	    // delete the label
-	    target.each(function(d) {
-		var selected = {};
-		selected[d.text_label_id] = this.map.text_labels[d.text_label_id];
-		this.map.delete_selectable({}, selected, true);
-	    }.bind(this));
-	} else {
-	    // set the text
-	    var text_label_ids = [];
-	    target.each(function(d) {
-		this.map.edit_text_label(d.text_label_id, this.input.node().value, true);
-		text_label_ids.push(d.text_label_id);
-	    }.bind(this));
-	}
+        if (this.input.node().value == '') {
+            // delete the label
+            target.each(function(d) {
+                var selected = {};
+                selected[d.text_label_id] = this.map.text_labels[d.text_label_id];
+                this.map.delete_selectable({}, selected, true);
+            }.bind(this));
+        } else {
+            // set the text
+            var text_label_ids = [];
+            target.each(function(d) {
+                this.map.edit_text_label(d.text_label_id, this.input.node().value, true);
+                text_label_ids.push(d.text_label_id);
+            }.bind(this));
+        }
     }
 
     function _add_and_edit(coords) {
         // make an empty label
         var text_label_id = this.map.new_text_label(coords, '');
-	// apply the cursor to the new label
+        // apply the cursor to the new label
         var sel = this.map.sel.select('#text-labels').selectAll('.text-label')
-	    .filter(function(d) { return d.text_label_id == text_label_id; });
-	sel.select('text').classed('edit-text-cursor', true);
-	this.show(sel, coords);
+                .filter(function(d) { return d.text_label_id == text_label_id; });
+        sel.select('text').classed('edit-text-cursor', true);
+        this.show(sel, coords);
     }
 });
 
 define('QuickJump',['utils'], function(utils) {
     /** A QuickJump menu to move between maps.
 
-	Arguments
-	---------
+     Arguments
+     ---------
 
-	sel: The d3 selection of an html node to place the menu inside.
+     sel: The d3 selection of an html node to place the menu inside.
 
-	options: An array of map names to jump to.
+     options: An array of map names to jump to.
 
-        load_callback: A callback function that accepts two arguments: map_name,
-        and another callback which returns true or false for success or failure
-        (callback purgatory).
+     load_callback: A callback function that accepts two arguments: map_name,
+     and another callback which returns true or false for success or failure
+     (callback purgatory).
 
      */
 
@@ -13207,33 +15309,33 @@ define('QuickJump',['utils'], function(utils) {
 
     // instance methods
     function init(sel, load_callback) {        
-	// set up the menu
-	var select_sel = sel.append('select')
-	    .attr('id', 'quick-jump-menu')
-	    .attr('class', 'form-control'); 
+        // set up the menu
+        var select_sel = sel.append('select')
+                .attr('id', 'quick-jump-menu')
+                .attr('class', 'form-control'); 
         this.selector = select_sel;
 
-	// get the options to show
-	var url_comp = utils.parse_url_components(window),
-	    current = ('map_name' in url_comp) ? url_comp.map_name : null,
-	    quick_jump_path = ('quick_jump_path' in url_comp) ? url_comp.quick_jump_path : null,
-	    options = ('quick_jump' in url_comp) ? url_comp.quick_jump : [],
+        // get the options to show
+        var url_comp = utils.parse_url_components(window),
+            current = ('map_name' in url_comp) ? url_comp.map_name : null,
+            quick_jump_path = ('quick_jump_path' in url_comp) ? url_comp.quick_jump_path : null,
+            options = ('quick_jump' in url_comp) ? url_comp.quick_jump : [],
             default_value = '— Jump to map —',
-	    view_options = [default_value].concat(options);
-	if (current !== null) {
-	    view_options = view_options.filter(function(o) {
-		return o != current;
-	    });
-	}
+            view_options = [default_value].concat(options);
+        if (current !== null) {
+            view_options = view_options.filter(function(o) {
+                return o != current;
+            });
+        }
         
-	select_sel.selectAll('option')
-	    .data(view_options)
-	    .enter()
-	    .append('option')
-	    .text(function(d) {
-		// works whether or not a '.' is present
-		return d.split('.').slice(-1)[0];
-	    });
+        select_sel.selectAll('option')
+            .data(view_options)
+            .enter()
+            .append('option')
+            .text(function(d) {
+                // works whether or not a '.' is present
+                return d.split('.').slice(-1)[0];
+            });
         
         // only show if there are options
         select_sel.style('display', view_options.length > 1 ? 'block' : 'none');
@@ -13248,11 +15350,11 @@ define('QuickJump',['utils'], function(utils) {
             }.bind(this));
         }.bind(this);
         
-	select_sel.on('change', function() {
-	    // get the new map
-	    var map_name = this.options[this.selectedIndex].__data__;
+        select_sel.on('change', function() {
+            // get the new map
+            var map_name = this.options[this.selectedIndex].__data__;
             change_map(map_name);
-	});
+        });
     }
 
     function reset_selection() {
@@ -13261,9 +15363,9 @@ define('QuickJump',['utils'], function(utils) {
     
     function replace_state_for_map_name(map_name) {
         /** Just changes the url to match the new map name. Does not actually
-            manage the HTML5 history.
+         manage the HTML5 history.
 
-        */
+         */
         
         // update the url with the new map
         var url = window.location.href
@@ -13273,9 +15375,9 @@ define('QuickJump',['utils'], function(utils) {
 });
 
 define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', 'Brush', 'CallbackManager', 'ui', 'SearchBar', 'Settings', 'SettingsMenu', 'TextEditInput', 'QuickJump', 'data_styles'], function(utils, BuildInput, ZoomContainer, Map, CobraModel, Brush, CallbackManager, ui, SearchBar, Settings, SettingsMenu, TextEditInput, QuickJump, data_styles) {
-    /** For documentation of this class, see docs/javascript_api.rst 
+    /** For documentation of this class, see docs/javascript_api.rst
 
-     */    
+     */
     var Builder = utils.make_class();
     Builder.prototype = { init: init,
                           load_map: load_map,
@@ -13316,15 +15418,20 @@ define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', '
         this.embedded_css = embedded_css;
         this.selection = selection;
 
+        // apply this object as data for the selection
+        this.selection.datum(this);
+
         // set defaults
         this.options = utils.set_options(options, {
             // view options
             menu: 'all',
             scroll_behavior: 'pan',
+            use_3d_transform: true,
             enable_editing: true,
             enable_keys: true,
             enable_search: true,
             fill_screen: false,
+            zoom_to_element: null,
             // map, model, and styles
             starting_reaction: null,
             never_ask_before_quit: false,
@@ -13335,6 +15442,7 @@ define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', '
             gene_font_size: 18,
             hide_secondary_metabolites: false,
             show_gene_reaction_rules: false,
+            hide_all_labels: false,
             // applied data
             // reaction
             reaction_data: null,
@@ -13387,7 +15495,7 @@ define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', '
             }.bind(this),
             // the options that are erased when the settings menu is canceled
             conditional_options = ['hide_secondary_metabolites', 'show_gene_reaction_rules',
-                                   'reaction_styles',
+                                   'hide_all_labels', 'scroll_behavior', 'use_3d_transform', 'reaction_styles',
                                    'reaction_compare_style', 'reaction_scale',
                                    'reaction_no_data_color', 'reaction_no_data_size',
                                    'and_method_in_gene_reaction_rule', 'metabolite_styles',
@@ -13428,8 +15536,13 @@ define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', '
         // the menu closes, everything is drawn.
         this.settings.status_bus
             .onValue(function(x) {
-                if (x == 'accepted') {
+                if (x === 'accepted') {
                     this._update_data(true, true, ['reaction', 'metabolite'], false);
+                    if (this.zoom_container !== null) {
+                        var new_behavior = this.settings.get_option('scroll_behavior');
+                        this.zoom_container.set_scroll_behavior(new_behavior);
+                        this.zoom_container.set_use_3d_transform(this.settings.get_option('use_3d_transform'));
+                    }
                     if (this.map !== null) {
                         this.map.draw_all_nodes(false);
                         this.map.draw_all_reactions(true, false);
@@ -13453,20 +15566,20 @@ define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', '
             this.cobra_model = null;
         else
             this.cobra_model = CobraModel.from_cobra_json(model_data);
-        
+
         if (this.map) {
-	    this.map.cobra_model = this.cobra_model;
+            this.map.cobra_model = this.cobra_model;
             if (should_update_data)
-		this._update_data(true, false);
+                this._update_data(true, false);
             if (this.settings.get_option('highlight_missing'))
-		this.map.draw_all_reactions(false, false);
-	}
+                this.map.draw_all_reactions(false, false);
+        }
 
         this.callback_manager.run('load_model', null, model_data, should_update_data);
     }
 
     function load_map(map_data, should_update_data) {
-        /** For documentation of this function, see docs/javascript_api.rst 
+        /** For documentation of this function, see docs/javascript_api.rst
 
          */
 
@@ -13480,14 +15593,13 @@ define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', '
         // remove the old builder
         utils.remove_child_nodes(this.selection);
 
-        // set up the svg
-        var svg = utils.setup_svg(this.selection, false,
-                                  this.options.fill_screen);
-
-        // se up the zoom container
-        this.zoom_container = new ZoomContainer(svg, this.selection,
-                                                this.options.scroll_behavior);
+        // set up the zoom container
+        this.zoom_container = new ZoomContainer(this.selection,
+                                                this.options.scroll_behavior,
+                                                this.options.use_3d_transform,
+                                                this.options.fill_screen);
         var zoomed_sel = this.zoom_container.zoomed_sel;
+        var svg = this.zoom_container.svg;
 
         if (map_data!==null) {
             // import map
@@ -13499,7 +15611,6 @@ define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', '
                                      this.settings,
                                      this.cobra_model,
                                      this.options.enable_search);
-            this.zoom_container.reset();
         } else {
             // new map
             this.map = new Map(svg,
@@ -13511,6 +15622,13 @@ define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', '
                                null,
                                this.options.enable_search);
         }
+        // zoom container status changes
+        this.zoom_container.callback_manager.set('svg_start', function() {
+            this.map.set_status('Drawing ...');
+        }.bind(this));
+        this.zoom_container.callback_manager.set('svg_finish', function() {
+            this.map.set_status('');
+        }.bind(this));
 
         // set the data for the map
         if (should_update_data)
@@ -13591,10 +15709,21 @@ define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', '
         }
 
         // setup selection box
-        if (map_data!==null) {
+        if (this.options.zoom_to_element) {
+            var type = this.options.zoom_to_element.type,
+                element_id = this.options.zoom_to_element.id;
+            if (typeof type === 'undefined' || ['reaction', 'node'].indexOf(type) == -1)
+                throw new Error('zoom_to_element type must be "reaction" or "node"');
+            if (typeof element_id === 'undefined')
+                throw new Error('zoom_to_element must include id');
+            if (type == 'reaction')
+                this.map.zoom_to_reaction(element_id);
+            else if (type == 'node')
+                this.map.zoom_to_node(element_id);
+        } else if (map_data !== null) {
             this.map.zoom_extent_canvas();
         } else {
-            if (this.options.starting_reaction!==null && this.cobra_model !== null) {
+            if (this.options.starting_reaction !== null && this.cobra_model !== null) {
                 // Draw default reaction if no map is provided
                 var size = this.zoom_container.get_size();
                 var start_coords = { x: size.width / 2,
@@ -13636,13 +15765,19 @@ define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', '
         // brush
         this.brush.toggle(mode=='brush');
         // zoom
-        this.zoom_container.toggle_zoom(mode=='zoom' || mode=='view');
+        this.zoom_container.toggle_pan_drag(mode=='zoom' || mode=='view');
         // resize canvas
         this.map.canvas.toggle_resize(mode=='zoom' || mode=='brush');
-        // behavior
-        this.map.behavior.toggle_rotation_mode(mode=='rotate');
-        this.map.behavior.toggle_selectable_click(mode=='build' || mode=='brush' || mode=='rotate');
-        this.map.behavior.toggle_selectable_drag(mode=='brush' || mode=='rotate');
+        // Behavior. Be careful of the order becuase rotation and
+        // toggle_selectable_drag both use Behavior.selectable_drag.
+        if (mode == 'rotate') {
+            this.map.behavior.toggle_selectable_drag(false); // before toggle_rotation_mode
+            this.map.behavior.toggle_rotation_mode(true);
+        } else {
+            this.map.behavior.toggle_rotation_mode(mode=='rotate'); // before toggle_selectable_drag
+            this.map.behavior.toggle_selectable_drag(mode=='brush');
+        }
+        this.map.behavior.toggle_selectable_click(mode=='build' || mode=='brush');
         this.map.behavior.toggle_label_drag(mode=='brush');
         this.map.behavior.toggle_label_mousedown(mode=='brush');
         this.map.behavior.toggle_text_label_edit(mode=='text');
@@ -13652,11 +15787,9 @@ define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', '
             this.map.select_none();
         if (mode=='rotate')
             this.map.deselect_text_labels();
-        // console.log('starting draw');
         this.map.draw_everything();
-        // console.log('finished draw');
     }
-    
+
     function view_mode() {
         /** For documentation of this function, see docs/javascript_api.rst.
 
@@ -13664,7 +15797,7 @@ define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', '
         this.callback_manager.run('view_mode');
         this._set_mode('view');
     }
-    
+
     function build_mode() {
         /** For documentation of this function, see docs/javascript_api.rst.
 
@@ -13672,7 +15805,7 @@ define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', '
         this.callback_manager.run('build_mode');
         this._set_mode('build');
     }
-    
+
     function brush_mode() {
         /** For documentation of this function, see docs/javascript_api.rst.
 
@@ -13680,7 +15813,7 @@ define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', '
         this.callback_manager.run('brush_mode');
         this._set_mode('brush');
     }
-    
+
     function zoom_mode() {
         /** For documentation of this function, see docs/javascript_api.rst.
 
@@ -13688,7 +15821,7 @@ define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', '
         this.callback_manager.run('zoom_mode');
         this._set_mode('zoom');
     }
-    
+
     function rotate_mode() {
         /** For documentation of this function, see docs/javascript_api.rst.
 
@@ -13696,7 +15829,7 @@ define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', '
         this.callback_manager.run('rotate_mode');
         this._set_mode('rotate');
     }
-    
+
     function text_mode() {
         /** For documentation of this function, see docs/javascript_api.rst.
 
@@ -13711,22 +15844,27 @@ define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', '
          */
         this.options.reaction_data = data;
         this._update_data(true, true, 'reaction');
+        this.map.set_status('');
     }
-    
-    function set_gene_data(data) {
+
+    function set_gene_data(data, clear_gene_reaction_rules) {
         /** For documentation of this function, see docs/javascript_api.rst.
 
          */
+        if (clear_gene_reaction_rules) // default undefined
+            this.settings.set_conditional('show_gene_reaction_rules', false);
         this.options.gene_data = data;
         this._update_data(true, true, 'reaction');
+        this.map.set_status('');
     }
-    
+
     function set_metabolite_data(data) {
         /** For documentation of this function, see docs/javascript_api.rst.
 
          */
         this.options.metabolite_data = data;
         this._update_data(true, true, 'metabolite');
+        this.map.set_status('');
     }
 
     function _update_data(update_model, update_map, kind, should_draw) {
@@ -13758,14 +15896,14 @@ define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', '
             met_data_object,
             reaction_data_object,
             gene_data_object;
-        
+
         // -------------------
         // First map, and draw
 
         // metabolite data
         if (update_metabolite_data && update_map && this.map !== null) {
             met_data_object = data_styles.import_and_check(this.options.metabolite_data,
-                                                           'metabolite_data'); 
+                                                           'metabolite_data');
             this.map.apply_metabolite_data_to_map(met_data_object);
             if (should_draw)
                 this.map.draw_all_nodes(false);
@@ -13781,7 +15919,7 @@ define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', '
                     this.map.draw_all_reactions(false, false);
             } else if (this.options.gene_data !== null && update_map && this.map !== null) {
                 gene_data_object = make_gene_data_object(this.options.gene_data,
-                                                         this.cobra_model, this.map); 
+                                                         this.cobra_model, this.map);
                 this.map.apply_gene_data_to_map(gene_data_object);
                 if (should_draw)
                     this.map.draw_all_reactions(false, false);
@@ -13793,7 +15931,7 @@ define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', '
             }
         }
 
-        // ---------------------------------------------------------------- 
+        // ----------------------------------------------------------------
         // Then the model, after drawing. Delay by 5ms so the the map draws
         // first.
 
@@ -13801,7 +15939,7 @@ define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', '
         if (this.update_model_timer)
             window.clearTimeout(this.update_model_timer);
 
-        var delay = 5;        
+        var delay = 5;
         this.update_model_timer = window.setTimeout(function() {
 
             // metabolite_data
@@ -13814,7 +15952,7 @@ define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', '
                                                        this.options.metabolite_styles,
                                                        this.options.metabolite_compare_style);
             }
-            
+
             // reaction data
             if (update_reaction_data) {
                 if (this.options.reaction_data !== null && update_model && this.cobra_model !== null) {
@@ -13828,7 +15966,7 @@ define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', '
                 } else if (this.options.gene_data !== null && update_model && this.cobra_model !== null) {
                     if (!gene_data_object)
                         gene_data_object = make_gene_data_object(this.options.gene_data,
-                                                                 this.cobra_model, this.map); 
+                                                                 this.cobra_model, this.map);
                     this.cobra_model.apply_gene_data(gene_data_object,
                                                      this.options.reaction_styles,
                                                      this.options.identifiers_on_map,
@@ -13846,7 +15984,7 @@ define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', '
             this.callback_manager.run('update_data', null, update_model, update_map, kind, should_draw);
 
         }.bind(this), delay);
-            
+
         // definitions
         function make_gene_data_object(gene_data, cobra_model, map) {
             var all_reactions = {};
@@ -13877,7 +16015,7 @@ define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', '
                                key: 'fn',
                                fn: load_map_for_file.bind(this),
                                pre_fn: function() {
-                                   map.set_status('Loading map...');
+                                   map.set_status('Loading map ...');
                                },
                                failure_fn: function() {
                                    map.set_status('');
@@ -13890,50 +16028,73 @@ define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', '
                       text: 'Clear map' });
         // model dropdown
         var model_menu = ui.dropdown_menu(menu, 'Model')
-            .button({ text: 'Load COBRA model JSON',
-                      key_text: (enable_keys ? ' (Ctrl+M)' : null),
-                      input: { assign: key_manager.assigned_keys.load_model,
-                               key: 'fn',
-                               fn: load_model_for_file.bind(this),
-                               pre_fn: function() {
-                                   map.set_status('Loading model...');
-                               },
-                               failure_fn: function() {
-                                   map.set_status('');
-                               } }
-                    })
-            .button({ key: keys.clear_model,
-                      text: 'Clear model' });
-        // disable the clear button
-        var disable_model_clear = function() {
+                .button({ text: 'Load COBRA model JSON',
+                          key_text: (enable_keys ? ' (Ctrl+M)' : null),
+                          input: { assign: key_manager.assigned_keys.load_model,
+                                   key: 'fn',
+                                   fn: load_model_for_file.bind(this),
+                                   pre_fn: function() {
+                                       map.set_status('Loading model ...');
+                                   },
+                                   failure_fn: function() {
+                                       map.set_status('');
+                                   } }
+                        })
+                .button({ id: 'convert_map',
+                          key: keys.convert_map,
+                          text: 'Update names and gene reaction rules using model' })
+                .button({ id: 'clear_model',
+                          key: keys.clear_model,
+                          text: 'Clear model' });
+        // disable the clear and convert buttons
+        var disable_model_clear_convert = function() {
             model_menu.dropdown.selectAll('li')
                 .classed('escher-disabled', function(d) {
-                    if (d.text == 'Clear model' && this.cobra_model === null)
+                    if ((d.id == 'clear_model' || d.id == 'convert_map') &&
+                        this.cobra_model === null)
                         return true;
                     return null;
                 }.bind(this));
         }.bind(this);
-        disable_model_clear();
-        this.callback_manager.set('load_model', disable_model_clear);
-        
+        disable_model_clear_convert();
+        this.callback_manager.set('load_model', disable_model_clear_convert);
+
         // data dropdown
         var data_menu = ui.dropdown_menu(menu, 'Data')
                 .button({ input: { assign: key_manager.assigned_keys.load_reaction_data,
                                    key: 'fn',
                                    fn: load_reaction_data_for_file.bind(this),
-                                   accept_csv: true },
+                                   accept_csv: true,
+                                   pre_fn: function() {
+                                       map.set_status('Loading reaction data ...');
+                                   },
+                                   failure_fn: function() {
+                                       map.set_status('');
+                                   }},
                           text: 'Load reaction data' })
                 .button({ key: keys.clear_reaction_data,
                           text: 'Clear reaction data' })
                 .divider()
                 .button({ input: { fn: load_gene_data_for_file.bind(this),
-                                   accept_csv: true  },
+                                   accept_csv: true,
+                                   pre_fn: function() {
+                                       map.set_status('Loading gene data ...');
+                                   },
+                                   failure_fn: function() {
+                                       map.set_status('');
+                                   }},
                           text: 'Load gene data' })
                 .button({ key: keys.clear_gene_data,
                           text: 'Clear gene data' })
                 .divider()
                 .button({ input: { fn: load_metabolite_data_for_file.bind(this),
-                                   accept_csv: true  },
+                                   accept_csv: true,
+                                   pre_fn: function() {
+                                       map.set_status('Loading metabolite data ...');
+                                   },
+                                   failure_fn: function() {
+                                       map.set_status('');
+                                   }},
                           text: 'Load metabolite data' })
                 .button({ key: keys.clear_metabolite_data,
                           text: 'Clear metabolite data' });
@@ -14232,6 +16393,9 @@ define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', '
             if (data !== null)
                 this.set_reaction_data(null);
 
+            // turn on gene_reaction_rules
+            this.settings.set_conditional('show_gene_reaction_rules', true);
+
             this.set_gene_data(data);
         }
     }
@@ -14268,7 +16432,7 @@ define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', '
     function _setup_status(selection, map) {
         var status_bar = selection.append('div').attr('id', 'status');
         map.callback_manager.set('set_status', function(status) {
-            status_bar.text(status);
+            status_bar.html(status);
         });
         return status_bar;
     }
@@ -14298,7 +16462,7 @@ define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', '
                 this.map.set_status('');
             }.bind(this));
         }.bind(this);
-        
+
         // make the quick jump object
         this.quick_jump = QuickJump(selection, load_fn);
     }
@@ -14310,7 +16474,7 @@ define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', '
             was_enabled.brush = brush.enabled;
             brush.toggle(false);
             was_enabled.zoom = zoom_container.zoom_on;
-            zoom_container.toggle_zoom(false);
+            zoom_container.toggle_pan_drag(false);
             was_enabled.selectable_mousedown = map.behavior.selectable_mousedown!=null;
             map.behavior.toggle_selectable_click(false);
             was_enabled.label_mousedown = map.behavior.label_mousedown!=null;
@@ -14318,7 +16482,7 @@ define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', '
         });
         map.callback_manager.set('end_rotation', function() {
             brush.toggle(was_enabled.brush);
-            zoom_container.toggle_zoom(was_enabled.zoom);
+            zoom_container.toggle_pan_drag(was_enabled.zoom);
             map.behavior.toggle_selectable_click(was_enabled.selectable_mousedown);
             map.behavior.toggle_label_mousedown(was_enabled.label_mousedown);
             was_enabled = {};
@@ -14335,6 +16499,7 @@ define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', '
                         fn: map.save_svg },
             load: { key: 79, modifiers: { control: true }, // ctrl-o
                     fn: null }, // defined by button
+            convert_map: { fn: this.map.convert_map.bind(this.map) },
             clear_map: { fn: this.map.clear_map.bind(this.map) },
             load_model: { key: 77, modifiers: { control: true }, // ctrl-m
                           fn: null }, // defined by button
@@ -14346,8 +16511,9 @@ define('Builder',['utils', 'BuildInput', 'ZoomContainer', 'Map', 'CobraModel', '
             clear_metabolite_data: { target: this,
                                      fn: function() { this.set_metabolite_data(null); }},
             load_gene_data: { fn: null }, // defined by button
-            clear_gene_data: { target: this,
-                               fn: function() { this.set_gene_data(null); }},
+            clear_gene_data: { fn: function() {
+                this.set_gene_data(null, true);
+            }.bind(this)},
             zoom_in: { key: 187, modifiers: { control: true }, // ctrl +
                        target: zoom_container,
                        fn: zoom_container.zoom_in },
@@ -14457,10 +16623,10 @@ define('DataMenu',["utils"], function(utils) {
             getdatafiles: null,
             datafiles: null,
             update_callback: null,
-	    target: null});
+            target: null});
 
-	if (o.selection===null)
-	    throw new Error('No selection provided for DataMenu');
+        if (o.selection===null)
+            throw new Error('No selection provided for DataMenu');
 
         // setup dropdown menu
         // Append menu if it doesn't exist
@@ -14470,7 +16636,7 @@ define('DataMenu',["utils"], function(utils) {
                 .attr('class','data-menu');
         }
         var select_sel = menu.append('form')
-            .append('select').attr('class','dropdown-menu');
+                .append('select').attr('class','dropdown-menu');
 
         if (o.getdatafiles) {
             if (o.datafiles) {
@@ -14545,70 +16711,70 @@ define('static',["utils"], function(utils) {
     return { load_map_model_from_url: load_map_model_from_url };
     
     function load_map_model_from_url(map_download_url, model_download_url,
-				     local_index, options, callback) {
-	var opt = utils.parse_url_components(window, options),
-	    to_load = [],
-	    load_map = function (fn) { fn(null); },
-	    load_model = function (fn) { fn(null); };
-	if (opt.map_name) {
-	    var map_path = _get_path('map', opt.map_name,
-				     local_index, map_download_url);
-	    if (map_path) {
-		load_map = function (fn) {
-		    d3.json(map_path, function(error, data) {
-			if (error) console.warn(error);
-			fn(data);
-		    });
-		};
-	    }
-	}
-	if (opt.model_name) {
-	    var model_path = _get_path('model', opt.model_name,
-				       local_index, model_download_url);
-	    if (model_path) {
-		load_model = function (fn) {
-		    d3.json(model_path, function(error, data) {
-			if (error) console.warn(error);
-			fn(data);
-		    });
-		};
-	    }
-	}
-	load_map(function(map_data) {
-	    load_model(function(model_data) {
-		callback(map_data, model_data, options);
-	    });
-	});
+                                     local_index, options, callback) {
+        var opt = utils.parse_url_components(window, options),
+            to_load = [],
+            load_map = function (fn) { fn(null); },
+            load_model = function (fn) { fn(null); };
+        if (opt.map_name) {
+            var map_path = _get_path('map', opt.map_name,
+                                     local_index, map_download_url);
+            if (map_path) {
+                load_map = function (fn) {
+                    d3.json(map_path, function(error, data) {
+                        if (error) console.warn(error);
+                        fn(data);
+                    });
+                };
+            }
+        }
+        if (opt.model_name) {
+            var model_path = _get_path('model', opt.model_name,
+                                       local_index, model_download_url);
+            if (model_path) {
+                load_model = function (fn) {
+                    d3.json(model_path, function(error, data) {
+                        if (error) console.warn(error);
+                        fn(data);
+                    });
+                };
+            }
+        }
+        load_map(function(map_data) {
+            load_model(function(model_data) {
+                callback(map_data, model_data, options);
+            });
+        });
     }
     
     function _get_path(kind, name, index, url) {
-	var match = index[kind+'s'].filter(function(x) {
-	    return x[kind+'_name'] == name;
-	});
-	if (match.length == 0)
-	    throw new Error('Bad ' + kind + ' ' + name);
-	return (url + encodeURIComponent(match[0].organism) + 
-		'/' + encodeURIComponent(match[0][kind+'_name'])) + '.json';
+        var match = index[kind+'s'].filter(function(x) {
+            return x[kind+'_name'] == name;
+        });
+        if (match.length == 0)
+            throw new Error('Bad ' + kind + ' ' + name);
+        return (url + encodeURIComponent(match[0].organism) + 
+                '/' + encodeURIComponent(match[0][kind+'_name'])) + '.json';
     }
 });
 
-define('main',['Builder', 'Map', 'Behavior', 'KeyManager', 'DataMenu', 'UndoStack', 'CobraModel', 'utils', 'SearchIndex', 'Settings', 'data_styles', 'ui', 'static'],
-       function(bu, mp, bh, km, dm, us, cm, ut, si, se, ds, ui, st) {
+define('main',['Builder', 'Map', 'Behavior', 'KeyManager', 'DataMenu', 'UndoStack', 'CobraModel', 'utils', 'SearchIndex', 'Settings', 'data_styles', 'ui', 'static', 'ZoomContainer'],
+       function(bu, mp, bh, km, dm, us, cm, ut, si, se, ds, ui, st, zc) {
            return { Builder: bu,
-		    Map: mp,
-		    Behavior: bh,
-		    KeyManager: km,
-		    DataMenu: dm,
-		    UndoStack: us,
-		    CobraModel: cm,
-		    utils: ut,
-		    SearchIndex: si,
-		    Settings: se,
-		    data_styles: ds,
+                    Map: mp,
+                    Behavior: bh,
+                    KeyManager: km,
+                    DataMenu: dm,
+                    UndoStack: us,
+                    CobraModel: cm,
+                    utils: ut,
+                    SearchIndex: si,
+                    Settings: se,
+                    data_styles: ds,
                     ui: ui,
-		    static: st };
+                    static: st,
+                    ZoomContainer: zc };
        });
-
     //The modules for your project will be inlined above
     //this snippet. Ask almond to synchronously require the
     //module value for 'main' here and return it as the

@@ -1,4 +1,4 @@
-/* knockout.js - run knockouts in the browser with glpk.js
+/** knockout.js - run knockouts in the browser with glpk.js
 
  Copyright (C) 2015 The Regents of the University of California.
 
@@ -16,6 +16,12 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>
 
  */
+
+/* global escher, d3, GLP_FX, glp_set_row_bnds, glp_set_row_name, glp_add_cols,
+ glp_add_rows, GLP_MAX, glp_set_obj_dir, glp_set_prob_name, glp_create_prob,
+ glp_get_obj_val, glp_simplex, GLP_ON, SMCP, glp_load_matrix, glp_set_obj_coef,
+ GLP_DB, glp_set_col_bnds, glp_set_col_name, glp_get_col_name, glp_get_col_prim,
+ glp_get_obj_val, glp_get_num_cols */
 
 function initialize_knockout() {
     // load everything
@@ -37,7 +43,7 @@ function load_builder(callback) {
     // load the Builder
     d3.json('E coli core.Core metabolism.json', function(e, data) {
         if (e) console.warn(e);
-        d3.text('builder-embed-1.1.2.css', function(e, css) {
+        d3.text('builder-embed-1.3.0.css', function(e, css) {
             if (e) console.warn(e);
             var options = { menu: 'all',
                             enable_editing: false,
@@ -59,23 +65,28 @@ function load_model(callback) {
 }
 
 
+function set_knockout_status(text) {
+    d3.select('#knockout-status').text(text);
+}
+
+
 function optimize_loop(builder, model) {
     var solve_and_display = function(m, knockouts) {
         var problem = build_glpk_problem(m);
         var result = optimize(problem);
         var keys = Object.keys(knockouts),
             ko_string = keys.map(function(s) { return 'Δ'+s; }).join(' ');
-            nbs = String.fromCharCode(160); // non-breaking space
+        var nbs = String.fromCharCode(160); // non-breaking space
         if (keys.length > 0)
             ko_string += (' (' + keys.length + 'KO): ');
         else ko_string = 'Click a reaction to knock it out. ';
         if (result.f < 1e-3) {
             builder.set_reaction_data(null);
-            builder.map.set_status(ko_string + 'You killed E.' + nbs + 'coli!');
-        } else { 
+            set_knockout_status(ko_string + 'You killed E.' + nbs + 'coli!');
+        } else {
             builder.set_reaction_data(result.x);
-            builder.map.set_status(ko_string + 'Growth' + nbs + 'rate:' + nbs +
-                                   (result.f/1.791*100).toFixed(1) + '%');
+            set_knockout_status(ko_string + 'Growth' + nbs + 'rate:' + nbs +
+                                (result.f/1.791*100).toFixed(1) + '%');
         }
     };
 
@@ -89,7 +100,7 @@ function optimize_loop(builder, model) {
     // set up and run
     model = set_carbon_source(model, 'EX_glc_e', 20);
     solve_and_display(model, knockouts);
-    
+
     // initialize event listeners
     var sel = builder.selection;
     sel.selectAll('.reaction,.reaction-label')
@@ -125,7 +136,7 @@ function fill_array_single(len, val, index_value, index) {
     for (var i = 0, arr = new Array(len); i < len;) {
         if (i == index)
             arr[i++] = index_value;
-        else 
+        else
             arr[i++] = val;
     }
     return arr;
@@ -209,7 +220,7 @@ function build_glpk_problem(model) {
     });
     // Load the S matrix
     glp_load_matrix(lp, ia.length - 1, ia, ja, ar);
-    
+
     return lp;
 }
 

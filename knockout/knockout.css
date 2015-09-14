@@ -17,34 +17,36 @@
  */
 
 body {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
-#status {
-    font-size: 24px;
+#knockout-status {
+  position: absolute;
+  bottom: 55px;
+  left: 20px;
+  font-size: 24px;
+  color: red;
+  background-color: white;
 }
 #knockout-buttons {
-    position: absolute;
-    bottom: 5px;
-    right: 5px;
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
 }
 #knockout-buttons .btn {
-    display: inline-block;
+  display: inline-block;
 }
 .label {
-    cursor: inherit !important;
+  cursor: inherit !important;
 }
 
 @media (max-width: 850px) {
-    #status {
-        bottom: 55px;
-    }
-    #knockout-buttons {
-        right: null;
-        left: 5px;
-    }
+  #knockout-buttons {
+    right: null;
+    left: 5px;
+  }
 }
 

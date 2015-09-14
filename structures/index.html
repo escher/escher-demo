@@ -29,18 +29,18 @@ THE SOFTWARE.
 <html>
   <title>Escher Structures</title>
   <!-- Bootstrap dependencies for the menu and buttons -->
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.0/jquery.min.js"/></script>
-  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"/></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
   <!-- Choose a Bootswatch theme -->
-  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootswatch/3.3.4/united/bootstrap.min.css"/>
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootswatch/3.3.5/united/bootstrap.min.css"/>
 
   <!-- d3 -->
-  <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.8/d3.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
   
   <!-- Escher files -->
-  <script src="escher-1.1.2.js"></script>
-  <link rel="stylesheet" href="builder-1.1.2.css"/>
+  <script src="escher-1.3.0.js"></script>
+  <link rel="stylesheet" href="builder-1.3.0.css"/>
 
   <style>
    #structures-buttons {
@@ -103,7 +103,7 @@ THE SOFTWARE.
    // load the map and embedded CSS
    d3.json('E coli core.Core_metabolism_for_structures.json', function(e, data) {
        if (e) console.warn(e);
-       d3.text('builder-embed-1.1.2.css', function(e, css) {
+       d3.text('builder-embed-1.3.0.css', function(e, css) {
            if (e) console.warn(e);
            var options = { 
                menu: 'all',

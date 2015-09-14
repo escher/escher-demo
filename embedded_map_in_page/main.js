@@ -7,7 +7,7 @@ window.onload = function() {
         if (e) console.warn(e);
 
         // Load the required CSS file as text
-        d3.text('builder-embed-1.2.1.css', function(e, css) {
+        d3.text('builder-embed-1.3.0.css', function(e, css) {
             if (e) console.warn(e);
 
             // ---------------------------------------
@@ -42,6 +42,8 @@ window.onload = function() {
                 // highlight the reaction specified by this id (all Escher IDs
                 // are strings)
                 zoom_to_element: {type: 'reaction', id: my_reaction_id },
+                // do not use the d3 transforms for this map
+                use_3d_transform: false,
                 // This is a trick to change the behavior of the "extent"
                 // button so it zooms in on the chosen reaction.
                 first_load_callback: function () {
