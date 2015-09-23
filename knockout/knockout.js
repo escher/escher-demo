@@ -46,6 +46,7 @@ function load_builder(callback) {
         d3.text('builder-embed-1.3.0.css', function(e, css) {
             if (e) console.warn(e);
             var options = { menu: 'all',
+                            use_3d_transform: true,
                             enable_editing: false,
                             fill_screen: true,
                             reaction_styles: ['abs', 'color', 'size', 'text'],

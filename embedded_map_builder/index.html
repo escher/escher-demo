@@ -47,7 +47,12 @@ THE SOFTWARE.
      d3.json('e_coli.iJO1366.central_metabolism.json', function(e, data) {
          d3.text('builder-embed-1.3.0.css', function(e, css) {
              if (e) console.warn(e);
-             var options = { menu: 'all', fill_screen: true };
+             var options = {
+                 menu: 'all',
+                 fill_screen: true,
+                 // not use the d3 transforms for this map
+                 use_3d_transform: true
+             };
              var b = escher.Builder(data, null, css, d3.select('#map_container'), options);
          });
      });

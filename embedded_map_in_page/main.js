@@ -17,6 +17,8 @@ window.onload = function() {
             var options1 = {
                 /* just show the zoom buttons */
                 menu: 'zoom',
+                // use the smooth pan and zoom option
+                use_3d_transform: true,
                 /* no editing in this map */
                 enable_editing: false,
                 /* no keyboard shortcuts */
@@ -35,6 +37,8 @@ window.onload = function() {
             var options2 = {
                 // just show the zoom buttons
                 menu: 'zoom',
+                // use the smooth pan and zoom option
+                use_3d_transform: true,
                 // no editing in this map
                 enable_editing: false,
                 // no keyboard shortcuts
@@ -42,8 +46,6 @@ window.onload = function() {
                 // highlight the reaction specified by this id (all Escher IDs
                 // are strings)
                 zoom_to_element: {type: 'reaction', id: my_reaction_id },
-                // do not use the d3 transforms for this map
-                use_3d_transform: false,
                 // This is a trick to change the behavior of the "extent"
                 // button so it zooms in on the chosen reaction.
                 first_load_callback: function () {
@@ -114,6 +116,8 @@ window.onload = function() {
             var options3 = {
                 // just show the zoom buttons
                 menu: 'zoom',
+                // do not use the smooth pan and zoom option
+                use_3d_transform: false,
                 // no editing in this map
                 enable_editing: false,
                 // no keyboard shortcuts
