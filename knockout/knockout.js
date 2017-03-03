@@ -43,17 +43,15 @@ function load_builder(callback) {
     // load the Builder
     d3.json('E coli core.Core metabolism.json', function(e, data) {
         if (e) console.warn(e);
-        d3.text('builder-embed-1.3.0.css', function(e, css) {
-            if (e) console.warn(e);
-            var options = { menu: 'all',
-                            use_3d_transform: true,
-                            enable_editing: false,
-                            fill_screen: true,
-                            reaction_styles: ['abs', 'color', 'size', 'text'],
-                            never_ask_before_quit: true };
-            var b = escher.Builder(data, null, css, d3.select('#map_container'), options);
-            callback(b);
-        });
+        var options = { menu: 'all',
+                        use_3d_transform: true,
+                        enable_editing: false,
+                        fill_screen: true,
+                        reaction_styles: ['abs', 'color', 'size', 'text'],
+                        never_ask_before_quit: true,
+                        enable_tooltips: false };
+        var b = escher.Builder(data, null, null, d3.select('#map_container'), options);
+        callback(b);
     });
 }
 
