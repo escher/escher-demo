@@ -21,7 +21,7 @@ http-server -p 8000
 This will start a unicode-friendly Python web
 server. Open [http://localhost:8000/](http://localhost:8000/) to see the demos.
 
-Try editing the `minimal_embedded_map/index.html` file, then reload your web
+Try editing the `embedded_map_builder/index.html` file, then reload your web
 browser to see what you've changed. You can see what's happening under the hood
 by opening your Developer tools
 ([Chrome](https://developer.chrome.com/devtools),

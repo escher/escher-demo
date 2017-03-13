@@ -44,14 +44,10 @@ THE SOFTWARE.
     <div id="map_container"></div>
 
     <script>
-     d3.json('e_coli.iJO1366.central_metabolism.json', function(e, data) {
-        var options = {
-            menu: 'all',
-            fill_screen: true,
-            // not use the d3 transforms for this map
-            use_3d_transform: true
-        };
-        var b = escher.Builder(data, null, null, d3.select('#map_container'), options);
+     d3.json('e_coli.iJO1366.central_metabolism.json', function(error, data) {
+       if (error) console.warn(error);
+       var options = { menu: 'all', fill_screen: true };
+       var b = escher.Builder(data, null, null, d3.select('#map_container'), options);
      });
     </script>
   </body>
