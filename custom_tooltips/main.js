@@ -35,7 +35,55 @@ var tooltips_1 = function (args) {
 }
 
 // --------------------------------------------------
-// TOOLTIP 2: Function with tinier rendering
+// TOOLTIP 2: Callback function with Tinier for rendering
+// --------------------------------------------------
+
+var tooltips_2 = function (args) {
+  // Use the tinier.render function to render any changes each time the
+  // tooltip gets called
+  tinier.render(
+    args.el,
+    // Create a new div element inside args.el
+    tinier.createElement(
+      'div',
+      // Style the text based on our tooltip_style object
+      { style: tooltip_style},
+      // Update the text to read out the identifier biggId
+      'Hello tinier ' + args.state.biggId
+    )
+  )
+}
+
+// --------------------------------------------------
+// TOOLTIP 3: Tooltip with random pics
+// --------------------------------------------------
+
+var tooltips_3 = function (args) {
+  // Use the tinier.render function to render any changes each time the
+  // tooltip gets called
+  tinier.render(
+    args.el,
+    // Create a new div element inside args.el
+    tinier.createElement(
+      'div',
+      // Style the text based on our tooltip_style object
+      { style: tooltip_style},
+      // Update the text to read out the identifier biggId
+      'Hello tinier ' + args.state.biggId,
+      // Line break
+      tinier.createElement('br'),
+      // Add a picture
+      tinier.createElement(
+        'img',
+        // Get a random pic from unsplash, with ID between 0 and 1000
+        { src: 'https://unsplash.it/100/100?image=' +  Math.floor(Math.random() * 1000) }
+      )
+    )
+  )
+}
+
+// --------------------------------------------------
+// TOOLTIP 4: Tooltip with a D3 plot
 // --------------------------------------------------
 
 /**
@@ -58,7 +106,7 @@ function calculateLetterFrequency (s) {
 /**
  * Tooltip function that shows plots with the frequency of letters in each ID.
  */
-var tooltips_2 = function (args) {
+var tooltips_4 = function (args) {
   // Use the tinier.render function to render any changes each time the
   // tooltip gets called
   tinier.render(
@@ -121,7 +169,7 @@ var tooltips_2 = function (args) {
 // TOOLTIP 3: Component with Tinier rendering and state handling
 // --------------------------------------------------
 
-var tooltips_3 = tinier.createComponent({
+var tooltips_5 = tinier.createComponent({
   init: function () {
     return {
       biggId: '',
@@ -172,7 +220,7 @@ window.onload = function () {
       fill_screen: true,
       // --------------------------------------------------
       // CHANGE ME
-      tooltip_component: tooltips_2,
+      tooltip_component: tooltips_4,
       // --------------------------------------------------
     }
     var b = escher.Builder(data, null, null, d3.select('#map_container'),
