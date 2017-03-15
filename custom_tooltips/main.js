@@ -173,11 +173,6 @@ var tooltips_5 = tinier.createComponent({
   init: function () {
     return {
       biggId: '',
-      name: '',
-      loc: { x: 0, y: 0 },
-      data: null,
-      type: null,
-      // custom data
       count: 0,
     }
   },
@@ -186,10 +181,6 @@ var tooltips_5 = tinier.createComponent({
     setContainerData: function (args) {
       return Object.assign({}, args.state, {
         biggId: args.biggId,
-        name: args.name,
-        loc: args.loc,
-        data: args.data,
-        type: args.type,
         count: args.state.count + 1,
       })
     },
