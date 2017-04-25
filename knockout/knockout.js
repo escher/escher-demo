@@ -23,6 +23,50 @@
  GLP_DB, glp_set_col_bnds, glp_set_col_name, glp_get_col_name, glp_get_col_prim,
  glp_get_obj_val, glp_get_num_cols */
 
+var tooltip_style = {
+ 'min-width': '500px',
+ 'min-height': '50px',
+ 'border-radius': '2px',
+ 'border': '1px solid #b58787',
+ 'padding': '7px',
+ 'background-color': '#fff',
+ 'text-align': 'left',
+ 'font-size': '16px',
+ 'font-family': 'sans-serif',
+ 'color': '#111',
+ 'box-shadow': '4px 6px 20px 0px rgba(0, 0, 0, 0.4)',
+}
+
+var tooltips_1 = function (args) {
+  // Check if there is already text in the tooltip
+  if (args.el.childNodes.length === 0) {
+    // If not, add new text
+    var slider = document.createElement('div')
+    args.el.appendChild(slider)
+    $(slider).ionRangeSlider({
+        hide_min_max: true,
+        keyboard: true,
+        min: -1000,
+        max: 1000,
+        from: -1000,
+        to: 1000,
+        type: 'double',
+        step: 1,
+        grid: true
+    });
+    // Style the text based on our tooltip_style object
+    Object.keys(tooltip_style).map(function (key) {
+      args.el.style[key] = tooltip_style[key]
+    })
+  }
+  // Update the text to read out the identifier biggId
+  $(args.el.childNodes[0]).data("ionRangeSlider").update({
+    from: -1000,
+    to: 1000
+  });
+  //args.el.childNodes[0].textContent = 'Hello ' + args.state.biggId;
+}
+
 function initialize_knockout() {
     // load everything
     load_builder(function(builder) {
@@ -235,4 +279,22 @@ function optimize(problem) {
         x[glp_get_col_name(problem, i)] = glp_get_col_prim(problem, i);
     }
     return {f: f, x: x};
+}
+
+window.onload = function () {
+
+  d3.json('e_coli.iJO1366.central_metabolism.json', function(e, data) {
+    if (e) console.warn(e)
+    var options = {
+      menu: 'zoom',
+      fill_screen: true,
+      // --------------------------------------------------
+      // CHANGE ME
+      tooltip_component: tooltips_1,
+      // --------------------------------------------------
+    }
+    var b = escher.Builder(data, null, null, d3.select('#map_container'),
+                           options)
+  })
+
 }
