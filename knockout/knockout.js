@@ -41,9 +41,11 @@ var tooltips_1 = function (args) {
   // Check if there is already text in the tooltip
   if (args.el.childNodes.length === 0) {
     // If not, add new text
-    var slider = document.createElement('div')
-    args.el.appendChild(slider)
-    $(slider).ionRangeSlider({
+    //$(args.el).rangeSlider()
+    // var node = document.createTextNode('Hello ')
+    // var br = document.createElement('br')
+    var $input = $('<input>').appendTo(args.el);
+    $input.ionRangeSlider({
         hide_min_max: true,
         keyboard: true,
         min: -1000,
@@ -54,16 +56,21 @@ var tooltips_1 = function (args) {
         step: 1,
         grid: true
     });
+    $input.on("change", function () {
+      var $this = $(this),
+          value = $this.prop("value");
+      console.log("Value: " + value);
+    });
     // Style the text based on our tooltip_style object
     Object.keys(tooltip_style).map(function (key) {
       args.el.style[key] = tooltip_style[key]
     })
-  }
+  };
+  var $input = $(args.el).children('input');
+  var slider_data = $input.data("ionRangeSlider");
+  slider_data.reset();
   // Update the text to read out the identifier biggId
-  $(args.el.childNodes[0]).data("ionRangeSlider").update({
-    from: -1000,
-    to: 1000
-  });
+
   //args.el.childNodes[0].textContent = 'Hello ' + args.state.biggId;
 }
 
