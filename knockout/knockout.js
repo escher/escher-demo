@@ -63,6 +63,7 @@ function load_builder(callback) {
                         fill_screen: true,
                         reaction_styles: ['abs', 'color', 'size', 'text'],
                         never_ask_before_quit: true,
+                        tooltip_component: tooltips_1,
                         enable_tooltips: false };
         var b = escher.Builder(data, null, null, d3.select('#map_container'), options);
         callback(b);
@@ -300,18 +301,19 @@ var tooltips_1 = function (args) {
 
 window.onload = function () {
 
-  d3.json('E coli core.Core metabolism.json', function(e, data) {
-    if (e) console.warn(e)
-    var options = {
-      menu: 'zoom',
-      fill_screen: true,
-      // --------------------------------------------------
-      // CHANGE ME
-      tooltip_component: tooltips_1,
-      // --------------------------------------------------
-    }
-    var b = escher.Builder(data, null, null, d3.select('#map_container'),
-                           options)
-  })
+  // d3.json('E coli core.Core metabolism.json', function(e, data) {
+  //   if (e) console.warn(e)
+  //   var options = {
+  //     menu: 'zoom',
+  //     fill_screen: true,
+  //     // --------------------------------------------------
+  //     // CHANGE ME
+  //     tooltip_component: tooltips_1,
+  //     // --------------------------------------------------
+  //   }
+  //   var b = escher.Builder(data, null, null, d3.select('#map_container'),
+  //                          options)
+  // })
+  initialize_knockout();
 
 }
