@@ -37,43 +37,6 @@ var tooltip_style = {
  'box-shadow': '4px 6px 20px 0px rgba(0, 0, 0, 0.4)',
 }
 
-var tooltips_1 = function (args) {
-  // Check if there is already text in the tooltip
-  if (args.el.childNodes.length === 0) {
-    // If not, add new text
-    //$(args.el).rangeSlider()
-    // var node = document.createTextNode('Hello ')
-    // var br = document.createElement('br')
-    var $input = $('<input>').appendTo(args.el);
-    $input.ionRangeSlider({
-        hide_min_max: true,
-        keyboard: true,
-        min: -1000,
-        max: 1000,
-        from: -1000,
-        to: 1000,
-        type: 'double',
-        step: 1,
-        grid: true
-    });
-    $input.on("change", function () {
-      var $this = $(this),
-          value = $this.prop("value");
-      console.log("Value: " + value);
-    });
-    // Style the text based on our tooltip_style object
-    Object.keys(tooltip_style).map(function (key) {
-      args.el.style[key] = tooltip_style[key]
-    })
-  };
-  var $input = $(args.el).children('input');
-  var slider_data = $input.data("ionRangeSlider");
-  slider_data.reset();
-  // Update the text to read out the identifier biggId
-
-  //args.el.childNodes[0].textContent = 'Hello ' + args.state.biggId;
-}
-
 function initialize_knockout() {
     // load everything
     load_builder(function(builder) {
@@ -205,6 +168,18 @@ function knock_out_reaction(model, reaction_id) {
 }
 
 
+function change_flux_reaction(model, reaction_id, lower, upper) {
+    for (var i = 0, l = model.reactions.length; i < l; i++) {
+        if (model.reactions[i].id == reaction_id) {
+            model.reactions[i].lower_bound = lower;
+            model.reactions[i].upper_bound = upper;
+            return model;
+        }
+    }
+    throw new Error('Bad reaction ' + reaction_id);
+}
+
+
 function set_carbon_source(model, reaction_id, sur) {
     for (var i = 0, l = model.reactions.length; i < l; i++) {
         if (model.reactions[i].id == reaction_id) {
@@ -288,9 +263,44 @@ function optimize(problem) {
     return {f: f, x: x};
 }
 
+var tooltips_1 = function (args) {
+  // Check if there is already text in the tooltip
+  if (args.el.childNodes.length === 0) {
+    // If not, add new text
+    // var node = document.createTextNode('Hello ')
+    // var br = document.createElement('br')
+    var $input = $('<input>').appendTo(args.el);
+    $input.ionRangeSlider({
+        hide_min_max: true,
+        keyboard: true,
+        min: -1000,
+        max: 1000,
+        from: -1000,
+        to: 1000,
+        type: 'double',
+        step: 1,
+        grid: true,
+        onFinish: function(data) {
+          console.log(args.state.biggId);
+          //model = change_flux_reaction(model, d.bigg_id, data.from, data.to);
+        }
+    });
+    // Style the text based on our tooltip_style object
+    Object.keys(tooltip_style).map(function (key) {
+      args.el.style[key] = tooltip_style[key]
+    })
+  };
+  var $input = $(args.el).children('input');
+  var slider_data = $input.data("ionRangeSlider");
+  slider_data.reset();
+  // Update the text to read out the identifier biggId
+
+  //args.el.childNodes[0].textContent = 'Hello ' + args.state.biggId;
+}
+
 window.onload = function () {
 
-  d3.json('e_coli.iJO1366.central_metabolism.json', function(e, data) {
+  d3.json('E coli core.Core metabolism.json', function(e, data) {
     if (e) console.warn(e)
     var options = {
       menu: 'zoom',
