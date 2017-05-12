@@ -57,14 +57,14 @@ function load_builder(callback) {
     // load the Builder
     d3.json('E coli core.Core metabolism.json', function(e, data) {
         if (e) console.warn(e);
-        var options = { menu: 'all',
+        var options = { menu: 'zoom',
                         use_3d_transform: true,
                         enable_editing: false,
                         fill_screen: true,
                         reaction_styles: ['abs', 'color', 'size', 'text'],
                         never_ask_before_quit: true,
                         tooltip_component: tooltips_1,
-                        enable_tooltips: false };
+                        enable_tooltips: true };
         var b = escher.Builder(data, null, null, d3.select('#map_container'), options);
         callback(b);
     });
@@ -283,7 +283,13 @@ var tooltips_1 = function (args) {
         grid: true,
         onFinish: function(data) {
           console.log(args.state.biggId);
-          //model = change_flux_reaction(model, d.bigg_id, data.from, data.to);
+          console.log(args.state.lower_bound);
+          // if (knockable(d.bigg_id)) {
+          //     if (!(d.bigg_id in knockouts))
+          //         knockouts[d.bigg_id] = true;
+          //     model = change_flux_reaction(model, d.bigg_id, data.from, data.to);
+          //     solve_and_display(model, knockouts);
+          // }
         }
     });
     // Style the text based on our tooltip_style object
