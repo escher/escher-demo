@@ -1,3 +1,4 @@
 *.log
 *.pyc
 private_token.py
+.DS_Store

@@ -37,45 +37,45 @@ var tooltip_style = {
  'box-shadow': '4px 6px 20px 0px rgba(0, 0, 0, 0.4)',
 }
 
-function initialize_knockout() {
-    // load everything
-    load_builder(function(builder) {
-        load_model(function(model) {
-            var old_model = escher.utils.clone(model);
-            optimize_loop(builder, model);
-            d3.select('#reset-button')
-                .on('click', function() {
-                    model = escher.utils.clone(old_model);
-                    optimize_loop(builder, model);
-                });
-        });
-    });
+function initialize_knockout () {
+  // Load everything
+  load_builder(function (builder) {
+    load_model(function (model) {
+      // Keep reference to original model
+      var old_model = escher.utils.clone(model)
+      optimize_loop(builder, model)
+      d3.select('#reset-button').on('click', function () {
+        model = escher.utils.clone(old_model)
+        optimize_loop(builder, model)
+      })
+    })
+  })
 }
 
 
-function load_builder(callback) {
-    // load the Builder
-    d3.json('E coli core.Core metabolism.json', function(e, data) {
-        if (e) console.warn(e);
-        var options = { menu: 'zoom',
-                        use_3d_transform: true,
-                        enable_editing: false,
-                        fill_screen: true,
-                        reaction_styles: ['abs', 'color', 'size', 'text'],
-                        never_ask_before_quit: true,
-                        tooltip_component: tooltips_1,
-                        enable_tooltips: true };
-        var b = escher.Builder(data, null, null, d3.select('#map_container'), options);
-        callback(b);
-    });
+function load_builder (callback) {
+  // Load the Builder
+  d3.json('E coli core.Core metabolism.json', function (e, data) {
+    if (e) console.warn(e)
+    var options = { menu: 'zoom',
+                    use_3d_transform: true,
+                    enable_editing: false,
+                    fill_screen: true,
+                    reaction_styles: ['abs', 'color', 'size', 'text'],
+                    never_ask_before_quit: true,
+                    tooltip_component: tooltips_1,
+                    enable_tooltips: true }
+    var b = escher.Builder(data, null, null, d3.select('#map_container'), options)
+    callback(b)
+  })
 }
 
 
-function load_model(callback) {
-    d3.json('E coli core.json', function(e, data) {
-        if (e) console.warn(e);
-        callback(data);
-    });
+function load_model (callback) {
+  d3.json('E coli core.json', function (e, data) {
+    if (e) console.warn(e)
+    callback(data)
+  })
 }
 
 
@@ -83,59 +83,66 @@ function set_knockout_status(text) {
     d3.select('#knockout-status').text(text);
 }
 
+function solve_and_display (model, builder, knockouts) {
+  var problem = build_glpk_problem(model)
+  var result = optimize(problem)
+  var keys = Object.keys(knockouts)
+  var ko_string = keys.map(function(s) { return 'Δ'+s; }).join(' ');
+  var nbs = String.fromCharCode(160); // non-breaking space
+  if (keys.length > 0)
+    ko_string += (' (' + keys.length + 'KO): ');
+  else ko_string = 'Click a reaction to knock it out. ';
+  if (result.f < 1e-3) {
+    builder.set_reaction_data(null);
+    set_knockout_status(ko_string + 'You killed E.' + nbs + 'coli!');
+  } else {
+    builder.set_reaction_data(result.x);
+    set_knockout_status(ko_string + 'Growth' + nbs + 'rate:' + nbs +
+                        (result.f/1.791*100).toFixed(1) + '%');
+  }
+}
 
-function optimize_loop(builder, model) {
-    var solve_and_display = function(m, knockouts) {
-        var problem = build_glpk_problem(m);
-        var result = optimize(problem);
-        var keys = Object.keys(knockouts),
-            ko_string = keys.map(function(s) { return 'Δ'+s; }).join(' ');
-        var nbs = String.fromCharCode(160); // non-breaking space
-        if (keys.length > 0)
-            ko_string += (' (' + keys.length + 'KO): ');
-        else ko_string = 'Click a reaction to knock it out. ';
-        if (result.f < 1e-3) {
-            builder.set_reaction_data(null);
-            set_knockout_status(ko_string + 'You killed E.' + nbs + 'coli!');
-        } else {
-            builder.set_reaction_data(result.x);
-            set_knockout_status(ko_string + 'Growth' + nbs + 'rate:' + nbs +
-                                (result.f/1.791*100).toFixed(1) + '%');
-        }
-    };
+/**
+ * Here's what optimize_loop does
+ */
+function optimize_loop (builder, model) {
+  var knockouts = {}
+  var knockable = function (r) {
+    return (r.indexOf('EX_') === -1
+            && r.indexOf('ATPM') === -1
+            && r.indexOf('Biomass') === -1)
+  }
 
-    var knockouts = {},
-        knockable = function(r) {
-            return (r.indexOf('EX_') == -1 &&
-                    r.indexOf('ATPM') == -1 &&
-                    r.indexOf('Biomass') == -1);
-        };
+  // set up and run
+  model = set_carbon_source(model, 'EX_glc_e', 20)
+  solve_and_display(model, builder, knockouts)
 
-    // set up and run
-    model = set_carbon_source(model, 'EX_glc_e', 20);
-    solve_and_display(model, knockouts);
+  // initialize event listeners
+  var sel = builder.selection;
+  sel.selectAll('.reaction,.reaction-label')
+    .style('cursor', function(d) {
+      if (knockable(d.bigg_id)) return 'pointer';
+      else return null;
+    })
+    .on('click', function(d) {
+      if (knockable(d.bigg_id)) {
+        if (!(d.bigg_id in knockouts))
+          knockouts[d.bigg_id] = true;
+        model = knock_out_reaction(model, d.bigg_id)
+        solve_and_display(model, builder, knockouts)
+      }
+    });
+  // grey for reactions that cannot be knocked out
+  sel.selectAll('.reaction-label')
+    .style('fill', function(d) {
+      if (!knockable(d.bigg_id)) return '#888';
+      else return null;
+    });
 
-    // initialize event listeners
-    var sel = builder.selection;
-    sel.selectAll('.reaction,.reaction-label')
-        .style('cursor', function(d) {
-            if (knockable(d.bigg_id)) return 'pointer';
-            else return null;
-        })
-        .on('click', function(d) {
-            if (knockable(d.bigg_id)) {
-                if (!(d.bigg_id in knockouts))
-                    knockouts[d.bigg_id] = true;
-                model = knock_out_reaction(model, d.bigg_id);
-                solve_and_display(model, knockouts);
-            }
-        });
-    // grey for reactions that cannot be knocked out
-    sel.selectAll('.reaction-label')
-        .style('fill', function(d) {
-            if (!knockable(d.bigg_id)) return '#888';
-            else return null;
-        });
+  // TODO set up tooltip with latest builder and model
+  builder.options.tooltip_component = function (args) {
+
+  }
 }
 
 
@@ -281,24 +288,25 @@ var tooltips_1 = function (args) {
         type: 'double',
         step: 1,
         grid: true,
-        onFinish: function(data) {
-          console.log(args.state.biggId);
-          console.log(args.state.lower_bound);
-          // if (knockable(d.bigg_id)) {
-          //     if (!(d.bigg_id in knockouts))
-          //         knockouts[d.bigg_id] = true;
-          //     model = change_flux_reaction(model, d.bigg_id, data.from, data.to);
-          //     solve_and_display(model, knockouts);
-          // }
-        }
     });
     // Style the text based on our tooltip_style object
     Object.keys(tooltip_style).map(function (key) {
       args.el.style[key] = tooltip_style[key]
     })
   };
+  console.log('NEW ' + args.state.biggId)
+  // Print out all args. NOTE that lower_bound and upper_bound are not included.
+  console.log(args)
   var $input = $(args.el).children('input');
   var slider_data = $input.data("ionRangeSlider");
+
+  // Make the onFinish function for every new tooltip call
+  slider_data.update({
+    onFinish: function (data) {
+      console.log(args.state.biggId)
+    },
+  })
+
   slider_data.reset();
   // Update the text to read out the identifier biggId
 
@@ -306,20 +314,5 @@ var tooltips_1 = function (args) {
 }
 
 window.onload = function () {
-
-  // d3.json('E coli core.Core metabolism.json', function(e, data) {
-  //   if (e) console.warn(e)
-  //   var options = {
-  //     menu: 'zoom',
-  //     fill_screen: true,
-  //     // --------------------------------------------------
-  //     // CHANGE ME
-  //     tooltip_component: tooltips_1,
-  //     // --------------------------------------------------
-  //   }
-  //   var b = escher.Builder(data, null, null, d3.select('#map_container'),
-  //                          options)
-  // })
-  initialize_knockout();
-
+  initialize_knockout()
 }
