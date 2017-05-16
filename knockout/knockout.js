@@ -87,8 +87,16 @@ function optimize_loop (builder, model) {
       // Check if there is already text in the tooltip
       if (args.el.childNodes.length === 0) {
         // If not, add new text
-        // var node = document.createTextNode('Hello ')
-        // var br = document.createElement('br')
+        var title_node = document.createTextNode('Hello ')
+        var br = document.createElement('br')
+        var lower_title_node = document.createTextNode('Lower limit ')
+        var upper_title_node = document.createTextNode(' Upper limit ')
+        args.el.appendChild(title_node)
+        args.el.appendChild(br)
+        args.el.appendChild(lower_title_node)
+        // var $lower_input = $('<input>').appendTo(args.el)
+        args.el.appendChild(upper_title_node)
+        // var $upper_input = $('<input>').appendTo(args.el)
         var $input = $('<input>').appendTo(args.el)
         $input.ionRangeSlider()
       // Style the text based on our tooltip_style object
@@ -98,15 +106,22 @@ function optimize_loop (builder, model) {
       }
       var $input = $(args.el).children('input')
       var slider_data = $input.data("ionRangeSlider")
+      for (var i = 0, l = model.reactions.length; i < l; i++) {
+          if (model.reactions[i].id == args.state.biggId) {
+              var lower = model.reactions[i].lower_bound
+              var upper = model.reactions[i].upper_bound
+          }
+      }
       slider_data.update({
         hide_min_max: true,
         keyboard: true,
         min: -1000,
         max: 1000,
-        from: -1000,
-        to: 1000,
+        from: lower,
+        to: upper,
         type: 'double',
         step: 1,
+        force_edges: true,
         grid: true,
         onFinish: function (data) {
           model = change_flux_reaction (model, args.state.biggId, data.from, data.to)
@@ -114,8 +129,7 @@ function optimize_loop (builder, model) {
         }
       })
     // Update the text to read out the identifier biggId
-
-    //args.el.childNodes[0].textContent = 'Hello ' + args.state.biggId;
+    args.el.childNodes[0].textContent = args.state.name
     }
     builder.load_map(builder.map_data)
     var knockouts = {}
