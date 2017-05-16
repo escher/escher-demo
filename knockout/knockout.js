@@ -62,7 +62,6 @@ function load_builder (callback) {
                         fill_screen: true,
                         reaction_styles: ['abs', 'color', 'size', 'text'],
                         never_ask_before_quit: true,
-                        tooltip_component: tooltips_1,
                         enable_tooltips: true, }
         var b = escher.Builder(data, null, null, d3.select('#map_container'), options)
         callback(b)
@@ -84,6 +83,41 @@ function set_knockout_status (text) {
 
 
 function optimize_loop (builder, model) {
+    builder.options.tooltip_component = function (args) {
+      // Check if there is already text in the tooltip
+      if (args.el.childNodes.length === 0) {
+        // If not, add new text
+        // var node = document.createTextNode('Hello ')
+        // var br = document.createElement('br')
+        var $input = $('<input>').appendTo(args.el)
+        $input.ionRangeSlider()
+      // Style the text based on our tooltip_style object
+        Object.keys(tooltip_style).map(function (key) {
+          args.el.style[key] = tooltip_style[key]
+        })
+      }
+      var $input = $(args.el).children('input')
+      var slider_data = $input.data("ionRangeSlider")
+      slider_data.update({
+        hide_min_max: true,
+        keyboard: true,
+        min: -1000,
+        max: 1000,
+        from: -1000,
+        to: 1000,
+        type: 'double',
+        step: 1,
+        grid: true,
+        onFinish: function (data) {
+          model = change_flux_reaction (model, args.state.biggId, data.from, data.to)
+          solve_and_display(model, builder, knockouts)
+        }
+      })
+    // Update the text to read out the identifier biggId
+
+    //args.el.childNodes[0].textContent = 'Hello ' + args.state.biggId;
+    }
+    builder.load_map(builder.map_data)
     var knockouts = {}
     var knockable = function(r) {
       return (r.indexOf('EX_') == -1
@@ -116,51 +150,9 @@ function optimize_loop (builder, model) {
             if (!knockable(d.bigg_id)) return '#888';
             else return null;
         });
-
-    builder.options.tooltip_component = function (args) {
-      // Check if there is already text in the tooltip
-      if (args.el.childNodes.length === 0) {
-        // If not, add new text
-        // var node = document.createTextNode('Hello ')
-        // var br = document.createElement('br')
-        var $input = $('<input>').appendTo(args.el)
-        $input.ionRangeSlider({
-          hide_min_max: true,
-          keyboard: true,
-          min: -1000,
-          max: 1000,
-          from: -1000,
-          to: 1000,
-          type: 'double',
-          step: 1,
-          grid: true,
-        })
-      // Style the text based on our tooltip_style object
-        Object.keys(tooltip_style).map(function (key) {
-          args.el.style[key] = tooltip_style[key]
-        })
-      }
-      var $input = $(args.el).children('input')
-      var slider_data = $input.data("ionRangeSlider")
-      slider_data.update({
-        onFinish: function (data) {
-          console.log(args.state.biggId)
-          // for (var i = 0, l = model.reactions.length; i < l; i++) {
-          //   if (model.reactions[i].id == reaction_id) {
-          //       console.log(model.reaction[i].lower_bound)
-          //   }
-          // }
-        }
-      })
-      slider_data.reset()
-    // Update the text to read out the identifier biggId
-
-    //args.el.childNodes[0].textContent = 'Hello ' + args.state.biggId;
-    }
-    builder.load_map(builder.map_data)
 }
 
-solve_and_display = function (model, builder, knockouts) {
+function solve_and_display (model, builder, knockouts) {
     var problem = build_glpk_problem(model)
     var result = optimize(problem)
     var keys = Object.keys(knockouts)
@@ -303,47 +295,6 @@ function optimize (problem) {
         x[glp_get_col_name(problem, i)] = glp_get_col_prim(problem, i);
     }
     return {f: f, x: x};
-}
-
-var tooltips_1 = function (args) {
-  // Check if there is already text in the tooltip
-  if (args.el.childNodes.length === 0) {
-    // If not, add new text
-    // var node = document.createTextNode('Hello ')
-    // var br = document.createElement('br')
-    var $input = $('<input>').appendTo(args.el)
-    $input.ionRangeSlider({
-      hide_min_max: true,
-      keyboard: true,
-      min: -1000,
-      max: 1000,
-      from: -1000,
-      to: 1000,
-      type: 'double',
-      step: 1,
-      grid: true,
-    })
-  // Style the text based on our tooltip_style object
-    Object.keys(tooltip_style).map(function (key) {
-      args.el.style[key] = tooltip_style[key]
-    })
-  }
-  var $input = $(args.el).children('input')
-  var slider_data = $input.data("ionRangeSlider")
-  slider_data.update({
-    onFinish: function (data) {
-      console.log(args.state.biggId)
-      // for (var i = 0, l = model.reactions.length; i < l; i++) {
-      //   if (model.reactions[i].id == reaction_id) {
-      //       console.log(model.reaction[i].lower_bound)
-      //   }
-      // }
-    }
-  })
-  slider_data.reset()
-// Update the text to read out the identifier biggId
-
-//args.el.childNodes[0].textContent = 'Hello ' + args.state.biggId;
 }
 
 window.onload = function () {
