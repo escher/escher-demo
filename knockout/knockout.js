@@ -89,8 +89,8 @@ function optimize_loop (builder, model) {
         // If not, add new text
         var title_node = document.createTextNode('Hello ')
         var br = document.createElement('br')
-        var lower_title_node = document.createTextNode('Lower limit ')
-        var upper_title_node = document.createTextNode(' Upper limit ')
+        var lower_title_node = document.createTextNode('Lower bound ')
+        var upper_title_node = document.createTextNode(' Upper bound ')
         args.el.appendChild(title_node)
         args.el.appendChild(br)
         args.el.appendChild(lower_title_node)
@@ -123,13 +123,14 @@ function optimize_loop (builder, model) {
         step: 1,
         force_edges: true,
         grid: true,
+        values: [],
         onFinish: function (data) {
           model = change_flux_reaction (model, args.state.biggId, data.from, data.to)
           solve_and_display(model, builder, knockouts)
         }
       })
     // Update the text to read out the identifier biggId
-    args.el.childNodes[0].textContent = args.state.name
+    args.el.childNodes[0].textContent = args.state.biggId
     }
     builder.load_map(builder.map_data)
     var knockouts = {}
