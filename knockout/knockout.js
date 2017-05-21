@@ -56,7 +56,7 @@ function load_builder (callback) {
     // load the Builder
     d3.json('E coli core.Core metabolism.json', function(e, data) {
         if (e) console.warn(e);
-        var options = { menu: 'zoom',
+        var options = { menu: 'all',
                         use_3d_transform: true,
                         enable_editing: false,
                         fill_screen: true,
@@ -98,12 +98,21 @@ function optimize_loop (builder, model) {
         args.el.appendChild(upper_title_node)
         // var $upper_input = $('<input>').appendTo(args.el)
         var $input = $('<input>').appendTo(args.el)
+        var $knockout_button = document.createElement('button')
+        var btn_text = document.createTextNode('Knockout Gene')
+        $knockout_button.appendChild(btn_text)
+        args.el.appendChild($knockout_button)
         $input.ionRangeSlider()
       // Style the text based on our tooltip_style object
         Object.keys(tooltip_style).map(function (key) {
           args.el.style[key] = tooltip_style[key]
         })
       }
+      var list = [-1000]
+      for (var i = -50; i <= 50; i++) {
+          list.push(i)
+      }
+      list.push(1000)
       var $input = $(args.el).children('input')
       var slider_data = $input.data("ionRangeSlider")
       for (var i = 0, l = model.reactions.length; i < l; i++) {
@@ -122,13 +131,20 @@ function optimize_loop (builder, model) {
         type: 'double',
         step: 1,
         force_edges: true,
-        grid: true,
-        values: [],
+        values: list,
         onFinish: function (data) {
-          model = change_flux_reaction (model, args.state.biggId, data.from, data.to)
+          model = change_flux_reaction (model, args.state.biggId, data.from_value, data.to_value)
           solve_and_display(model, builder, knockouts)
         }
       })
+      $knockout_button.onclick = function() {
+            if (knockable(args.el.bigg_id)) {
+                if (!(args.el.bigg_id in knockouts))
+                    knockouts[args.el.bigg_id] = true;
+                model = knock_out_reaction(model, args.el.bigg_id);
+                solve_and_display(model, builder, knockouts);
+            }
+        }
     // Update the text to read out the identifier biggId
     args.el.childNodes[0].textContent = args.state.biggId
     }
