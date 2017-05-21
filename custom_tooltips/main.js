@@ -2,8 +2,8 @@
 
 var tinier = escher.libs.tinier
 var tooltip_style = {
-  'min-width': '40px',
-  'min-height': '10px',
+  'min-width': '500px',
+  'min-height': '50px',
   'border-radius': '2px',
   'border': '1px solid #b58787',
   'padding': '7px',
@@ -23,15 +23,37 @@ var tooltips_1 = function (args) {
   // Check if there is already text in the tooltip
   if (args.el.childNodes.length === 0) {
     // If not, add new text
-    var node = document.createTextNode('Hello ')
-    args.el.appendChild(node)
+    //$(args.el).rangeSlider()
+    // var node = document.createTextNode('Hello ')
+    // var br = document.createElement('br')
+    var $input = $('<input>').appendTo(args.el);
+    $input.ionRangeSlider({
+        hide_min_max: true,
+        keyboard: true,
+        min: -1000,
+        max: 1000,
+        from: -1000,
+        to: 1000,
+        type: 'double',
+        step: 1,
+        grid: true
+    });
+    $input.on("change", function () {
+      var $this = $(this),
+          value = $this.prop("value");
+      console.log("Value: " + value);
+    });
     // Style the text based on our tooltip_style object
     Object.keys(tooltip_style).map(function (key) {
       args.el.style[key] = tooltip_style[key]
     })
-  }
+  };
+  var $input = $(args.el).children('input');
+  var slider_data = $input.data("ionRangeSlider");
+  slider_data.reset();
   // Update the text to read out the identifier biggId
-  args.el.childNodes[0].textContent = 'Hello ' + args.state.biggId
+
+  //args.el.childNodes[0].textContent = 'Hello ' + args.state.biggId;
 }
 
 // --------------------------------------------------
@@ -106,6 +128,7 @@ function calculateLetterFrequency (s) {
 /**
  * Tooltip function that shows plots with the frequency of letters in each ID.
  */
+
 var tooltips_4 = function (args) {
   // Use the tinier.render function to render any changes each time the
   // tooltip gets called
@@ -211,7 +234,7 @@ window.onload = function () {
       fill_screen: true,
       // --------------------------------------------------
       // CHANGE ME
-      tooltip_component: tooltips_4,
+      tooltip_component: tooltips_1,
       // --------------------------------------------------
     }
     var b = escher.Builder(data, null, null, d3.select('#map_container'),
