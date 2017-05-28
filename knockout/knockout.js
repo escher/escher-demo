@@ -131,6 +131,7 @@ function optimize_loop (builder, model) {
               var upper = model.reactions[i].upper_bound
           }
       }
+      console.log(lower)
       console.log(upper)
       slider_data.update({
         hide_min_max: true,
