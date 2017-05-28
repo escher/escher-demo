@@ -37,6 +37,8 @@ var tooltip_style = {
  'box-shadow': '4px 6px 20px 0px rgba(0, 0, 0, 0.4)',
 }
 
+var _ = escher.libs.underscore
+
 function initialize_knockout () {
     // load everything
     load_builder(function(builder) {
@@ -97,12 +99,18 @@ function optimize_loop (builder, model) {
         // var $lower_input = $('<input>').appendTo(args.el)
         args.el.appendChild(upper_title_node)
         // var $upper_input = $('<input>').appendTo(args.el)
-        var $input = $('<input>').appendTo(args.el)
+        var $slider_input = $('<input class = "slider">').appendTo(args.el)
         var $knockout_button = document.createElement('button')
-        var btn_text = document.createTextNode('Knockout Gene')
-        $knockout_button.appendChild(btn_text)
+        var $rxn_reset = document.createElement('button')
+        var ko_btn_text = document.createTextNode('Knockout Gene')
+        var reset_btn_text = document.createTextNode('Reset Reaction')
+        $knockout_button.appendChild(ko_btn_text)
+        $rxn_reset.appendChild(reset_btn_text)
+        $knockout_button.setAttribute('class', 'knockout_button')
+        $rxn_reset.setAttribute('class', 'rxn_reset')
         args.el.appendChild($knockout_button)
-        $input.ionRangeSlider()
+        args.el.appendChild($rxn_reset)
+        $slider_input.ionRangeSlider()
       // Style the text based on our tooltip_style object
         Object.keys(tooltip_style).map(function (key) {
           args.el.style[key] = tooltip_style[key]
@@ -113,14 +121,18 @@ function optimize_loop (builder, model) {
           list.push(i)
       }
       list.push(1000)
-      var $input = $(args.el).children('input')
-      var slider_data = $input.data("ionRangeSlider")
+      var $slider_input = $(args.el).children('.slider')
+      var $knockout_button = $(args.el).children('.knockout_button')
+      var $rxn_reset = $(args.el).children('.rxn_reset')
+      var slider_data = $slider_input.data('ionRangeSlider')
       for (var i = 0, l = model.reactions.length; i < l; i++) {
           if (model.reactions[i].id == args.state.biggId) {
               var lower = model.reactions[i].lower_bound
               var upper = model.reactions[i].upper_bound
           }
       }
+      console.log(lower)
+      console.log(upper)
       slider_data.update({
         hide_min_max: true,
         keyboard: true,
@@ -128,23 +140,31 @@ function optimize_loop (builder, model) {
         max: 1000,
         from: lower,
         to: upper,
+        from_value: lower,
+        to_value: upper,
         type: 'double',
         step: 1,
         force_edges: true,
         values: list,
+        onChange: _.throttle(function (data) {
+          model = change_flux_reaction (model, args.state.biggId, data.from_value, data.to_value)
+          solve_and_display(model, builder, knockouts)
+        }, .200),
         onFinish: function (data) {
           model = change_flux_reaction (model, args.state.biggId, data.from_value, data.to_value)
           solve_and_display(model, builder, knockouts)
-        }
+          console.log(data.to)
+          console.log(data.to_value)
+        },
       })
       $knockout_button.onclick = function() {
-            if (knockable(args.el.bigg_id)) {
-                if (!(args.el.bigg_id in knockouts))
-                    knockouts[args.el.bigg_id] = true;
-                model = knock_out_reaction(model, args.el.bigg_id);
-                solve_and_display(model, builder, knockouts);
-            }
+        if (knockable(args.el.bigg_id)) {
+          if (!(args.el.bigg_id in knockouts))
+            knockouts[args.el.bigg_id] = true
+          model = knock_out_reaction(model, args.el.bigg_id)
+          solve_and_display(model, builder, knockouts)
         }
+      }
     // Update the text to read out the identifier biggId
     args.el.childNodes[0].textContent = args.state.biggId
     }
