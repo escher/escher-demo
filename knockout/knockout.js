@@ -138,8 +138,8 @@ function optimize_loop (builder, model) {
         keyboard: true,
         min: -1000,
         max: 1000,
-        from: lower,
-        to: upper,
+        from: lower + 51,
+        to: upper + 51,
         from_value: lower,
         to_value: upper,
         type: 'double',
@@ -153,8 +153,8 @@ function optimize_loop (builder, model) {
         onFinish: function (data) {
           model = change_flux_reaction (model, args.state.biggId, data.from_value, data.to_value)
           solve_and_display(model, builder, knockouts)
+          console.log(data.from)
           console.log(data.to)
-          console.log(data.to_value)
         },
       })
       $knockout_button.onclick = function() {
