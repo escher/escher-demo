@@ -102,7 +102,7 @@ function optimize_loop (builder, model) {
         var $slider_input = $('<input class = "slider">').appendTo(args.el)
         var $knockout_button = document.createElement('button')
         var $rxn_reset = document.createElement('button')
-        var ko_btn_text = document.createTextNode('Knockout Gene')
+        var ko_btn_text = document.createTextNode('Knockout Reaction')
         var reset_btn_text = document.createTextNode('Reset Reaction')
         $knockout_button.appendChild(ko_btn_text)
         $rxn_reset.appendChild(reset_btn_text)
@@ -157,14 +157,17 @@ function optimize_loop (builder, model) {
           console.log(data.to)
         },
       })
-      $knockout_button.onclick = function() {
-        if (knockable(args.el.bigg_id)) {
-          if (!(args.el.bigg_id in knockouts))
-            knockouts[args.el.bigg_id] = true
-          model = knock_out_reaction(model, args.el.bigg_id)
+      $knockout_button.off('click')
+      $knockout_button.on('click', function () {
+        var bigg_id = args.state.biggId
+        console.log(bigg_id)
+        if (knockable(bigg_id)) {
+          if (!(bigg_id in knockouts))
+            knockouts[bigg_id] = true
+          model = knock_out_reaction(model, bigg_id)
           solve_and_display(model, builder, knockouts)
         }
-      }
+      })
     // Update the text to read out the identifier biggId
     args.el.childNodes[0].textContent = args.state.biggId
     }
