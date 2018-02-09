@@ -1,6 +1,6 @@
 /* knockout.css - styles for knockout demo
 
-   Copyright (C) 2015 The Regents of the University of California.
+   Copyright (C) 2018 The Regents of the University of California.
 
    This program is free software: you can redistribute it and/or modify it under
    the terms of the GNU General Public License as published by the Free Software
@@ -22,23 +22,53 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
+  font-family: "Source Sans Pro",Calibri,Candara,Arial,sans-serif;
+  font-size: 16px;
 }
-#knockout-status {
+
+#knockout-bottom {
   position: absolute;
-  bottom: 55px;
-  left: 20px;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+#knockout-status {
+  flex: 0 0 auto;
+  padding: 10px;
   font-size: 24px;
   color: red;
   background-color: white;
 }
+
 #knockout-buttons {
-  position: absolute;
-  bottom: 5px;
-  right: 5px;
+  flex: 0 0 auto;
+  padding: 10px;
 }
-#knockout-buttons .btn {
+
+.demo-button {
   display: inline-block;
+  color: white!important;
+  border: 1px solid #2E2F2F;
+  background-image: linear-gradient(#4F5151, #474949 6%, #3F4141);
+  background-color: white;
+  cursor: pointer;
+  text-decoration: none;
+  border-radius: 3px;
+  padding: 5px;
+  font-size: 18px;
+  font-family: "Source Sans Pro",Calibri,Candara,Arial,sans-serif;
 }
+
+.demo-button:active {
+  background-image: linear-gradient(#3F4141, #474949 6%, #4F5151);
+  text-decoration: none;
+}
+
 .label {
   cursor: inherit !important;
 }
@@ -49,4 +79,3 @@ body {
     left: 5px;
   }
 }
-
