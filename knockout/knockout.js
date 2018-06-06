@@ -78,7 +78,7 @@ function optimize_loop(builder, model) {
         var nbs = String.fromCharCode(160); // non-breaking space
         if (keys.length > 0)
             ko_string += (' (' + keys.length + 'KO): ');
-        else ko_string = 'Click a reaction to knock it out. ';
+        else ko_string = 'Click a reaction to knock it out... ';
         if (result.f < 1e-3) {
             builder.set_reaction_data(null);
             set_knockout_status(ko_string + 'You killed E.' + nbs + 'coli!');
@@ -109,9 +109,13 @@ function optimize_loop(builder, model) {
         })
         .on('click', function(d) {
             if (knockable(d.bigg_id)) {
-                if (!(d.bigg_id in knockouts))
+                if (!(d.bigg_id in knockouts)) {
                     knockouts[d.bigg_id] = true;
-                model = knock_out_reaction(model, d.bigg_id);
+                    model = knock_out_reaction(model, d.bigg_id);
+                } else {
+                    delete knockouts[d.bigg_id];
+                    model = knock_in_reaction(model, d.bigg_id);
+                }
                 solve_and_display(model, knockouts);
             }
         });
@@ -147,6 +151,17 @@ function knock_out_reaction(model, reaction_id) {
         if (model.reactions[i].id == reaction_id) {
             model.reactions[i].lower_bound = 0.0;
             model.reactions[i].upper_bound = 0.0;
+            return model;
+        }
+    }
+    throw new Error('Bad reaction ' + reaction_id);
+}
+
+function knock_in_reaction(model, reaction_id) {
+    for (var i = 0, l = model.reactions.length; i < l; i++) {
+        if (model.reactions[i].id == reaction_id) {
+            model.reactions[i].lower_bound = -1000;
+            model.reactions[i].upper_bound = 1000;
             return model;
         }
     }
