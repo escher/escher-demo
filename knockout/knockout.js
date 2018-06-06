@@ -23,11 +23,14 @@
  GLP_DB, glp_set_col_bnds, glp_set_col_name, glp_get_col_name, glp_get_col_prim,
  glp_get_obj_val, glp_get_num_cols */
 
+// Making it global for knock-in
+var old_model;
+
 function initialize_knockout() {
     // load everything
     load_builder(function(builder) {
         load_model(function(model) {
-            var old_model = escher.utils.clone(model);
+            old_model = escher.utils.clone(model);
             optimize_loop(builder, model);
             d3.select('#reset-button')
                 .on('click', function() {
@@ -160,8 +163,8 @@ function knock_out_reaction(model, reaction_id) {
 function knock_in_reaction(model, reaction_id) {
     for (var i = 0, l = model.reactions.length; i < l; i++) {
         if (model.reactions[i].id == reaction_id) {
-            model.reactions[i].lower_bound = -1000;
-            model.reactions[i].upper_bound = 1000;
+            model.reactions[i].lower_bound = old_model.reactions[i].lower_bound;
+            model.reactions[i].upper_bound = old.model.reactions[i].upper_bound;
             return model;
         }
     }
