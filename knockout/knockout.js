@@ -164,7 +164,7 @@ function knock_in_reaction(model, reaction_id) {
     for (var i = 0, l = model.reactions.length; i < l; i++) {
         if (model.reactions[i].id == reaction_id) {
             model.reactions[i].lower_bound = old_model.reactions[i].lower_bound;
-            model.reactions[i].upper_bound = old.model.reactions[i].upper_bound;
+            model.reactions[i].upper_bound = old_model.reactions[i].upper_bound;
             return model;
         }
     }
