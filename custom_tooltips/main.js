@@ -1,5 +1,3 @@
-/* global escher, d3 */
-
 const preact = escher.libs.preact;
 const h = preact.createElement;
 const Component = preact.Component;
@@ -27,7 +25,7 @@ const Tooltip1 = props => {
     // Style the text based on our tooltip_style object
     h('div', { style: tooltipStyle},
       // Update the text to read out the identifier biggId
-      'Hello tinier ' + props.biggId,
+      'Hello tooltip world ' + props.biggId,
       // Line break
       h('br'),
       // Add a picture. Get a random pic from unsplash, with ID between 0 and 1000.
@@ -121,31 +119,6 @@ class Tooltip2 extends Component {
   }
 }
 
-//------------------------------------------
-// TOOLTIP 3: Component with state handling
-//------------------------------------------
-
-class Tooltip3 extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      biggId: '',
-      count: 0
-    };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      biggId: nextProps.biggId,
-      count: this.state.count + 1
-    });
-  }
-
-  render(props, state) {
-    return h('div', { style: tooltipStyle }, `Hello tinier ${state.biggId}, ${state.count}`);
-  }
-}
-
 //---------------------
 // Load the Escher map
 //---------------------
@@ -158,7 +131,7 @@ escher.libs.d3_json('iJO1366.Central metabolism.json', function (e, data) {
     never_ask_before_quit: true,
     // --------------------------------------------------
     // CHANGE ME
-    tooltip_component: Tooltip1
+    tooltip_component: Tooltip2
     // --------------------------------------------------
   };
   escher.Builder(data, null, null, escher.libs.d3_select('#map_container'), options);
