@@ -5,14 +5,14 @@
  glp_get_obj_val, glp_get_num_cols */
 
 // load everything
-load_builder(function () {
+load_builder(function (builder) {
   load_model(model => {
     var old_model = escher.utils.clone(model);
-    optimize_loop(this, model);
+    optimize_loop(builder, model);
     escher.libs.d3_select('#reset-button')
-      .on('click',() => {
+      .on('click', () => {
         model = escher.utils.clone(old_model);
-        optimize_loop(this, model);
+        optimize_loop(builder, model);
       });
   });
 });
