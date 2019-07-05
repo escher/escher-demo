@@ -28,25 +28,3 @@ by opening your Developer tools
 [Firefox](https://developer.mozilla.org/en-US/docs/Tools)). Next, have a look at
 the Escher [JavaScript documentation](http://escher.readthedocs.org/) to learn
 about the Builder class and its options and methods.
-
-Snippets
---------
-
-The examples in the snippets directory are short code blocks that can be
-executed in the Developer Tools for an open Escher map to activate new
-features. Each snippet has a description at the beginning of the file. To learn
-about the Developer Tools, try these resources:
-
-- Chrome: https://developer.chrome.com/devtools
-- Firefox: http://www.howtogeek.com/105320/how-to-use-firefoxs-web-developer-tools/
-- Safari: https://developer.apple.com/library/safari/documentation/AppleApplications/Conceptual/Safari_Developer_Guide/GettingStarted/GettingStarted.html
-- Internet Explorer/Edge: https://msdn.microsoft.com/library/bg182326
-
-Ideas
------
-
-- sliders for data
-- knockout example
-- data (e.g. plots) on hover
-- embed in website
-- ChemSpider structures on a map

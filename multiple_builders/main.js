@@ -3,7 +3,7 @@
 window.onload = function() {
 
     // Load a JSON file for the map from the network
-    d3.json('e_coli_core.Core metabolism.json', function(e, data) {
+    escher.libs.d3_json('e_coli_core.Core metabolism.json', function(e, data) {
         if (e) console.warn(e);
 
         // ---------------------------------------
@@ -23,14 +23,14 @@ window.onload = function() {
             enable_tooltips: false,
         };
 
-        escher.Builder(data, null, null, d3.select('#map_container_1'), options1);
+        escher.Builder(data, null, null, escher.libs.d3_select('#map_container_1'), options1);
 
         // ---------------------------------------
         // Second map: Zoom in on a reaction
         // ---------------------------------------
 
         var my_reaction_id = '1576701',
-            my_container2 = d3.select('#map_container_2');
+            my_container2 = escher.libs.d3_select('#map_container_2');
 
         var options2 = {
             // Just show the zoom buttons
@@ -48,12 +48,11 @@ window.onload = function() {
             zoom_to_element: {type: 'reaction', id: my_reaction_id },
             // This is a trick to change the behavior of the "extent"
             // button so it zooms in on the chosen reaction.
-            first_load_callback: function () {
-                var builder = this;
+            first_load_callback: function (builder) {
                 my_container2
                     .selectAll('.simple-button')
-                    .each(function() {
-                        var t = d3.select(this);
+                    .each(function () {
+                        var t = escher.libs.d3_select(this);
                         // just get the canvas button
                         if (t.attr('title').indexOf('canvas') != -1) {
                             // clear other click listeners
@@ -94,22 +93,22 @@ window.onload = function() {
         };
 
         // set a callback to run when the Builder is ready
-        var first_load_callback = function() {
+        var first_load_callback = function (builder) {
             // Get a nice starting location for the reaction
-            var size = this.zoom_container.get_size();
+            var size = builder.zoomContainer.getSize();
             var start_coords = { x: 100,
                                     y: -80 };
             var start_direction = 90;
 
             // Draw the reaction
-            this.map.new_reaction_from_scratch('ENO', start_coords, start_direction);
+            builder.map.new_reaction_from_scratch('ENO', start_coords, start_direction);
 
             // And zoom the map to focus on that reaction
-            this.map.zoom_extent_nodes();
+            builder.map.zoom_extent_nodes();
 
             // After building a reaction, Escher selects the newest
             // metabolite. Unselect it like this.
-            this.map.select_none();
+            builder.map.select_none();
         };
 
         // Set up the Builder
@@ -129,7 +128,7 @@ window.onload = function() {
             // No tooltips
             enable_tooltips: false,
         };
-        escher.Builder(null, custom_model, null, d3.select('#map_container_3'), options3);
+        escher.Builder(null, custom_model, null, escher.libs.d3_select('#map_container_3'), options3);
     });
 
 };
