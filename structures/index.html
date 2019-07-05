@@ -28,19 +28,12 @@ THE SOFTWARE.
 <!DOCTYPE html>
 <html>
   <title>Escher Structures</title>
-  <!-- Bootstrap dependencies for the menu and buttons -->
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"/></script>
-  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
-  <!-- Choose a Bootswatch theme -->
-  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootswatch/3.3.5/united/bootstrap.min.css"/>
-
-  <!-- d3 -->
-  <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
 
   <!-- Escher files -->
-  <script src="escher.js" charset="utf-8"></script>
-  <link rel="stylesheet" href="builder.css"/>
+  <script src="escher.min.js" charset="utf-8"></script>
+
+  <!-- Use extra d3 features -->
+  <script src="https://d3js.org/d3.v4.min.js"></script>
 
   <style>
    #structures-buttons {
@@ -69,28 +62,27 @@ THE SOFTWARE.
   <script>
    var img_size = 200;
 
-   function remove_compartment(met_id) {
+   function remove_compartment (met_id) {
        return met_id.replace(/_[a-z][a-z0-9]?$/, '');
    }
 
-   function add_structures() {
+   function add_structures () {
        console.log('Loading structures');
        d3.select('#map_container')
          .selectAll('.metabolite-circle')
-         .each(function(data) {
+         .each(function (data) {
              // only apply the transformation to primary nodes
              if (!data.node_is_primary) return;
 
              // get the circle location
-             var circle = d3.select(this),
-                 transform = d3.transform(circle.attr('transform'));
+             var circle = d3.select(this);
              // get the parent node, and add the image
              d3.select(circle.node().parentNode)
                  // insert the image before the text
                .insert('image', 'text')
                .attr('transform', 'translate('
-                                + (transform.translate[0] - img_size / 2) + ','
-                                + (transform.translate[1] - img_size / 2) + ')')
+                                + (data.x - img_size / 2) + ','
+                                + (data.y - img_size / 2) + ')')
                .attr('width', img_size)
                .attr('height', img_size)
                .attr('preserveAspectRatio', 'xMinYMin meet')
@@ -101,22 +93,20 @@ THE SOFTWARE.
    }
 
    // load the map and embedded CSS
-   d3.json('E coli core.Core_metabolism_for_structures.json', function(e, data) {
+   d3.json('E coli core.Core_metabolism_for_structures.json', function (e, data) {
        if (e) console.warn(e);
        var options = {
-           menu: 'all',
-           use_3d_transform: true,
            enable_editing: false,
            fill_screen: true,
            reaction_styles: ['abs', 'color', 'size', 'text'],
            never_ask_before_quit: true,
-           //make the primary metabolites larger to make room for structues
-           primary_metabolite_radius: 70
+           // make the primary metabolites larger to make room for structues
+           primary_metabolite_radius: 70,
+           // add the structures after loading the map
+           first_load_callback: add_structures
        };
        // make a Builder
        var builder = escher.Builder(data, null, null, d3.select('#map_container'), options);
-       // add the structures
-       add_structures();
    });
   </script>
 </html>
