@@ -63,8 +63,9 @@ function optimize_loop (builder, model) {
       set_knockout_status(ko_string + 'You killed E.' + nbs + 'coli!');
     } else {
       builder.set_reaction_data(result.x);
+      console.log(result.f)
       set_knockout_status(ko_string + 'Growth' + nbs + 'rate:' + nbs +
-                          (result.f/1.791*100).toFixed(1) + '%');
+                          (result.f/0.8739215069684303*100).toFixed(1) + '%');
     }
   };
 

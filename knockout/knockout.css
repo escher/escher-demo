@@ -27,7 +27,8 @@ body {
 }
 
 #knockout-bottom {
-  position: absolute;
+  z-index: 1000;
+  position: fixed;
   bottom: 0px;
   left: 0px;
   width: 100%;

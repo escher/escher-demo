@@ -37,9 +37,23 @@ THE SOFTWARE.
 
   <style>
    #structures-buttons {
-     position: absolute;
+     z-index: 1000;
+     position: fixed;
      bottom: 5px;
      right: 5px;
+   }
+   .demo-button {
+     display: inline-block;
+     color: white!important;
+     border: 1px solid #2E2F2F;
+     background-image: linear-gradient(#4F5151, #474949 6%, #3F4141);
+     background-color: white;
+     cursor: pointer;
+     text-decoration: none;
+     border-radius: 3px;
+     padding: 5px;
+     font-size: 18px;
+     font-family: "Source Sans Pro",Calibri,Candara,Arial,sans-serif;
    }
   </style>
 
@@ -51,12 +65,13 @@ THE SOFTWARE.
   <body>
     <div id="map_container"></div>
     <div id="structures-buttons">
-      <a href="https://escher.github.io/" class="btn btn-default btn-md">
+      <a href="https://escher.github.io/" class="demo-button">
         Escher home
       </a>
-      <a href="https://github.com/escher/escher-demo" class="btn btn-default btn-md">
+      <a href="https://github.com/escher/escher-demo/tree/gh-pages/structures" class="demo-button">
         View the code
       </a>
+    </div>
   </body>
 
   <script>
